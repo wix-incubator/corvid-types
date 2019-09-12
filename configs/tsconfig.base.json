@@ -3,6 +3,7 @@
     "allowJs": true,
     "noEmit": true,
     "checkJs": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017"
   }
 }
