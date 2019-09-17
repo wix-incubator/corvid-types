@@ -21,6 +21,11 @@
     "configs"
   ],
   "types": "./types/index.d.ts",
+  "keywords": [
+    "corvid",
+    "corvid-cli",
+    "wix"
+  ],
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
