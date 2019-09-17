@@ -281,6 +281,11 @@ declare module 'wix-crm-backend' {
     function createContact(contactInfo: wix_crm_backend.ContactInfo): Promise<string>;
 
     /**
+     * Deletes an existing contact.
+     */
+    function deleteContact(contactId: string, options: wix_crm_backend.DeleteOptions): Promise<void>;
+
+    /**
      * Sends a Triggered Email to a contact.
      */
     function emailContact(emailId: string, toContact: string, options?: wix_users.TriggeredEmailOptions): Promise<void>;
@@ -1621,7 +1626,7 @@ declare namespace $w {
         /**
          * Sends a message to the HTML Component.
          */
-        postMessage(message: string | number | boolean | any | Array): void;
+        postMessage(message: string | number | boolean | any | any[]): void;
     }
 
     /**
@@ -5807,7 +5812,7 @@ declare namespace wix_http_functions {
         /**
          * Sets or gets the body of the response as a string or binary buffer.
          */
-        body: number | Buffer;
+        body: string | Buffer;
         /**
          * Sets or gets the HTTP response header fields.
          */
@@ -5844,110 +5849,12 @@ declare namespace wix_crm_backend {
      */
     interface Events {
         /**
-         * An event that fires when a new workflow card is created.
-         */
-        onCardCreated(event: wix_crm_backend.Events.CardCreatedEvent): void;
-        /**
-         * An event that fires when a workflow card is moved.
-         */
-        onCardMoved(event: wix_crm_backend.Events.CardMovedEvent): void;
-        /**
-         * An event that fires when a workflow card is moved.
-         */
-        onCardRestored(event: wix_crm_backend.Events.CardRestoredEvent): void;
-        /**
          * An event that fires when a user submits a form.
          */
         onFormSubmit(event: wix_crm_backend.Events.FormSubmitEvent): void;
     }
 
     namespace Events {
-        /**
-         * An object representing a created card.
-         */
-        type CardCreatedEvent = {
-            /**
-             * ID of the card's workflow.
-             */
-            workflowId: string;
-            /**
-             * Name of the card's workflow.
-             */
-            workflowName: string;
-            /**
-             * ID of the card's phase.
-             */
-            phaseId: string;
-            /**
-             * Name of the card's phase.
-             */
-            phaseName: string;
-            /**
-             * The card that was created.
-             */
-            card: wix_crm_backend.workflows.Card;
-        };
-
-        /**
-         * An object representing a moved card.
-         */
-        type CardMovedEvent = {
-            /**
-             * ID of the card's workflow.
-             */
-            workflowId: string;
-            /**
-             * Name of the card's workflow.
-             */
-            workflowName: string;
-            /**
-             * ID of the card's new phase.
-             */
-            newPhaseId: string;
-            /**
-             * Name of the card's new phase.
-             */
-            newPhaseName: string;
-            /**
-             * The card that was moved.
-             */
-            card: wix_crm_backend.workflows.Card;
-            /**
-             * ID of the card's old phase.
-             */
-            previousPhaseId: string;
-            /**
-             * Name of the card's old phase.
-             */
-            previousPhaseName: string;
-        };
-
-        /**
-         * An object representing a moved card.
-         */
-        type CardRestoredEvent = {
-            /**
-             * ID of the workflow the card was restored to.
-             */
-            workflowId: string;
-            /**
-             * Name of the workflow the card was restored to.
-             */
-            workflowName: string;
-            /**
-             * ID of the phase the card was restored to.
-             */
-            phaseId: string;
-            /**
-             * Name of the phase the card was restored to.
-             */
-            phaseName: string;
-            /**
-             * The card that was restored.
-             */
-            card: wix_crm_backend.workflows.Card;
-        };
-
         /**
          * An object representing an attachment to a form.
          */
@@ -6232,6 +6139,16 @@ declare namespace wix_crm_backend {
         customFields: string | number | Date;
     };
 
+    /**
+     * An object that contains contact deletion options.
+     */
+    type DeleteOptions = {
+        /**
+         * Whether to perform the deletion when the contact is also a member. Defaults to `false`.
+         */
+        deleteMembers: boolean;
+    };
+
 }
 
 declare namespace wix_data {
@@ -6431,11 +6348,11 @@ declare namespace wix_data {
         /**
          * Refines a query or filter to match items whose specified property values equals all of the specified `value` parameters.
          */
-        hasAll(propertyName: string, value: string | number | Date | Array): wix_data.WixDataQuery;
+        hasAll(propertyName: string, value: string | number | Date | any[]): wix_data.WixDataQuery;
         /**
          * Refines a query or filter to match items whose specified property value equals any of the specified `value` parameters.
          */
-        hasSome(propertyName: string, value: string | number | Date | Array): wix_data.WixDataQuery;
+        hasSome(propertyName: string, value: string | number | Date | any[]): wix_data.WixDataQuery;
         /**
          * Refines a query or filter to match items whose specified property does not exist or does not have any value.
          */
@@ -6525,11 +6442,11 @@ declare namespace wix_data {
         /**
          * Refines a query or filter to match items whose specified property values equals all of the specified `value` parameters.
          */
-        hasAll(propertyName: string, value: string | number | Date | Array): wix_data.WixDataQuery;
+        hasAll(propertyName: string, value: string | number | Date | any[]): wix_data.WixDataQuery;
         /**
          * Refines a query or filter to match items whose specified property value equals any of the specified `value` parameters.
          */
-        hasSome(propertyName: string, value: string | number | Date | Array): wix_data.WixDataQuery;
+        hasSome(propertyName: string, value: string | number | Date | any[]): wix_data.WixDataQuery;
         /**
          * Includes referenced items for the specified properties in a query's results.
          */
