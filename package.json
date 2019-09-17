@@ -16,6 +16,10 @@
   },
   "license": "MIT",
   "main": "index.js",
+  "files": [
+    "types",
+    "configs"
+  ],
   "types": "./types/index.d.ts",
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
