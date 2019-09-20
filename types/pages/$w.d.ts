@@ -1,3 +1,5 @@
+/// <reference path="../common/utilityTypes.d.ts" />
+
 type TypeNameToSdkType = {
   "AccountNavBar": $w.AccountNavBar;
   "Anchor": $w.Anchor;
@@ -46,12 +48,11 @@ type TypeNameToSdkType = {
   "VideoPlayer": $w.VideoPlayer;
 }
 
-type IntersectionArrayAndBase<T> = {
-  [P in keyof T]: P extends "Document" ? T[P] : T[P] & T[P][];
-}
+type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>
 
-type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType>
-
+/**
+ * Selects and returns elements from a page.
+ */
 declare function $w<T extends keyof WixElementSelector>(selector: T): WixElementSelector[T]
 
 /**
@@ -65,18 +66,18 @@ declare function $w<T extends keyof WixElementSelector>(selector: T): WixElement
  *  You do not need to import `$w`.
  */
 declare namespace $w {
-  /**
-   * Gets a selector function for a specific context.
-   */
+    /**
+     * Gets a selector function for a specific context.
+     */
   export function at(context: $w.Event.EventContext): $w.$w;
 
-  /**
-   * Sets the function that runs when all the page elements have finished loading.
-   */
+    /**
+     * Sets the function that runs when all the page elements have finished loading.
+     */
   export function onReady(initFunction: $w.ReadyHandler): void;
 
-  /**
-   * Selects and returns elements from a page.
-   */
-  type $w =  <T extends keyof WixElementSelector>(selector: T) => WixElementSelector[T]
+    /**
+     * Selects and returns elements from a page.
+     */
+    type $w = <T extends keyof WixElementSelector>(selector: T)=>WixElementSelector[T]
 }
