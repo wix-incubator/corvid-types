@@ -144,6 +144,11 @@ declare module 'wix-window' {
     const viewMode: string;
 
     /**
+     * The Rendering API is used to control when code is run as a page is being loaded.
+     */
+    const rendering: wix_window.rendering;
+
+    /**
      * Returns information about the window.
      */
     function getBoundingRect(): Promise<wix_window.WindowSizeInfo>;
@@ -4250,7 +4255,7 @@ declare namespace wix_window {
         /**
          * Gets the current environment the rendering process is running in.
          */
-        readonly env: string;
+        readonly env: 'backend' | 'browser';
         /**
          * **Deprecated:** Gets the current cycle in the rendering process.
          */
