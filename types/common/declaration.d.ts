@@ -191,6 +191,21 @@ declare module 'wix-window' {
 }
 
 /**
+ * Note: This feature is not yet available to all users.
+ * 
+ * 
+ *  The wix-captcha-backend module contains functionality for working with
+ *  the reCAPTCHA element from backend code.
+ */
+declare module 'wix-captcha-backend' {
+    /**
+     * Authorizes the reCAPTCHA token.
+     */
+    function authorize(token: string): Promise<wix_captcha_backend.SuccessReport>;
+
+}
+
+/**
  * HTTP functions are used to expose an API of your site's functionality.
  */
 declare module 'wix-http-functions' {
@@ -251,7 +266,7 @@ declare module 'wix-http-functions' {
      *  The `response()` function creates a custom response built with the
      *  information passed to the `options` parameter in a [`WixHttpFunctionResponseOptions`](#WixHttpFunctionResponseOptions)
      *  object.
-     *
+     * 
      *  Use the `response()` function to create a response to return from an HTTP
      *  function.
      */
@@ -704,10 +719,6 @@ declare module 'wix-users' {
 }
 
 declare namespace $w {
-    type dataset = wix_dataset.Dataset;
-
-    type router_dataset = wix_dataset.DynamicDataset;
-
     /**
      * A post page for a specific blog post.
      */
@@ -946,7 +957,7 @@ declare namespace $w {
 
     /**
      * Provides functionality for elements that can be collapsed.
-     *
+     * 
      *  To learn about the behavior of a collapsed element,
      *  see the [`collapsed`](#collapsed) property.
      */
@@ -1322,13 +1333,13 @@ declare namespace $w {
 
     /**
      * Provides functionality for elements that can set and lose focus.
-     *
+     * 
      *  The element on the page that is currently active is the element in focus.
      *  Only one element on the page can have focus at any given moment.
      *  Typically, an element exhibits a visual cue, such as a subtle outline,
      *  indicating that it is in focus. The element in focus receives keystroke
      *  events if the user causes any.
-     *
+     * 
      *  An element receives focus and loses focus (blurs) through user actions,
      *  such as clicking and tabbing, or programmatically, using the
      *  [focus( )](#focus) and [blur( )](#blur) functions.
@@ -1571,7 +1582,7 @@ declare namespace $w {
 
     /**
      * Provides functionality for elements that can be hidden.
-     *
+     * 
      *  To learn about the behavior of a hidden element,
      *  see the [`hidden`](#hidden) property.
      */
@@ -1602,7 +1613,7 @@ declare namespace $w {
      *  component to your page code using the [`postMessage()`](#postMessage) and
      *  [`onMessage()`](#onMessage) functions. To learn more about what code an HTML
      *  component can hold, see here.
-     *
+     * 
      *  For an overview of working with an HTML Component using code, see Working with the HTML Element.
      */
     interface HtmlComponent extends $w.IFrame{
@@ -1662,9 +1673,9 @@ declare namespace $w {
     /**
      * Images are images stored in the Media Manager
      *  or retrieved from an external web location.
-     *
+     * 
      *  The URL formats for images are:
-     *
+     * 
      *  + Images from the Media Manager: `wix:image://v1//#originWidth=&originHeight=[&watermark=]`
      *  + Images from the web: `http(s)://`
      */
@@ -2089,12 +2100,12 @@ declare namespace $w {
 
     /**
      * An object representing an element's styles.
-     *
+     * 
      * Elements that expose a style property can be styled programmatically.
      * You cannot programmatically style elements that do not expose a style property.
-     *
+     *  
      * The following elements expose the style property:
-     *
+     * 
      *  + [`Box`]($w.Box.html)
      *  + [`Button`]($w.Button.html)
      *  + [`Checkbox`]($w.Checkbox.html)
@@ -2106,7 +2117,7 @@ declare namespace $w {
      *  + [`QuickActionBar`]($w.QuickActionBar.html)
      *  + [`RadioButtonGroup`]($w.RadioButtonGroup.html)
      *  + [`TextBox`]($w.TextBox.html)
-     *  + [`TextInput`]($w.TextInput.html)
+     *  + [`TextInput`]($w.TextInput.html) 
      *  + [`UploadButton`]($w.UploadButton.html)
      */
     interface Style {
@@ -2206,10 +2217,10 @@ declare namespace $w {
             /**
              * The location of the data displayed
              *  in the column.
-             *
+             * 
              *  When the table is populated by a connection to a dataset, the `dataPath`
              *  value is a field key from the collection that the dataset is connected to.
-             *
+             * 
              *  When the table is populated by using the [`rows`](#rows) or
              *  [`dataFetcher`](#dataFetcher) properties, the `dataPath` value is one of the
              *  property keys from the table's row objects.
@@ -2234,13 +2245,13 @@ declare namespace $w {
             /**
              * The location of the links used when
              *  the items in the column are clicked.
-             *
+             * 
              *  When the table is populated by a connection to a dataset, the `linkPath`
              *  value is a field key from the collection that the dataset is connected to.
              *  The collection field can be a [regular field](https://support.wix.com/en/article/about-database-collections#regular-fields)
              *  that contains URLs or a [calculated field](https://support.wix.com/en/article/about-database-collections#calculated-fields)
              *  that contains relative links to dynamic pages.
-             *
+             * 
              *  When the table is populated by using the [`rows`](#rows) or
              *  [`dataFetcher`](#dataFetcher) properties, the `linkPath` value is one of the
              *  property keys from the table's rows objects.
@@ -2464,15 +2475,15 @@ declare namespace $w {
 
     /**
      * Provides functionality for elements that can be validated.
-     *
+     * 
      * Certain input elements contain properties that are used in basic form
      * validation, such as [`required`]($w.RequiredMixin.html#required) and
      * [`maxlength`]($w.TextInputMixin.html#maxlength). More complex validation
      * logic is achieved using the properties and functions below.
-     *
+     * 
      * Basic validation of elements against the constraints set in the Editor or
      * programmatically is always peformed, regardless of any custom validation.
-     *
+     * 
      * However, sometimes more complex validation is needed, including validations
      * that depend on more than one element. This is typically achieved by adding
      * custom validation logic in an event handler that you set using the input
@@ -2480,7 +2491,7 @@ declare namespace $w {
      * handler, you call the `reject()` function to indicate that the element is
      * invalid. The element's validity is checked when the value of the element
      * changes either by user interaction or programmatically.
-     *
+     * 
      * Note that validations other than **required**, including custom validations,
      * are not run on input elements when they don't have a value.
      */
@@ -2791,6 +2802,59 @@ declare namespace $w {
          * Unmutes audio volume.
          */
         unmute(): Promise<void>;
+    }
+
+    /**
+     * Note: This feature is not yet available to all users.
+     * 
+     * 
+     * The reCAPTCHA element allows you to present a challenge-response test
+     *  to site visitors to determine whether they are human or a bot.
+     */
+    interface Captcha extends $w.Element, $w.FocusMixin{
+        /**
+         * Gets the reCAPTCHA token.
+         */
+        readonly token: string;
+        /**
+         * Adds an event handler that runs when an error occurs while completing the reCAPTCHA challenge.
+         */
+        onError(handler: $w.Captcha.ErrorHandler): void;
+        /**
+         * Adds an event handler that runs when the reCAPTCHA token expires.
+         */
+        onTimeout(handler: $w.Captcha.TimeoutHandler): void;
+        /**
+         * Adds an event handler that runs when the reCAPTCHA challenge is successfully completed.
+         */
+        onVerified(handler: $w.Captcha.VerifiedHandler): void;
+        /**
+         * Resets the reCAPTCHA challenge.
+         */
+        reset(): Promise<void>;
+    }
+
+    namespace Captcha {
+        /**
+         * An error event handler.
+         */
+        type ErrorHandler = ()=>void;
+
+        /**
+         * A timeout event handler.
+         */
+        type TimeoutHandler = ()=>void;
+
+        /**
+         * A verification event handler.
+         */
+        type VerificationHandler = ()=>void;
+
+        /**
+         * A verification event handler.
+         */
+        type VerifiedHandler = ()=>Promise<Void>;
+
     }
 
     /**
@@ -3379,7 +3443,7 @@ declare namespace $w {
             /**
              * Buyer's identity.
              *  One of:
-             *
+             * 
              *  + `"ADMIN"`: Buyer is the site owner.
              *  + `"MEMBER"`: Buyer is a logged-in site member.
              *  + `"VISITOR"`: Buyer is not logged in.
@@ -3445,7 +3509,7 @@ declare namespace $w {
             /**
              * Type of the line item.
              *  One of:
-             *
+             * 
              *  + `"DIGITAL"`: Digital item.
              *  + `"PHYSICAL"`: Physical item.
              *  + `"CUSTOM_AMOUNT_ITEM"`: Item with a custom price.
@@ -3477,7 +3541,7 @@ declare namespace $w {
             /**
              * Type of the media item.
              *  One of:
-             *
+             * 
              *  + `"IMAGE"`: Image item.
              *  + `"UNSPECIFIED_MEDIA_TYPE_ITEM"`: Media item type can't be classified due to an error.
              */
@@ -3716,6 +3780,10 @@ declare namespace $w {
         };
 
     }
+
+    type dataset = wix_dataset.Dataset;
+
+    type router_dataset = wix_dataset.DynamicDataset;
 
 }
 
@@ -4012,7 +4080,7 @@ declare namespace site_monitoring {
             /**
              * Indicates the viewing mode from which the log entry originates.
              *  One of the following:
-             *
+             * 
              *  + `"Preview"`: Preview mode.
              *  + `"Site"`: Published site mode.
              */
@@ -4944,9 +5012,9 @@ declare namespace wix_billing_backend {
             value: number;
             /**
              * Discount type.
-             *
+             * 
              * Either:
-             *
+             * 
              * + `"Fixed"`: A fixed amount is deducted.
              * + `"Percentage"`: A percentage of the total amount is deducted.
              */
@@ -4993,7 +5061,7 @@ declare namespace wix_billing_backend {
             /**
              * Status of the invoice.
              *  One of:
-             *
+             * 
              *  + `"Draft"`
              *  + `"Sent"`
              *  + `"Processing"`
@@ -5190,7 +5258,7 @@ declare namespace wix_billing_backend {
             /**
              * An IETF language tag.
              * Some common language tags include:
-             *
+             * 
              * + `"en-US"`: English, United States
              * + `"en-GB"`: English, British
              * + `"es-ES"`: Spanish, Spain
@@ -5409,9 +5477,9 @@ declare namespace wix_billing_backend {
             value: number;
             /**
              * Discount type.
-             *
+             * 
              * Either:
-             *
+             * 
              * + `"Fixed"`: A fixed amount is deducted.
              * + `"Percentage"`: A percentage of the total amount is deducted.
              */
@@ -5512,7 +5580,7 @@ declare namespace wix_billing_backend {
             /**
              * An IETF language tag.
              * Some common language tags include:
-             *
+             * 
              * + `"en-US"`: English, United States
              * + `"en-GB"`: English, British
              * + `"es-ES"`: Spanish, Spain
@@ -5549,7 +5617,7 @@ declare namespace wix_billing_backend {
             /**
              * Price quote term type.
              *  One of:
-             *
+             * 
              *  + `"DueOnReceipt"`
              *  + `"NetPlus"`
              *  + `"TimeStamp"`
@@ -5575,7 +5643,7 @@ declare namespace wix_billing_backend {
             /**
              * Status of the price quote.
              *  One of:
-             *
+             * 
              *  + `"Draft"`
              *  + `"Sent"`
              *  + `"Processing"`
@@ -5745,6 +5813,29 @@ declare namespace wix_billing_backend {
 
 }
 
+declare namespace wix_captcha_backend {
+    /**
+     * An object representing a reCAPTCHA authorization error message.
+     */
+    type ErrorReport = {
+        /**
+         * Error message.
+         */
+        error: string;
+    };
+
+    /**
+     * An object representing a reCAPTCHA authorization success message.
+     */
+    type SuccessReport = {
+        /**
+         * Value is `true` when authorization is successful.
+         */
+        success: boolean;
+    };
+
+}
+
 declare namespace wix_http_functions {
     /**
      * An object representing an incoming request received by a call to an HTTP function.
@@ -5870,7 +5961,7 @@ declare namespace wix_crm_backend {
             /**
              * Type of attachment.
              * One of:
-             *
+             * 
              * + `"UNDEFINED"`
              * + `"DOCUMENT"`
              * + `"IMAGE"`
@@ -5961,7 +6052,7 @@ declare namespace wix_crm_backend {
             /**
              * Contributor that will receive the notifications, based on their assigned roles.
              *  One of:
-             *
+             * 
              *  + `"All_Contributors"`: All site contributors, including the site owner.
              *  + `"Owner"`: Only the site owner.
              */
@@ -5975,7 +6066,7 @@ declare namespace wix_crm_backend {
             /**
              * Roles to receive the notification.
              * One of:
-             *
+             * 
              * + `"All_Contributors"`: All site contributors (default).
              * + `"Owner"`: Only the site owner.
              */
@@ -6797,7 +6888,7 @@ declare namespace wix_marketing_backend {
             /**
              * Wix application for which the coupon is applicable.
              * One of the following:
-             *
+             * 
              *  + `"stores"`
              *  + `"bookings"`
              *  + `"events"`
@@ -6865,7 +6956,7 @@ declare namespace wix_pay_backend {
             /**
              * Payment status.
              *  One of:
-             *
+             * 
              *  + `"Successful"`
              *  + `"Pending"`
              *  + `"Failed"`
@@ -7681,7 +7772,7 @@ declare namespace wix_stores_backend {
         /**
          * Type of coupon.
          *  One of:
-         *
+         * 
          *  + `"BuyXGetY"`
          *  + `"FixedPriceAmount"`
          *  + `"FreeShipping"`
@@ -7718,7 +7809,7 @@ declare namespace wix_stores_backend {
         /**
          * Buyer's identity.
          *  One of:
-         *
+         * 
          *  + `"ADMIN"`: Buyer is the site owner.
          *  + `"MEMBER"`: Buyer is a logged-in site member.
          *  + `"VISITOR"`: Buyer is not logged in.
@@ -7844,7 +7935,7 @@ declare namespace wix_stores_backend {
         /**
          * Type of the line item.
          *  One of:
-         *
+         * 
          *  + `"DIGITAL"`: Digital item.
          *  + `"PHYSICAL"`: Physical item.
          *  + `"CUSTOM_AMOUNT_ITEM"`: Item with a custom price.
@@ -7872,7 +7963,7 @@ declare namespace wix_stores_backend {
         /**
          * Type of the media item.
          *  One of:
-         *
+         * 
          *  + `"IMAGE"`: Image item.
          *  + `"UNSPECIFIED_MEDIA_TYPE_ITEM"`: Media item type can't be classified due to an error.
          */
@@ -8226,7 +8317,7 @@ declare namespace wix_bookings {
         /**
          * Status of the booking that was checked out.
          *  One of:
-         *
+         * 
          *  + `"Confirmed"`: Payment was successful or payment is to be done offline.
          *  + `"Pending Payment"`: Payment is pending.
          *  + `"Terminated"`: Payment failed or was cancelled.
@@ -8542,7 +8633,7 @@ declare namespace wix_paid_plans {
         wixPayOrderId: string;
         /**
          * Payment status in Wix Pay. One of:
-         *
+         * 
          *  + "`Successful`": Payment was successfully received.
          *  + "`Pending`": Payment is pending payment provider approval.
          *  + "`Failed`": Payment has failed.
@@ -8631,7 +8722,7 @@ declare namespace wix_pay {
         /**
          * Deprecated: An object representing information about the user. It will be used to prefill
          *  user info form during payment process.
-         *
+         * 
          *  Deprecation note: Pass user information to [`createPayment( )`](wix-pay-backend.html#createPayment) instead.
          */
         userInfo?: wix_pay.PaymentUserInfo;
@@ -8653,7 +8744,7 @@ declare namespace wix_pay {
         payment: wix_pay.Payment;
         /**
          * Payment status. One of:
-         *
+         * 
          *  + "`Successful`": Payment was successfully received.
          *  + "`Pending`": Payment is pending payment provider approval.
          *  + "`Failed`": Payment has failed.
