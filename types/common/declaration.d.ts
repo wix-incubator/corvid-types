@@ -8339,7 +8339,7 @@ declare namespace wix_bookings {
          */
         value: string;
         /**
-         * ID of the form field from the **form** property in the **Booking/Sessions** collection.
+         * ID of the form field from the **form** property in the **Booking/Services** collection.
          */
         _id: string;
     };

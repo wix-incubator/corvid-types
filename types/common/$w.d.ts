@@ -1,4 +1,4 @@
-/// <reference path="../common/utilityTypes.d.ts" />
+/// <reference path="./utilityTypes.d.ts" />
 
 declare type TypeNameToSdkType = {
     AccountNavBar: $w.AccountNavBar;

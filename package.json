@@ -5,7 +5,9 @@
   "scripts": {
     "lint": "eslint .",
     "build": ":",
-    "test": "yarn lint"
+    "test": "jest",
+    "generate-dts": "docworks dts -r git@github.com:wix-private/wix-code-docs.git -o declaration -d temp_declarations --wixselector && npm run copy-declarations temp_declarations",
+    "copy-declarations": "scripts/copy_declarations.sh"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@commitlint/travis-cli": "^8.1.0",
+    "docworks-cli": "^1.10.1",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
