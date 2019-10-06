@@ -17,7 +17,7 @@
     "node": ">=10"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "src/index.js",
   "files": [
     "types",
     "configs"
@@ -36,10 +36,14 @@
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.17.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "fs-extra": "^8.1.0",
     "husky": "^3.0.5",
+    "jest": "^24.9.0",
     "lint-staged": "^9.2.5",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "typescript": "^3.6.3"
   },
   "husky": {
     "hooks": {

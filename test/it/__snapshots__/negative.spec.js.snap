@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`typescript - negative scenarios should fail compiling test/it/code-samples/negative/backend-$w-module folder 1`] = `"$w-module.js (1,1): Cannot use namespace '$w' as a value."`;
+
+exports[`typescript - negative scenarios should fail compiling test/it/code-samples/negative/backend-unknown-module folder 1`] = `"unknown.js (1,11): Cannot find name 'wixUnknownModule'."`;
+
+exports[`typescript - negative scenarios should fail compiling test/it/code-samples/negative/pages-$w-dynamic-not-on-page folder 1`] = `"index.js (6,6): Argument of type '\\"#button3\\"' is not assignable to parameter of type '\\"Document\\" | \\"#page1\\" | \\"#text1\\" | \\"#button1\\" | \\"#input1\\" | \\"#button2\\" | \\"#googleMaps1\\" | \\"#text2\\" | \\"#header1\\" | \\"#footer1\\" | \\"#wixChat1\\" | \\"AccountNavBar\\" | \\"Anchor\\" | \\"Box\\" | ... 41 more ... | \\"VideoPlayer\\"'.,index.js (11,6): Argument of type '\\"#button4\\"' is not assignable to parameter of type '\\"Document\\" | \\"#page1\\" | \\"#text1\\" | \\"#button1\\" | \\"#input1\\" | \\"#button2\\" | \\"#googleMaps1\\" | \\"#text2\\" | \\"#header1\\" | \\"#footer1\\" | \\"#wixChat1\\" | \\"AccountNavBar\\" | \\"Anchor\\" | \\"Box\\" | ... 41 more ... | \\"VideoPlayer\\"'."`;
+
+exports[`typescript - negative scenarios should fail compiling test/it/code-samples/negative/pages-node-module folder 1`] = `"node.js (1,20): Cannot find module 'fs'.,node.js (2,22): Cannot find module 'path'."`;
+
+exports[`typescript - negative scenarios should fail compiling test/it/code-samples/negative/pages-unknown-module folder 1`] = `"unknown.js (1,11): Cannot find name 'wixUnknownModule'."`;
+
+exports[`typescript - negative scenarios should fail compiling test/it/code-samples/negative/public-node-module folder 1`] = `"node.js (1,20): Cannot find module 'fs'.,node.js (2,22): Cannot find module 'path'."`;
+
+exports[`typescript - negative scenarios should fail compiling test/it/code-samples/negative/public-unknown-module folder 1`] = `"unknown.js (1,11): Cannot find name 'wixUnknownModule'."`;
