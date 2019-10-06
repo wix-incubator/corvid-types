@@ -1816,6 +1816,28 @@ declare namespace $w {
     }
 
     /**
+     * Note: This feature is not yet available to all users.
+     */
+    interface MultiStateBox extends $w.Element, $w.HiddenCollapsedMixin, $w.ClickableMixin, $w.ContainableMixin{
+        /**
+         * Gets the multi-state box's current state.
+         */
+        readonly currentState: $w.State;
+        /**
+         * Gets a list of all the states contained in the multi-state box.
+         */
+        readonly states: $w.State[];
+        /**
+         * Change the multi-state box's current state to a specific state.
+         */
+        changeState(stateReference: string | $w.State): Promise<$w.State>;
+        /**
+         * Adds an event handler that runs when the multi-state box moves to a new state.
+         */
+        onChange(eventHandler: $w.EventHandler): $w.MultiStateBox;
+    }
+
+    /**
      * Provides basic functionality for all Wix objects, including objects
      *  that are not [elements]($w.Element.html).
      */
@@ -2096,6 +2118,16 @@ declare namespace $w {
          * Adds an event handler that runs when the slideshow moves to a new slide.
          */
         onChange(eventHandler: $w.EventHandler): $w.Slideshow;
+    }
+
+    /**
+     * Note: This feature is not yet available to all users.
+     */
+    interface State extends $w.Element, $w.Background, $w.ContainableMixin{
+        /**
+         * Gets the state's ID.
+         */
+        readonly id: string;
     }
 
     /**
@@ -2853,7 +2885,7 @@ declare namespace $w {
         /**
          * A verification event handler.
          */
-        type VerifiedHandler = ()=>Promise<Void>;
+        type VerifiedHandler = ()=>Promise<void>;
 
     }
 
@@ -5940,12 +5972,110 @@ declare namespace wix_crm_backend {
      */
     interface Events {
         /**
+         * An event that fires when a new workflow card is created.
+         */
+        onCardCreated(event: wix_crm_backend.Events.CardCreatedEvent): void;
+        /**
+         * An event that fires when a workflow card is moved.
+         */
+        onCardMoved(event: wix_crm_backend.Events.CardMovedEvent): void;
+        /**
+         * An event that fires when a workflow card is moved.
+         */
+        onCardRestored(event: wix_crm_backend.Events.CardRestoredEvent): void;
+        /**
          * An event that fires when a user submits a form.
          */
         onFormSubmit(event: wix_crm_backend.Events.FormSubmitEvent): void;
     }
 
     namespace Events {
+        /**
+         * An object representing a created card.
+         */
+        type CardCreatedEvent = {
+            /**
+             * ID of the card's workflow.
+             */
+            workflowId: string;
+            /**
+             * Name of the card's workflow.
+             */
+            workflowName: string;
+            /**
+             * ID of the card's phase.
+             */
+            phaseId: string;
+            /**
+             * Name of the card's phase.
+             */
+            phaseName: string;
+            /**
+             * The card that was created.
+             */
+            card: wix_crm_backend.workflows.Card;
+        };
+
+        /**
+         * An object representing a moved card.
+         */
+        type CardMovedEvent = {
+            /**
+             * ID of the card's workflow.
+             */
+            workflowId: string;
+            /**
+             * Name of the card's workflow.
+             */
+            workflowName: string;
+            /**
+             * ID of the card's new phase.
+             */
+            newPhaseId: string;
+            /**
+             * Name of the card's new phase.
+             */
+            newPhaseName: string;
+            /**
+             * ID of the card's old phase.
+             */
+            previousPhaseId: string;
+            /**
+             * Name of the card's old phase.
+             */
+            previousPhaseName: string;
+            /**
+             * The card that was moved.
+             */
+            card: wix_crm_backend.workflows.Card;
+        };
+
+        /**
+         * An object representing a moved card.
+         */
+        type CardRestoredEvent = {
+            /**
+             * ID of the workflow the card was restored to.
+             */
+            workflowId: string;
+            /**
+             * Name of the workflow the card was restored to.
+             */
+            workflowName: string;
+            /**
+             * ID of the phase the card was restored to.
+             */
+            phaseId: string;
+            /**
+             * Name of the phase the card was restored to.
+             */
+            phaseName: string;
+            /**
+             * The card that was restored.
+             */
+            card: wix_crm_backend.workflows.Card;
+        };
+
         /**
          * An object representing an attachment to a form.
          */
@@ -5954,10 +6084,6 @@ declare namespace wix_crm_backend {
              * Name of the attachment.
              */
             name: string;
-            /**
-             * URL of the attachment.
-             */
-            url: string;
             /**
              * Type of attachment.
              * One of:
@@ -5968,6 +6094,10 @@ declare namespace wix_crm_backend {
              * + `"VIDEO"`
              */
             type: string;
+            /**
+             * URL of the attachment.
+             */
+            url: string;
         };
 
         /**
@@ -6001,13 +6131,13 @@ declare namespace wix_crm_backend {
              */
             submissionTime: Date;
             /**
-             * The form's attachments.
-             */
-            attachments: wix_crm_backend.Events.FormAttachment[];
-            /**
              * Data submitted in the form. The object contains key:value pairs where the key is the field name and the value is the contents of the field.
              */
             submissionData: wix_crm_backend.Events.FormField[];
+            /**
+             * The form's attachments.
+             */
+            attachments: wix_crm_backend.Events.FormAttachment[];
         };
 
     }
@@ -6175,6 +6305,366 @@ declare namespace wix_crm_backend {
              *  that this task is linked to.
              */
             contactId?: string;
+        };
+
+    }
+
+    /**
+     * The wix-crm-backend module contains functionality for working with
+     *  your site's [workflows](https://support.wix.com/en/article/about-workflows)
+     *  from backend code.
+     * 
+     *  A workflow consists of a number of phases, also known as steps. The final phase
+     *  in the workflow, the phase that indicates the workflow has been completed,
+     *  is know as the win phase. Each phase can contain cards that move between the phases,
+     *  indicating the card's progression through the workflow.
+     */
+    interface workflows {
+        /**
+         * Archives a workflow card.
+         */
+        archiveCard(id: string): Promise<void>;
+        /**
+         * Creates a new workflow card.
+         */
+        createCard(workflowId: string, phaseId: string, card: wix_crm_backend.workflows.Card, position?: number): Promise<string>;
+        /**
+         * Creates a new workflow phase.
+         */
+        createPhase(workflowId: string, phase: wix_crm_backend.workflows.Phase, position?: number): Promise<string>;
+        /**
+         * Creates a new workflow.
+         */
+        createWorkflow(workflowInfo: wix_crm_backend.workflows.WorkflowInfo): Promise<string>;
+        /**
+         * Deletes a workflow card by ID.
+         */
+        deleteCard(id: string): Promise<void>;
+        /**
+         * Deletes a workflow phase by ID.
+         */
+        deletePhase(id: string): Promise<void>;
+        /**
+         * Deletes a workflow by ID.
+         */
+        deleteWorkflow(id: string): Promise<void>;
+        /**
+         * Gets a workflow card by ID.
+         */
+        getCard(id: string): Promise<wix_crm_backend.workflows.Card>;
+        /**
+         * Gets a phase info by ID.
+         */
+        getPhaseInfo(id: string): Promise<wix_crm_backend.workflows.Phase>;
+        /**
+         * Gets a workflow info by ID.
+         */
+        getWorkflowInfo(id: string): Promise<wix_crm_backend.workflows.WorkflowInfo>;
+        /**
+         * Gets a list of a workflow's cards.
+         */
+        listCards(workflowId: string, options: wix_crm_backend.workflows.ListCardOptions): Promise<wix_crm_backend.workflows.CardList>;
+        /**
+         * Gets a list of a workflow's phases.
+         */
+        listPhasesInfo(workflowId: string, options: wix_crm_backend.workflows.ListOptions): Promise<wix_crm_backend.workflows.PhaseList>;
+        /**
+         * Gets a list of the site's workflows info.
+         */
+        listWorkflowsInfo(options: wix_crm_backend.workflows.ListOptions): Promise<wix_crm_backend.workflows.WorkflowList>;
+        /**
+         * Moves a card to a new position within a workflow.
+         */
+        moveCard(cardId: string, options: wix_crm_backend.workflows.MoveCardOptions): Promise<void>;
+        /**
+         * Moves a phase to a new position with a workflow.
+         */
+        movePhase(id: string, options: wix_crm_backend.workflows.MovePhaseOptions): Promise<void>;
+        /**
+         * Restores an archived workflow card.
+         */
+        restoreCard(id: string, options: wix_crm_backend.workflows.MoveCardOptions): Promise<void>;
+        /**
+         * Updates an existing workflow card.
+         */
+        updateCardFields(id: string, card: wix_crm_backend.workflows.Card): Promise<void>;
+        /**
+         * Updates an existing workflow phase.
+         */
+        updatePhaseFields(id: string, phase: wix_crm_backend.workflows.Phase): Promise<void>;
+        /**
+         * Updates an existing workflow.
+         */
+        updateWorkflowFields(id: string, workflowInfo: wix_crm_backend.workflows.WorkflowInfo): Promise<void>;
+    }
+
+    namespace workflows {
+        /**
+         * An object containing card information.
+         */
+        type Card = {
+            /**
+             * Name of the card.
+             */
+            name: string;
+            /**
+             * Unique card identifier.
+             */
+            id: string;
+            /**
+             * ID of the contact associated with the card.
+             */
+            contactId: string;
+            /**
+             * Date the card was created.
+             */
+            createdDate: Date;
+            /**
+             * Date the card was last updated.
+             */
+            updatedDate: Date;
+            /**
+             * Source that created the card.
+             * 
+             *  One of:
+             * 
+             *  + `"Contacts"`
+             *  + `"Inbox"`
+             *  + `"Invoices"`
+             *  + `"Price Quotes"`
+             *  + `"Wix Forms"`
+             */
+            source: string;
+            /**
+             * ID of the phase which contains the card.
+             */
+            phaseId: string;
+        };
+
+        /**
+         * An object containing a list of cards and pagination info.
+         */
+        type CardList = {
+            /**
+             * List of cards matching the list options.
+             */
+            items: wix_crm_backend.workflows.Card[];
+            /**
+             * Number of items in the current results page.
+             */
+            length: number;
+            /**
+             * Total number of cards in the specified workflow and phase.
+             */
+            totalCount: number;
+            /**
+             * Number of items returned per page with the current list options.
+             */
+            pageSize: number;
+            /**
+             * Total number of results pages.
+             */
+            totalPages: number;
+            /**
+             * Index of the current page. Indices are zero-based.
+             */
+            currentPage: number;
+        };
+
+        /**
+         * An object contains ListCards request data.
+         */
+        type ListCardOptions = {
+            /**
+             * Maximum number of cards to retrieve. Defaults to `50`.
+             */
+            limit?: number;
+            /**
+             * ID of phase to retrieve cards from. If omitted, will retrieve cards from all phases. Not to be used with `fetchOnlyArchived`.
+             */
+            phaseId?: string;
+            /**
+             * Whether to retrieve only archived cards. Not to be used with `phaseId`.
+             */
+            fetchOnlyArchived?: boolean;
+            /**
+             * Ordering options.
+             */
+            order?: wix_crm_backend.workflows.OrderOptions;
+            /**
+             * Number of cards to skip before the retrieved items. Defaults to `0`.
+             */
+            skip?: number;
+        };
+
+        /**
+         * An object containing options used when requesting a list of workflows or phases.
+         */
+        type ListOptions = {
+            /**
+             * Maximum number of items to retrieve. Defaults to `50` for phases and `100` for workflows.
+             */
+            limit?: number;
+            /**
+             * Ordering options.
+             */
+            order?: wix_crm_backend.workflows.OrderOptions;
+            /**
+             * Number of items to skip before the retrieved items. Defaults to `0`.
+             */
+            skip?: number;
+        };
+
+        /**
+         * An object containing information used when moving a card.
+         */
+        type MoveCardOptions = {
+            /**
+             * ID of the phase to move the card to. If omitted, the card remains in the same phase.
+             */
+            newPhaseId?: string;
+            /**
+             * Position within the phase to move the card to. If omitted, the card is moved to the top of the phase.
+             */
+            newPosition?: number;
+        };
+
+        /**
+         * An object containing information used when moving a phase.
+         */
+        type MovePhaseOptions = {
+            /**
+             * ID of the workflow to move the phase to.
+             */
+            workflowId: string;
+            /**
+             * Position within the workflow to move the phase to.
+             */
+            newPosition: number;
+        };
+
+        /**
+         * An object containing sort order options.
+         */
+        type OrderOptions = {
+            /**
+             * Order of sort. Either `"asc"` or `"desc"` (defaults to `"asc"`).
+             */
+            sort: string;
+            /**
+             * Field to sort on.
+             */
+            field: string;
+        };
+
+        /**
+         * An object containing phase information.
+         */
+        type Phase = {
+            /**
+             * Name of the phase.
+             */
+            name: string;
+            /**
+             * Unique phase identifier.
+             */
+            id: string;
+        };
+
+        /**
+         * An object containing a list of phases and pagination info.
+         */
+        type PhaseList = {
+            /**
+             * List of phases matching the list options.
+             */
+            items: wix_crm_backend.workflows.Phase[];
+            /**
+             * Number of items in the current results page.
+             */
+            length: number;
+            /**
+             * Total number of phases in the specified workflow.
+             */
+            totalCount: number;
+            /**
+             * Number of items returned per page with the current list options.
+             */
+            pageSize: number;
+            /**
+             * Total number of results pages.
+             */
+            totalPages: number;
+            /**
+             * Index of the current page. Indices are zero-based.
+             */
+            currentPage: number;
+        };
+
+        /**
+         * An object contains workflow.
+         */
+        type Workflow = {
+            /**
+             * Workflow information.
+             */
+            workflowInfo: wix_crm_backend.workflows.WorkflowInfo;
+            /**
+             * ID of the win phase.
+             */
+            winPhaseId: string;
+        };
+
+        /**
+         * An object containing information about a workflow.
+         */
+        type WorkflowInfo = {
+            /**
+             * Unique workflow identifier.
+             */
+            id: string;
+            /**
+             * Name of the workflow.
+             */
+            name: string;
+            /**
+             * Workflow description.
+             */
+            description?: string;
+            /**
+             * Date the workflow was created.
+             */
+            createdDate?: Date;
+        };
+
+        /**
+         * An object containing a list of workflows and pagination info.
+         */
+        type WorkflowList = {
+            /**
+             * List of workflows matching the list options.
+             */
+            items: wix_crm_backend.workflows.WorkflowInfo[];
+            /**
+             * Number of items in the current results page.
+             */
+            length: number;
+            /**
+             * Total number of workflows in the site.
+             */
+            totalCount: number;
+            /**
+             * Number of items returned per page with the current list options.
+             */
+            pageSize: number;
+            /**
+             * Total number of results pages.
+             */
+            totalPages: number;
+            /**
+             * Index of the current page. Indices are zero-based.
+             */
+            currentPage: number;
         };
 
     }
@@ -6927,6 +7417,233 @@ declare namespace wix_marketing_backend {
              * ID of the specific item in the group for which the coupon is applicable. If no `entityId` is specified, the coupon applies to all items in the group. In some cases when a group is specified, an `entityId` is required.
              */
             entityId?: string;
+        };
+
+    }
+
+}
+
+declare namespace wix_media_backend {
+    /**
+     * Events fired by the Wix Media API.
+     */
+    interface Events {
+        /**
+         * An event that fires when a file has completed uploading.
+         */
+        onFileUploaded(event: wix_media_backend.Events.FileEvent): void;
+        /**
+         * An event that fires when a video file has completed transcoding.
+         */
+        onVideoTranscoded(event: wix_media_backend.Events.FileEvent): void;
+    }
+
+    namespace Events {
+        /**
+         * An object representing an uploaded file and upload context.
+         */
+        type FileEvent = {
+            /**
+             * Information about the uploaded file.
+             */
+            fileInfo: wix_media_backend.mediaManager.FileInfo;
+            /**
+             * An object of key:value string pairs that was sent
+             *  when the file was uploaded.
+             */
+            context: any;
+        };
+
+    }
+
+    /**
+     * The `mediaManager` module contains functionality for working with
+     *  the media that is stored in your site's Media Manager.
+     */
+    interface mediaManager {
+        /**
+         * Gets a file's information from the Media Manager by name or URL.
+         */
+        getFileInfo(fileName: string): Promise<wix_media_backend.mediaManager.FileInfo>;
+        /**
+         * Gets a file's URL from the Media Manager.
+         */
+        getFileUrl(fileName: string): Promise<string>;
+        /**
+         * Gets an upload URL and a corresponding upload token.
+         */
+        getUploadUrl(path: string, options: wix_media_backend.mediaManager.UploadOptions): Promise<wix_media_backend.mediaManager.UploadUrl>;
+        /**
+         * Gets a video file's playback URL from the Media Manager.
+         */
+        getVideoPlaybackUrl(fileName: string, format: string): Promise<string>;
+        /**
+         * Imports a file to the Media Manager from a URL.
+         */
+        importFile(path: string, url: string, options: wix_media_backend.mediaManager.UploadOptions): Promise<wix_media_backend.mediaManager.FileInfo>;
+        /**
+         * Uploads a file to the Media Manager.
+         */
+        upload(path: string, fileContent: Buffer, fileName: string, options: wix_media_backend.mediaManager.UploadOptions): Promise<wix_media_backend.mediaManager.FileInfo>;
+    }
+
+    namespace mediaManager {
+        /**
+         * An object containing information about the file that was uploaded.
+         */
+        type FileInfo = {
+            /**
+             * File name of the file that was uploaded. This name
+             *  is used when calling the [`getFileInfo()`](#getFileInfo), [`getFileUrl()`](#getFileUrl),
+             *  and [`getVideoPlaybackUrl()`](#getVideoPlaybackUrl) functions.
+             */
+            fileName: string;
+            /**
+             * URL of the file.
+             */
+            fileUrl: string;
+            /**
+             * File hash.
+             */
+            hash: string;
+            /**
+             * Size of the uploaded file in bytes.
+             */
+            sizeInBytes: number;
+            /**
+             * Mime type of
+             *  the uploaded file.
+             */
+            mimeType: string;
+            /**
+             * Type of the file that was uploaded.
+             *  One of:
+             * 
+             *  + `"audio"`
+             *  + `"document"`
+             *  + `"image"`
+             *  + `"shape"`
+             *  + `"video"`
+             */
+            mediaType: string;
+            /**
+             * Whether the link to the uploaded file is
+             *  public or private. Private links require a token to be used.
+             */
+            isPrivate: boolean;
+            /**
+             * ID of the uploaded files parent folder.
+             */
+            parentFolderId: string;
+            /**
+             * Name of the uploaded file. This is the name
+             *  that appears in the Media Manager.
+             */
+            originalFileName: string;
+            /**
+             * Status of the file that was uploaded.
+             *  One of:
+             * 
+             *  + `"IN-DOWNLOAD-QUEUE"`
+             *  + `"IN-QUEUE"`
+             *  + `"READY"`
+             */
+            opStatus: string;
+            /**
+             * URL where the file was uploaded from.
+             */
+            sourceURL: string;
+            /**
+             * URL of the file's icon.
+             */
+            iconUrl: string;
+            /**
+             * List of labels assigned to the file by the Media Manager.
+             */
+            labels: string[];
+            /**
+             * File height.
+             */
+            height: string;
+            /**
+             * File width.
+             */
+            width: string;
+        };
+
+        /**
+         * An object containing information about the media options of a file to upload.
+         */
+        type MediaOptions = {
+            /**
+             * Type of the file to upload.
+             *  One of:
+             * 
+             *  + `"audio"`
+             *  + `"document"`
+             *  + `"image"`
+             *  + `"shape"`
+             *  + `"video"`
+             */
+            mediaType?: string;
+            /**
+             * Mime type of
+             *  the file to import. The specified value must match the actual mime type of
+             *  the file's content.
+             */
+            mimeType?: string;
+        };
+
+        /**
+         * An object containing information about the metadata options of a file to upload.
+         */
+        type MetadataOptions = {
+            /**
+             * Whether the link to the uploaded file will
+             *  be public or private. Private links require a token to be used. Defaults to
+             *  `false`.
+             */
+            isPrivate?: boolean;
+            /**
+             * Indicates if the file was uploaded by a
+             *  site visitor. Files uploaded by visitors are tagged in the Media Manager as
+             *  being added by a visitor. Defaults to `true`.
+             */
+            isVisitorUpload?: boolean;
+            /**
+             * An object of key:value string pairs that is sent
+             *  back in the [`onFileUploaded()`](wix-media-backend.Events.html#onFileUploaded)
+             *  event.
+             */
+            context?: any;
+        };
+
+        /**
+         * An object containing information about the options of a file to upload.
+         */
+        type UploadOptions = {
+            /**
+             * Media options of the file to upload.
+             */
+            mediaOptions?: wix_media_backend.mediaManager.MediaOptions;
+            /**
+             * Metadata options of the file to upload.
+             */
+            metadataOptions?: wix_media_backend.mediaManager.MetadataOptions;
+        };
+
+        /**
+         * An object containing information about an upload URL.
+         */
+        type UploadUrl = {
+            /**
+             * The URL to POST a file to.
+             */
+            uploadUrl: string;
+            /**
+             * The token to use with the file POST.
+             */
+            uploadToken: string;
         };
 
     }

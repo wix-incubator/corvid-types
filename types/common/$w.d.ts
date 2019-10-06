@@ -1,4 +1,3 @@
-/// <reference path="./utilityTypes.d.ts" />
 
 declare type TypeNameToSdkType = {
     AccountNavBar: $w.AccountNavBar;
@@ -48,6 +47,8 @@ declare type TypeNameToSdkType = {
     TimePicker: $w.TimePicker;
     VideoPlayer: $w.VideoPlayer;
 };
+
+declare type IntersectionArrayAndBase<T, P> = {[K in keyof T]: K extends P ? T[K] : T[K] & T[K][];};
 
 declare type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>;
 
