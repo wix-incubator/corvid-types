@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "types": ["corvid-types/types/backend"]
+    "typeRoots": ["../", "node_modules/@types"],
+    "types": ["types/backend", "node"]
   }
 }

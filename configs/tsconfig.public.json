@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "types": ["corvid-types/types/public"]
+    "typeRoots": ["../"],
+    "types": ["types/public"]
   }
 }

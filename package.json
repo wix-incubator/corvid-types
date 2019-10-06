@@ -51,5 +51,8 @@
     "*.js": [
       "eslint"
     ]
+  },
+  "dependencies": {
+    "@types/node": "^12.7.5"
   }
 }
