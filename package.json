@@ -1,12 +1,13 @@
 {
   "name": "corvid-types",
-  "version": "0.1.86",
+  "version": "0.1.87",
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint .",
     "build": ":",
     "test": "jest",
     "generate-dts": "docworks dts -r git@github.com:wix-private/wix-code-docs.git -o declaration -d temp_declarations --wixselector && npm run copy-declarations temp_declarations",
+    "postpublish" : "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
     "copy-declarations": "scripts/copy_declarations.sh"
   },
   "repository": {
