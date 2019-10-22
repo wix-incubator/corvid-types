@@ -1484,14 +1484,14 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-docworks-cli@^1.10.1:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/docworks-cli/-/docworks-cli-1.10.1.tgz#361ecb89039555c106331eaaadf0a04c72821d43"
-  integrity sha512-bgHfOaoizh8Y4JU9+J3BIRT2tsqP+brVWnkIDjhSsWy/Mr8mcN1LC34wDIEkwdDmhI7WgGqen4KIN/borpaFQQ==
+docworks-cli@^1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/docworks-cli/-/docworks-cli-1.10.2.tgz#71efd5c14bb638230df3f91ae7bd70d4555ff3b3"
+  integrity sha512-0dtu+C43rTT3Kudp7PtCdb+tXgS/MiWqM0ccxcCPwjZe71GtSKoSM4m3/T6GwE5bDPmx0ddiH0+1FKqexEIlXg==
   dependencies:
     babel-polyfill "^6.23.0"
     chalk "^2.3.0"
-    docworks-dts "^1.10.1"
+    docworks-dts "^1.10.2"
     docworks-jsdoc2spec "^1.9.1"
     docworks-repo "^1.9.1"
     docworks-tern "^1.9.1"
@@ -1501,10 +1501,10 @@ docworks-cli@^1.10.1:
     simple-git "1.120.0"
     tmp-promise "^1.0.3"
 
-docworks-dts@^1.10.1:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/docworks-dts/-/docworks-dts-1.10.1.tgz#4a17509ac126c273a6393d7eea1bdf7f281bb640"
-  integrity sha512-jeKT+YKOD13fvRJLh/hR/YfRduDh5+XaFs1qbWzBbsoaWlacrMtx9IqCSlEhkeeUfl7g/Yv7EprFHbgi8pGd8g==
+docworks-dts@^1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/docworks-dts/-/docworks-dts-1.10.2.tgz#d8a54564cd37f049896799d710c067b0f351df20"
+  integrity sha512-b9jLKZfAwx704cISXQDRQ8wijAl4YllaxVHmTZHjp42It2hNdNWf245V2AKvZzwRo095BaWft1/p6eSTB4N45Q==
   dependencies:
     dts-dom "^3.3.0"
 
