@@ -4,11 +4,13 @@
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint .",
-    "build": ":",
+    "build": "npm run generate-dts",
     "test": "jest",
-    "generate-dts": "docworks dts -r git@github.com:wix-private/wix-code-docs.git -o declaration -d temp_declarations --wixselector && npm run copy-declarations temp_declarations",
-    "postpublish" : "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
-    "copy-declarations": "scripts/copy_declarations.sh"
+    "clone-repo": "rm -rf corvid_docs && git clone git@github.com:wix-private/wix-code-docs.git corvid_docs",
+    "generate-dts": "npm run clone-repo && npm run generate-dts:declaration && npm run generate-dts:selector && rm -rf corvid_docs",
+    "generate-dts:declaration": "docworks dts -l corvid_docs -o declaration -d types/common --wixselector",
+    "generate-dts:selector": "scripts/selector-declaration-generator.js",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,8 @@
     "@commitlint/config-conventional": "^8.1.0",
     "@commitlint/travis-cli": "^8.1.0",
     "docworks-cli": "^1.10.2",
+    "docworks-dts": "^1.10.2",
+    "docworks-repo": "^1.9.1",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",

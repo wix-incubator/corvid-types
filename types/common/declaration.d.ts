@@ -85,6 +85,11 @@ declare module 'wix-site' {
     function getSiteStructure(): wix_site.SiteStructure;
 
     /**
+     * Optimizes resource fetching of pages and lightboxes in the site so they will load faster.
+     */
+    function prefetchPageResources(prefetchItems: wix_site.PrefetchItems): wix_site.PrefetchResult;
+
+    /**
      * Returns the sitemap for a router or dynamic page prefix.
      */
     function routerSitemap(routerPrefix: string): Promise<wix_router.WixRouterSitemapEntry[]>;
@@ -408,6 +413,11 @@ declare module 'wix-data' {
     function sort(): wix_data.WixDataSort;
 
     /**
+     * Removes all items from a collection.
+     */
+    function truncate(collectionName: string, options?: wix_data.WixDataOptions): Promise<void>;
+
+    /**
      * Updates an item in a collection.
      */
     function update(collectionName: string, item: any, options?: wix_data.WixDataOptions): Promise<any>;
@@ -630,6 +640,11 @@ declare module 'wix-crm' {
  *  paid plans from client-side code.
  */
 declare module 'wix-paid-plans' {
+    /**
+     * Cancels a specific order (subscription) of a plan.
+     */
+    function cancelOrder(orderId: string): Promise<void>;
+
     /**
      * Orders a paid plan.
      */
@@ -1140,7 +1155,7 @@ declare namespace $w {
     }
 
     /**
-     * The Rendering API is used to control when code is run as a page is being loaded.
+     * Use effect options to customize an effect when showing or hiding an element.
      */
     interface EffectOptions {
     }
@@ -1279,7 +1294,7 @@ declare namespace $w {
      */
     interface Element extends $w.Node, $w.ViewportMixin{
         /**
-         * Indicates if an element is currently displayed.
+         * Indicates if an element is currently in the DOM structure.
          */
         readonly rendered: boolean;
         /**
@@ -1816,7 +1831,7 @@ declare namespace $w {
     }
 
     /**
-     * Note: This feature is not yet available to all users.
+     * Multi-state boxes are containers for states.
      */
     interface MultiStateBox extends $w.Element, $w.HiddenCollapsedMixin, $w.ClickableMixin, $w.ContainableMixin{
         /**
@@ -2751,6 +2766,105 @@ declare namespace $w {
     type Validator = (value: string | $w.UploadButton.File[] | boolean, reject: Function)=>void;
 
     /**
+     * Note: This feature is not yet available to all users.
+     * 
+     * 
+     * `AddressInput` is used for entering addresses. It lets users type
+     * an address, and suggests exact locations using Google Maps services.
+     */
+    interface AddressInput extends $w.FormElement, $w.DisabledMixin, $w.RequiredMixin, $w.ReadOnlyMixin, $w.HiddenCollapsedMixin, $w.FocusMixin, $w.ClickableMixin{
+        /**
+         * Sets or gets the filter of the address input.
+         */
+        filter: $w.AddressInput.AddressFilter;
+        /**
+         * Sets or gets the placeholder of the address input.
+         */
+        placeholder: string;
+        /**
+         * Sets or gets the value of the address input.
+         */
+        value: $w.AddressInput.Address;
+    }
+
+    namespace AddressInput {
+        /**
+         * An object representing a physical address.
+         */
+        type Address = {
+            /**
+             * Address in human-readable format. The formatted address is displayed in the address input element.
+             */
+            formatted: string;
+            /**
+             * Address coordinates.
+             */
+            location?: $w.AddressInput.AddressLocation;
+            /**
+             * Address street name and number.
+             */
+            streetAddress?: $w.AddressInput.StreetAddress;
+            /**
+             * Address city.
+             */
+            city?: string;
+            /**
+             * Address subdivision of a country, such as a state or province.
+             */
+            subdivision?: string;
+            /**
+             * Address country.
+             */
+            country?: string;
+            /**
+             * Address postal code.
+             */
+            postalCode?: string;
+        };
+
+        /**
+         * An object containing a filter for filtering address suggestions
+         * in an address input. Suggestions are restricted to addresses within
+         * the specified country.
+         */
+        type AddressFilter = {
+            /**
+             * ISO_3166 country code.
+             */
+            country?: string;
+        };
+
+        /**
+         * An object containing the coordinates of an address.
+         */
+        type AddressLocation = {
+            /**
+             * Address latitude.
+             */
+            latitude: number;
+            /**
+             * Address longitude.
+             */
+            longitude: number;
+        };
+
+        /**
+         * An object containing the street name and number of an address.
+         */
+        type StreetAddress = {
+            /**
+             * Street name.
+             */
+            name: string;
+            /**
+             * Street number.
+             */
+            number?: string;
+        };
+
+    }
+
+    /**
      * An element for playing audio files.
      */
     interface AudioPlayer extends $w.Element, $w.HiddenCollapsedMixin{
@@ -2843,7 +2957,7 @@ declare namespace $w {
      * The reCAPTCHA element allows you to present a challenge-response test
      *  to site visitors to determine whether they are human or a bot.
      */
-    interface Captcha extends $w.Element, $w.FocusMixin{
+    interface Captcha extends $w.Element, $w.FocusMixin, $w.HiddenCollapsedMixin{
         /**
          * Gets the reCAPTCHA token.
          */
@@ -4174,6 +4288,51 @@ declare namespace wix_location {
 }
 
 declare namespace wix_site {
+    /**
+     * An object that contains information about which pages and lightboxes to
+     *  prefetch resources for.
+     */
+    type PrefetchItems = {
+        /**
+         * The relative or absolute URLs of the pages in your site
+         *  to prefetch resources for.
+         */
+        pages: string[];
+        /**
+         * The names of the lightboxes in your site to prefetch 
+         *  resources for.
+         */
+        lightboxes: string[];
+    };
+
+    /**
+     * An object that is returned from a prefetch request.
+     */
+    type PrefetchResult = {
+        /**
+         * A success or failure message.
+         */
+        message: string;
+        /**
+         * The errors that occurred.
+         */
+        errors: wix_site.PrefetchResultError;
+    };
+
+    /**
+     * An object that is returned when a resource prefetch is unsuccessful.
+     */
+    type PrefetchResultError = {
+        /**
+         * The names of the pages for which prefetch failed.
+         */
+        pages: string[];
+        /**
+         * The names of the lightbox for which prefetch failed.
+         */
+        lightboxes: string[];
+    };
+
     /**
      * An object that contains information about the site's prefixes.
      */
@@ -6740,51 +6899,51 @@ declare namespace wix_data {
         /**
          * A hook that is triggered after a `count()` operation.
          */
-        afterCount(count: number, context: wix_data.Hooks.HookContext): Promise<number>;
+        afterCount(count: number, context: wix_data.Hooks.HookContext): Promise<number> & number;
         /**
          * A hook that is triggered after a `get()` operation.
          */
-        afterGet(item: any, context: wix_data.Hooks.HookContext): Promise<any>;
+        afterGet(item: any, context: wix_data.Hooks.HookContext): Promise<any> & any;
         /**
          * A hook that is triggered after an `insert()` operation.
          */
-        afterInsert(item: any, context: wix_data.Hooks.HookContext): Promise<any>;
+        afterInsert(item: any, context: wix_data.Hooks.HookContext): Promise<any> & any;
         /**
          * A hook that is triggered after a `find` operation, for each of the items in the query results.
          */
-        afterQuery(item: any, context: wix_data.Hooks.HookContext): Promise<any>;
+        afterQuery(item: any, context: wix_data.Hooks.HookContext): Promise<any> & any;
         /**
          * A hook that is triggered after a `remove()` operation.
          */
-        afterRemove(item: any, context: wix_data.Hooks.HookContext): Promise<any>;
+        afterRemove(item: any, context: wix_data.Hooks.HookContext): Promise<any> & any;
         /**
          * A hook that is triggered after an `update()` operation.
          */
-        afterUpdate(item: any, context: wix_data.Hooks.HookContext): Promise<any>;
+        afterUpdate(item: any, context: wix_data.Hooks.HookContext): Promise<any> & any;
         /**
          * A hook that is triggered before a `count()` operation.
          */
-        beforeCount(query: wix_data.WixDataQuery, context: wix_data.Hooks.HookContext): Promise<wix_data.WixDataQuery>;
+        beforeCount(query: wix_data.WixDataQuery, context: wix_data.Hooks.HookContext): Promise<wix_data.WixDataQuery> & wix_data.WixDataQuery;
         /**
          * A hook that is triggered before a `get()` operation.
          */
-        beforeGet(itemId: string, context: wix_data.Hooks.HookContext): Promise<string>;
+        beforeGet(itemId: string, context: wix_data.Hooks.HookContext): Promise<string> & string;
         /**
          * A hook that is triggered before an `insert()` operation.
          */
-        beforeInsert(item: any, context: wix_data.Hooks.HookContext): Promise<any>;
+        beforeInsert(item: any, context: wix_data.Hooks.HookContext): Promise<any> & any;
         /**
          * A hook that is triggered before a `find()` operation.
          */
-        beforeQuery(query: wix_data.WixDataQuery, context: wix_data.Hooks.HookContext): Promise<wix_data.WixDataQuery>;
+        beforeQuery(query: wix_data.WixDataQuery, context: wix_data.Hooks.HookContext): Promise<wix_data.WixDataQuery> & wix_data.WixDataQuery;
         /**
          * A hook that is called before a `remove()` operation.
          */
-        beforeRemove(itemId: string, context: wix_data.Hooks.HookContext): Promise<string>;
+        beforeRemove(itemId: string, context: wix_data.Hooks.HookContext): Promise<string> & string;
         /**
          * A hook that is triggered before an `update()` operation.
          */
-        beforeUpdate(item: any, context: wix_data.Hooks.HookContext): Promise<any>;
+        beforeUpdate(item: any, context: wix_data.Hooks.HookContext): Promise<any> & any;
         /**
          * A hook that is triggered on any error or rejected Promise from any of the wix-data operations.
          */
@@ -7248,7 +7407,7 @@ declare namespace wix_fetch {
          */
         readonly ok: boolean;
         /**
-         * The reponse [status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).
+         * The response [status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).
          */
         readonly status: number;
         /**

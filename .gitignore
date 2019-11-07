@@ -1,4 +1,7 @@
 node_modules
+corvid_docs
+types/common/$w.d.ts
+types/common/declaration.d.ts
 .vscode
 .idea
 .history

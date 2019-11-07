@@ -1,3 +1,4 @@
+/// <reference path="../common/utilityTypes.d.ts" />
 
 declare type TypeNameToSdkType = {
     AccountNavBar: $w.AccountNavBar;
@@ -35,6 +36,7 @@ declare type TypeNameToSdkType = {
     VectorImage: $w.VectorImage;
     VerticalMenu: $w.VerticalMenu;
     Video: $w.Video;
+    AddressInput: $w.AddressInput;
     AudioPlayer: $w.AudioPlayer;
     Captcha: $w.Captcha;
     Pagination: $w.Pagination;
@@ -47,8 +49,6 @@ declare type TypeNameToSdkType = {
     TimePicker: $w.TimePicker;
     VideoPlayer: $w.VideoPlayer;
 };
-
-declare type IntersectionArrayAndBase<T, P> = {[K in keyof T]: K extends P ? T[K] : T[K] & T[K][];};
 
 declare type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>;
 
