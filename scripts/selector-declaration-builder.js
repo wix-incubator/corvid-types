@@ -55,7 +55,7 @@ function get$wFunctionMembers(operation) {
   return { name, params, returnType, typeParameters, jsDocComment };
 }
 
-function convent$wOperationToFunctionType(operation) {
+function convert$wOperationToFunctionType(operation) {
   const {
     name,
     params,
@@ -93,7 +93,7 @@ function is$wOperation(operation) {
 
 function convert$wServiceToNamespace(service) {
   const $wOperation = service.operations.find(is$wOperation);
-  const $wFuncType = convent$wOperationToFunctionType($wOperation);
+  const $wFuncType = convert$wOperationToFunctionType($wOperation);
   const operations = service.operations
     .filter(o => !is$wOperation(o))
     .map(convertOperationToFunction);

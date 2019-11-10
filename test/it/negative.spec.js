@@ -10,7 +10,6 @@ const negativeRoots = listSubDirectories(NEGATIVE_ROOT_PATH).filter(
 );
 
 describe("typescript - negative scenarios", () => {
-  console.log(negativeRoots);
   it.each(negativeRoots)(
     "should fail compiling %s folder",
     async tsRootPath => {

@@ -17,7 +17,7 @@ describe("define $w.d.ts", () => {
     test("should generate triple slash directive with the given path", () => {
       const tripleSlashDirectivePath = "../common/utilityTypes.d.ts";
       const dts = get$wDts({ tripleSlashDirectivePath });
-      const expectedDeceleration = ``; /// <reference path="${tripleSlashDirectivePath}" />`
+      const expectedDeceleration = `/// <reference path="${tripleSlashDirectivePath}" />`;
 
       expect(dts).toContain(expectedDeceleration);
     });
