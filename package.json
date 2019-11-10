@@ -6,7 +6,7 @@
     "lint": "eslint .",
     "build": "npm run generate-dts",
     "test": "jest",
-    "clone-repo": "rm -rf corvid_docs && git clone git@github.com:wix/wix-code-docs.git corvid_docs",
+    "clone-repo": "rm -rf corvid_docs && git clone https://github.com/wix/wix-code-docs.git corvid_docs",
     "generate-dts": "npm run clone-repo && npm run generate-dts:declaration && npm run generate-dts:selector && rm -rf corvid_docs",
     "generate-dts:declaration": "docworks dts -l corvid_docs -o declaration -d types/common --wixselector",
     "generate-dts:selector": "scripts/selector-declaration-generator.js",
