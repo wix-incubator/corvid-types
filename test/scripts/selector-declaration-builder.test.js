@@ -1,23 +1,22 @@
 const $wDeclarationBuilder = require("../../scripts/selector-declaration-builder");
 
 describe("define $w.d.ts", () => {
-  function get$wDts({
-    servicePath,
-    tripleSlashDirectivePath = "directive"
-  } = {}) {
+  function get$wDts(servicePath) {
     const services = [require("./services/$w.service.json")];
     if (servicePath) {
       services.push(require(servicePath));
     }
 
-    return $wDeclarationBuilder(services, tripleSlashDirectivePath);
+    return $wDeclarationBuilder(services);
   }
 
-  describe("triple slash directive", () => {
-    test("should generate triple slash directive with the given path", () => {
-      const tripleSlashDirectivePath = "../common/utilityTypes.d.ts";
-      const dts = get$wDts({ tripleSlashDirectivePath });
-      const expectedDeceleration = `/// <reference path="${tripleSlashDirectivePath}" />`;
+  describe("IntersectionArrayAndBase declaration", () => {
+    test("should generate IntersectionArrayAndBase declaration", () => {
+      const dts = get$wDts();
+      const expectedDeceleration = `declare type IntersectionArrayAndBase<T, P> = {
+    [K in keyof T]: K extends P ? T[K] : T[K] & T[K][];
+};
+`;
 
       expect(dts).toContain(expectedDeceleration);
     });
@@ -32,14 +31,14 @@ describe("define $w.d.ts", () => {
     });
 
     test("should include queryable services declaration", () => {
-      const dts = get$wDts({ servicePath: "./services/Gallery.service.json" });
+      const dts = get$wDts("./services/Gallery.service.json");
       const expectedDeceleration = "Gallery: $w.Gallery;";
 
       expect(dts).toContain(expectedDeceleration);
     });
 
     test("should not include unqueryable services declaration", () => {
-      const dts = get$wDts({ servicePath: "./services/CartIcon.service.json" });
+      const dts = get$wDts("./services/CartIcon.service.json");
       const unexpectedDeceleration = "CartIcon: $w.CartIcon;";
 
       expect(dts).not.toContain(unexpectedDeceleration);

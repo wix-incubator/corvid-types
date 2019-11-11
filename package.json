@@ -6,10 +6,7 @@
     "lint": "eslint .",
     "build": "npm run generate-dts",
     "test": "jest",
-    "clone-repo": "rm -rf corvid_docs && git clone https://github.com/wix/wix-code-docs.git corvid_docs",
-    "generate-dts": "npm run clone-repo && npm run generate-dts:declaration && npm run generate-dts:selector && rm -rf corvid_docs",
-    "generate-dts:declaration": "docworks dts -l corvid_docs -o declaration -d types/common --wixselector",
-    "generate-dts:selector": "scripts/selector-declaration-generator.js",
+    "generate-dts": "scripts/generate-types.js",
     "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags"
   },
   "repository": {
@@ -60,8 +57,5 @@
     "*.js": [
       "eslint"
     ]
-  },
-  "dependencies": {
-    "@types/node": "^12.7.5"
   }
 }

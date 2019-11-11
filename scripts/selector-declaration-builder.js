@@ -9,8 +9,6 @@ const {
   dtsProperty,
   dtsObjectTypeAlias,
   dtsTypeParameter,
-  dtsTripleSlashReferencePathDirective,
-  getTripleSlashDirectivesString,
   convertTreeToString
 } = docworksDts.dtsGenerator;
 const {
@@ -141,17 +139,18 @@ function getAllDeclarations(services) {
   return { queryableType, wixElementSelectorType, $wFunc, $wNamespace };
 }
 
-function $wDeclarationBuilder(services, tripleSlashDirectivePath) {
-  const tripleSlashReference = [
-    dtsTripleSlashReferencePathDirective(tripleSlashDirectivePath)
-  ];
-
+function $wDeclarationBuilder(services) {
   const $wDeclaration = getAllDeclarations(services);
 
+  const intersectionArrayAndBaseDeclaration = `declare type ${INTERSECTION_ARRAY_AND_BASE_TYPE}<T, P> = {
+    [K in keyof T]: K extends P ? T[K] : T[K] & T[K][];
+};
+`;
+
   return [
-    getTripleSlashDirectivesString(tripleSlashReference),
+    intersectionArrayAndBaseDeclaration,
     convertTreeToString($wDeclaration)
-  ].join("");
+  ].join("\n");
 }
 
 module.exports = $wDeclarationBuilder;
