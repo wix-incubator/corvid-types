@@ -2,7 +2,7 @@ const $wDeclarationBuilder = require("../../scripts/selector-declaration-builder
 
 describe("define $w.d.ts", () => {
   function get$wDts(servicePath) {
-    const services = [require("./services/$w.service.json")];
+    const services = [require("./fixtures/$w.service.json")];
     if (servicePath) {
       services.push(require(servicePath));
     }
@@ -31,14 +31,14 @@ describe("define $w.d.ts", () => {
     });
 
     test("should include queryable services declaration", () => {
-      const dts = get$wDts("./services/Gallery.service.json");
+      const dts = get$wDts("./fixtures/Gallery.service.json");
       const expectedDeceleration = "Gallery: $w.Gallery;";
 
       expect(dts).toContain(expectedDeceleration);
     });
 
     test("should not include unqueryable services declaration", () => {
-      const dts = get$wDts("./services/CartIcon.service.json");
+      const dts = get$wDts("./fixtures/CartIcon.service.json");
       const unexpectedDeceleration = "CartIcon: $w.CartIcon;";
 
       expect(dts).not.toContain(unexpectedDeceleration);
