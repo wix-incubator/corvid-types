@@ -4,11 +4,10 @@
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint .",
-    "build": ":",
+    "build": "npm run generate-dts",
     "test": "jest",
-    "generate-dts": "docworks dts -r git@github.com:wix-private/wix-code-docs.git -o declaration -d temp_declarations --wixselector && npm run copy-declarations temp_declarations",
-    "postpublish" : "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
-    "copy-declarations": "scripts/copy_declarations.sh"
+    "generate-dts": "scripts/generate-types.js",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -33,7 +32,9 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@commitlint/travis-cli": "^8.1.0",
-    "docworks-cli": "^1.10.2",
+    "docworks-cli": "^1.10.4",
+    "docworks-dts": "^1.10.3",
+    "docworks-repo": "^1.9.1",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
@@ -44,6 +45,7 @@
     "jest": "^24.9.0",
     "lint-staged": "^9.2.5",
     "prettier": "^1.18.2",
+    "tmp": "^0.1.0",
     "typescript": "^3.6.3"
   },
   "husky": {
