@@ -34,3 +34,13 @@ jobs:
       stage: test
       script:
         - yarn test
+
+    - stage: npm release
+        if: tag IS present
+        script: skip
+        deploy:
+          provider: npm
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
