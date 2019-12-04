@@ -15,10 +15,10 @@ Features relating to the Local Editor are currently in the stage of alpha releas
 
 
 This package contains type definitions for Corvid by Wix.
-Intended to be used with [`corvid-cli`](https://github.com/wix-incubator/corvid#corvid-local-development) to provide stunning code intelligence experiment with your local IDE.    
+Intended to be used with [`corvid-cli`](https://github.com/wix-incubator/corvid#corvid-local-development) to provide stunning code intelligence experience with your local IDE.    
 
 # How to use
-You can install the `corvid-types` package manually or let [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) done everything for you!
+You can install the `corvid-types` package manually or let [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) do everything for you!
 ### create-corvid-app
 Just run 
     ```

@@ -1,5 +1,5 @@
 # Build
-The declaration files are auto generated(as there are new corvid APIs on a monthly base) 
+The declaration files are auto generated(as new Corvid apis are added all the time) 
 
 To generate the files, simply run
 `npm i && npm run build`
