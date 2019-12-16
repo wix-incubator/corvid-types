@@ -15,19 +15,19 @@ Features relating to the Local Editor are currently in the stage of alpha releas
 
 
 This package contains type definitions for Corvid by Wix.
-Intended to be used with [`corvid-cli`](https://github.com/wix-incubator/corvid#corvid-local-development) to provide stunning code intelligence experience with your local IDE.    
+It is intended to be used with the [`corvid-cli`](https://github.com/wix-incubator/corvid#corvid-local-development) to provide a stunning code intelligence experience in your local IDE.    
 
-# How to use
+# How to Use
 You can install the `corvid-types` package manually or let [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) do everything for you!
 ### create-corvid-app
 Just run 
     ```
     npx create-corvid-app <folder-name> [your-wix-site-url]
     ```
-The [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) would install `corvid-types` locally and you are ready to go.
+The [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) will install `corvid-types` locally and you are ready to go.
 
 ### Manual Installation 
-1. Navigate to the folder where you have cloned your site to it and install the `corvid-types` 
+1. Navigate to the folder where you have cloned your site to and install `corvid-types` 
     ```
     npm install --save-dev corvid-types
     ```
@@ -35,4 +35,4 @@ The [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) would
     ```
     npx corvid open-editor
     ```
-3. Hit the save button in the local editor window
+3. Click the **Save** button in the local editor window
