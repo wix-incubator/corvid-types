@@ -98,6 +98,14 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
 
+"@babel/polyfill@^7.0.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.7.0.tgz#e1066e251e17606ec7908b05617f9b7f8180d8f3"
+  integrity sha512-/TS23MVvo34dFmf8mwCisCbWGrfhbiWZSwBo6HkADTBhUa2Q/jWltyY/tpofz/b6/RIhqaqQcquptCirqIhOaQ==
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.1.0", "@babel/template@^7.4.0", "@babel/template@^7.6.0":
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.6.0.tgz#7f0159c7f5012230dad64cca42ec9bdb5c9536e6"
@@ -870,7 +878,7 @@ babel-plugin-jest-hoist@^24.9.0:
   dependencies:
     "@types/babel__traverse" "^7.0.6"
 
-babel-polyfill@6.26.0, babel-polyfill@^6.23.0:
+babel-polyfill@6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
   integrity sha1-N5k3q8Z9eJWXCtxiHyhM2WbPIVM=
@@ -1187,10 +1195,15 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.20.0, commander@~2.20.0:
+commander@^2.20.0:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
+
+commander@~2.20.3:
+  version "2.20.3"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
+  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
 compare-func@^1.3.1:
   version "1.3.2"
@@ -1257,6 +1270,11 @@ core-js@^2.4.0, core-js@^2.5.0:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.9.tgz#6b4b214620c834152e179323727fc19741b084f2"
   integrity sha512-HOpZf6eXmnl7la+cUdMnLvUxKNqLUzJvgIziQ0DiF3JwSImNphIqdGqzj6hIKyX04MmV0poclQ7+wjWvxQyR2A==
+
+core-js@^2.6.5:
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
+  integrity sha512-5wjnpaT/3dV+XB4borEsnAYQchn00XSgTAWKDkEqv+K8KevjbzmofK6hfJ9TZIlpj2N0xQpazy7PiRQiWHqzWg==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -1484,29 +1502,41 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-docworks-cli@^1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/docworks-cli/-/docworks-cli-1.10.2.tgz#71efd5c14bb638230df3f91ae7bd70d4555ff3b3"
-  integrity sha512-0dtu+C43rTT3Kudp7PtCdb+tXgS/MiWqM0ccxcCPwjZe71GtSKoSM4m3/T6GwE5bDPmx0ddiH0+1FKqexEIlXg==
+docworks-cli@^1.10.4:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/docworks-cli/-/docworks-cli-1.10.8.tgz#6c125b7cd7dc3c582c3069dbeb84d654298401e6"
+  integrity sha512-VBeEBBS8VFWP0ThonB745WPURQAYv7HB7B5UJ9H5pLK0pKsK8bxA9kO4Xpjw5IIIomoNYFT6kNbmgfKVErEawA==
   dependencies:
-    babel-polyfill "^6.23.0"
+    "@babel/polyfill" "^7.0.0"
     chalk "^2.3.0"
-    docworks-dts "^1.10.2"
-    docworks-jsdoc2spec "^1.9.1"
-    docworks-repo "^1.9.1"
-    docworks-tern "^1.9.1"
+    docworks-dts "^1.10.8"
+    docworks-jsdoc2spec "^1.10.8"
+    docworks-repo "^1.10.8"
+    docworks-tern "^1.10.8"
     fs-extra "^5.0.0"
     optimist "^0.6.1"
     resolve "^1.5.0"
     simple-git "1.120.0"
     tmp-promise "^1.0.3"
 
-docworks-dts@^1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/docworks-dts/-/docworks-dts-1.10.2.tgz#d8a54564cd37f049896799d710c067b0f351df20"
-  integrity sha512-b9jLKZfAwx704cISXQDRQ8wijAl4YllaxVHmTZHjp42It2hNdNWf245V2AKvZzwRo095BaWft1/p6eSTB4N45Q==
+docworks-dts@^1.10.3, docworks-dts@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/docworks-dts/-/docworks-dts-1.10.8.tgz#a0a8088cf3ee2d790b8d1d26695613d664b248f6"
+  integrity sha512-V/hRhbT//fmM7KV4E7Ix/rijQvGXfQmR/de6DiXku6mCs7zRM4kexLSflg3w/f/p7egS3OPUttZQuoDXn6UKcg==
   dependencies:
     dts-dom "^3.3.0"
+
+docworks-jsdoc2spec@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/docworks-jsdoc2spec/-/docworks-jsdoc2spec-1.10.8.tgz#a4b38d9a6881c031b061c12e2fcb1ca0e553673e"
+  integrity sha512-HrVnR/Zs1hGuBRUkYHEVvZwMduZ9Ft0LUmrZgXtrC1FDcwUMzEhH/KH3Avi/2nXSH/SyT/IkSIaCa15apOa67Q==
+  dependencies:
+    docworks-model "^1.10.8"
+    intercept-stdout "^0.1.2"
+    jsdoc "3.4.3"
+    lodash "^4.17.15"
+    lodash.isequal "^4.5.0"
+    requizzle "^0.2.1"
 
 docworks-jsdoc2spec@^1.9.1:
   version "1.9.1"
@@ -1519,6 +1549,13 @@ docworks-jsdoc2spec@^1.9.1:
     lodash.isequal "^4.5.0"
     requizzle "^0.2.1"
 
+docworks-json@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/docworks-json/-/docworks-json-1.10.8.tgz#5732a7cdfa3e7e1462c8ce0395783a1a0ff934af"
+  integrity sha512-jOlMf96OYzzplfB+oxTlSoTCX6gqzEx+L1w0cTH5eNPiz887Zirf1zFa7s2TgspoPZt4h8recw9YIa3Zxc1DfQ==
+  dependencies:
+    lodash "^4.0.0"
+
 docworks-json@^1.8.4:
   version "1.8.4"
   resolved "https://registry.yarnpkg.com/docworks-json/-/docworks-json-1.8.4.tgz#fbee6a787db68dcd5f434237a19eac471c3b779a"
@@ -1526,10 +1563,27 @@ docworks-json@^1.8.4:
   dependencies:
     lodash "^4.0.0"
 
+docworks-model@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/docworks-model/-/docworks-model-1.10.8.tgz#7ea3e3dd1c0a328a72b702adc0a31d4f13a61492"
+  integrity sha512-SM+G+XOoSkCCP82MQeBsRcXj4JvmQlXFZLhNn1qU6CDpcCTk33rIeRRX3yOZyv+rU4CRvvXJhE2zwaIRcSwZ+A==
+
 docworks-model@^1.8.4:
   version "1.8.4"
   resolved "https://registry.yarnpkg.com/docworks-model/-/docworks-model-1.8.4.tgz#344a5f0876cd076da803c80d865be6a9233b9385"
   integrity sha512-zrNKV39paWkb1yOhM1Hk58zbE78byQOxpDFNQANRr/us1wPOO2REbYXgW3BmtAYCXmubr2qxphtrgCvzPTTHTg==
+
+docworks-repo@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/docworks-repo/-/docworks-repo-1.10.8.tgz#59478bec195e43248bb413c33224aff8b6565fd6"
+  integrity sha512-tnOaGdwDSoEiUsqSqu+LfFGO8OoecnH0eFbWaHvD8KdeK2aaP5tSA+HKUFKjeXbAI8gJ73z2Colq3b8VeUgymw==
+  dependencies:
+    array-flatten "^2.1.1"
+    docworks-jsdoc2spec "^1.10.8"
+    docworks-json "^1.10.8"
+    fs-extra "^3.0.1"
+    lodash "^4.17.15"
+    lodash.isequal "^4.5.0"
 
 docworks-repo@^1.9.1:
   version "1.9.1"
@@ -1542,13 +1596,13 @@ docworks-repo@^1.9.1:
     fs-extra "^3.0.1"
     lodash.isequal "^4.5.0"
 
-docworks-tern@^1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/docworks-tern/-/docworks-tern-1.9.1.tgz#d3a9b1bf2cdf1ccb61e8f41c7ece4ad007a29896"
-  integrity sha512-i0p4SAdTAcoSjpFiMK6Lp1dd8rHtfiOF1TZIWAo4ItDP+rbNOf8w1stp1MSfqE26TWIc8Jmf6ALakAjloPBCXQ==
+docworks-tern@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/docworks-tern/-/docworks-tern-1.10.8.tgz#a97d89513d514da1750a7121d0f5795db7053d6e"
+  integrity sha512-cskD6IUa80Gj+49FncHvApGpg2I5jRvXVUl9NH2/QtlSMOLDqpIFT0IYJlLtge1fe9+8P3ftVSV6whW9y4Q3/Q==
   dependencies:
-    docworks-model "^1.8.4"
-    docworks-repo "^1.9.1"
+    docworks-model "^1.10.8"
+    docworks-repo "^1.10.8"
     optimist "^0.6.1"
     resolve "^1.5.0"
 
@@ -2286,9 +2340,9 @@ growly@^1.3.0:
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
 
 handlebars@^4.1.2:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.2.0.tgz#57ce8d2175b9bbb3d8b3cf3e4217b1aec8ddcb2e"
-  integrity sha512-Kb4xn5Qh1cxAKvQnzNWZ512DhABzyFNmsaJf3OAkWNa4NkaqWcNI8Tao8Tasi0/F4JD9oyG0YxuFyvyR57d+Gw==
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.5.3.tgz#5cf75bd8714f7605713511a56be7c349becb0482"
+  integrity sha512-3yPecJoJHK/4c6aZhSvxOyG4vJKDshV36VHp0iVCDVh7o9w2vwi3NSnL2MMPj3YdduqaBcu7cGbggJQM0br9xA==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -3551,7 +3605,7 @@ lodash@4.17.14:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
   integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
 
-lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.2.1:
+lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.2.1:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -4526,6 +4580,11 @@ regenerator-runtime@^0.11.0:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
   integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
 
+regenerator-runtime@^0.13.2:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.3.tgz#7cf6a77d8f5c6f60eb73c5fc1955b2ceb01e6bf5"
+  integrity sha512-naKIZz2GQ8JWh///G7L3X6LaQUAMp2lvb1rvwwsURe/VXwD6VMfr+/1NuNw3ag8v2kY1aQ/go5SNn79O9JU7yw==
+
 regex-not@^1.0.0, regex-not@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/regex-not/-/regex-not-1.0.2.tgz#1f4ece27e00b0b65e0247a6810e6a85d83a5752c"
@@ -5234,7 +5293,7 @@ tmp-promise@^1.0.3:
     bluebird "^3.5.0"
     tmp "0.1.0"
 
-tmp@0.1.0:
+tmp@0.1.0, tmp@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.1.0.tgz#ee434a4e22543082e294ba6201dcc6eafefa2877"
   integrity sha512-J7Z2K08jbGcdA1kkQpJSqLF6T0tdQqpR2pnSUXsIchbPdTI9v3e85cLW0d6WDhwuAleOV71j2xWs8qMPfK7nKw==
@@ -5363,11 +5422,11 @@ typescript@^3.6.3:
   integrity sha512-N7bceJL1CtRQ2RiG0AQME13ksR7DiuQh/QehubYcghzv20tnh+MQnQIuJddTmsbqYj+dztchykemz0zFzlvdQw==
 
 uglify-js@^3.1.4:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.6.0.tgz#704681345c53a8b2079fb6cec294b05ead242ff5"
-  integrity sha512-W+jrUHJr3DXKhrsS7NUVxn3zqMOFn0hL/Ei6v0anCIMoKC93TjcflTagwIHLW7SfMFfiQuktQyFVCFHGUE0+yg==
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.7.3.tgz#f918fce9182f466d5140f24bb0ff35c2d32dcc6a"
+  integrity sha512-7tINm46/3puUA4hCkKYo4Xdts+JDaVC9ZPRcG8Xw9R4nhO/gZgUM3TENq8IF4Vatk8qCig4MzP/c8G4u2BkVQg==
   dependencies:
-    commander "~2.20.0"
+    commander "~2.20.3"
     source-map "~0.6.1"
 
 underscore@~1.8.3:
