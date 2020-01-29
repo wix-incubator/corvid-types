@@ -4,8 +4,8 @@
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint .",
-    "build": "npm run generate-dts",
-    "test": "jest",
+    "build": "npm run generate-dts && webpack",
+    "test": "webpack && jest",
     "generate-dts": "scripts/generate-types.js"
   },
   "repository": {
@@ -16,7 +16,8 @@
     "node": ">=10"
   },
   "license": "MIT",
-  "main": "src/index.js",
+  "browser": "dist/corvidTypes.js",
+  "main": "dist/corvidTypes.js",
   "files": [
     "types",
     "configs"
@@ -28,9 +29,11 @@
     "wix"
   ],
   "devDependencies": {
+    "@babel/preset-env": "^7.8.3",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@commitlint/travis-cli": "^8.1.0",
+    "babel-loader": "^8.0.6",
     "docworks-cli": "^1.10.4",
     "docworks-dts": "^1.10.3",
     "docworks-repo": "^1.9.1",
@@ -44,8 +47,11 @@
     "jest": "^24.9.0",
     "lint-staged": "^9.2.5",
     "prettier": "^1.18.2",
+    "raw-loader": "^4.0.0",
     "tmp": "^0.1.0",
-    "typescript": "^3.6.3"
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   },
   "husky": {
     "hooks": {
@@ -59,6 +65,7 @@
     ]
   },
   "dependencies": {
-    "@types/node": "^12.7.5"
+    "@types/node": "^12.7.5",
+    "typescript": "^3.6.3"
   }
 }
