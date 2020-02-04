@@ -7,7 +7,7 @@ export function getCurrentCart() {
 
 export function getTestBufferBigInt64BE() {
     const b = new Buffer("testooo")
-    return b.readBigInt64BE()
+    return b.toString()
 }
 
 export function readLocalFile(filePath) {

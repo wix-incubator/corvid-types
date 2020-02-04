@@ -30,7 +30,7 @@ const getPublicTsConfig = testPath => `{
   }
 }`;
 
-const EMPTY_TS_CONFIG = `{
+const getEmptyTsConfig = () => `{
   compilerOptions: {
     baseUrl: ".",
     paths: {
@@ -42,10 +42,8 @@ const EMPTY_TS_CONFIG = `{
     allowJs: true,
     noEmit: true,
     checkJs: true,
-    allowSyntheticDefaultImports: true,
-  },
-  "typeRoots": ["./types"],
-  "types": ["./", "pages", "backend", "public"]
+    allowSyntheticDefaultImports: true
+  }
 }`;
 
 const getTsConfigByContext = (context, testPath) => {
@@ -57,8 +55,10 @@ const getTsConfigByContext = (context, testPath) => {
     case "backend":
       return getBackendTsConfig(testPath);
     default:
-      return EMPTY_TS_CONFIG;
+      return getEmptyTsConfig();
   }
 };
 
-module.exports = getTsConfigByContext;
+module.exports = {
+  getTsConfigByContext
+};

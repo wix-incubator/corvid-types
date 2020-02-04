@@ -2,6 +2,7 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "typeRoots": ["../"],
-    "types": ["types/pages"]
+    "types": ["types/pages"],
+    "lib": ["ES2017", "WebWorker"]
   }
 }

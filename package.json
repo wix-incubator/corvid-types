@@ -4,9 +4,10 @@
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint .",
-    "build": "npm run generate-dts && webpack",
+    "build": "npm run generate-dts && npm run generate-full-corvid-types && webpack",
     "test": "webpack && jest",
-    "generate-dts": "scripts/generate-types.js"
+    "generate-dts": "scripts/generate-types.js",
+    "generate-full-corvid-types": "scripts/generate-full-corvid-types.js"
   },
   "repository": {
     "type": "git",
@@ -46,8 +47,10 @@
     "husky": "^3.0.5",
     "jest": "^24.9.0",
     "lint-staged": "^9.2.5",
+    "lodash": "^4.17.15",
     "prettier": "^1.18.2",
     "raw-loader": "^4.0.0",
+    "shelljs": "^0.8.3",
     "tmp": "^0.1.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.5",
@@ -65,7 +68,7 @@
     ]
   },
   "dependencies": {
-    "@types/node": "^12.7.5",
+    "@types/node": "^10.0.0",
     "typescript": "^3.6.3"
   }
 }
