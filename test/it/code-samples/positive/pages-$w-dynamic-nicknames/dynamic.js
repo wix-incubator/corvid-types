@@ -21,5 +21,6 @@ $w.onReady(function() {
 
   $w("#text1").text = lastClicked
   $w("#text2").text = previousPageURL
+  $w("#appwidget1").zProperty = "testo"
 });
 

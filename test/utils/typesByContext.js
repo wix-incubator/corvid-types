@@ -1,7 +1,11 @@
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs-extra");
 const shell = require("shelljs");
-const { declarations } = require("../../dist/corvidTypes");
+const {
+  declarations,
+  getWidgetTypeDeclarations,
+  getPageElementsTypeDeclarations
+} = require("../../dist/corvidTypes");
 
 const getTestContext = testPath => {
   if (testPath.includes("/pages")) return "pages";
@@ -9,10 +13,10 @@ const getTestContext = testPath => {
   if (testPath.includes("/public")) return "public";
 };
 
-const getDeclarationsByTestPath = testPath => {
+const getDeclarationsByTestPath = (testPath, elementsMap, widgets) => {
   switch (getTestContext(testPath)) {
     case "pages":
-      return declarations.page();
+      return declarations.page({ elementsMap, widgets });
     case "backend":
       return declarations.backend();
     case "public":
@@ -20,8 +24,12 @@ const getDeclarationsByTestPath = testPath => {
   }
 };
 
-const createDeclarationsFilesByConfigPath = (testPath, tmpPath) => {
-  const types = getDeclarationsByTestPath(testPath);
+const createDeclarationsFilesByConfigPath = (
+  testPath,
+  tmpPath,
+  { elementsMap, widgets } = {}
+) => {
+  const types = getDeclarationsByTestPath(testPath, elementsMap, widgets);
   types.forEach(file => {
     if (file.path.includes("node_modules")) {
       const relativePath = file.path.split("node_modules").pop();
@@ -33,7 +41,44 @@ const createDeclarationsFilesByConfigPath = (testPath, tmpPath) => {
     }
   });
 };
+
+const handlePageElementsMap = (testPath, replace = false) => {
+  let el;
+  if (fs.existsSync(`${testPath}/pageElements.json`)) {
+    el = JSON.parse(fs.readFileSync(`${testPath}/pageElements.json`, "utf8"));
+    fs.removeSync(`${testPath}/pageElements.json`);
+
+    if (replace) {
+      fs.writeFileSync(
+        `${testPath}/pageElements.d.ts`,
+        getPageElementsTypeDeclarations(el)
+      );
+    } else {
+      return el;
+    }
+  }
+};
+
+const handleWidget = (testPath, replace = false) => {
+  let el;
+  if (fs.existsSync(`${testPath}/widget.json`)) {
+    el = JSON.parse(fs.readFileSync(`${testPath}/widget.json`, "utf8"));
+    fs.removeSync(`${testPath}/widget.json`);
+
+    if (replace) {
+      fs.writeFileSync(
+        `${testPath}/widget.d.ts`,
+        getWidgetTypeDeclarations(el)
+      );
+    } else {
+      return el ? [el] : undefined;
+    }
+  }
+};
+
 module.exports = {
   getTestContext,
+  handleWidget,
+  handlePageElementsMap,
   createDeclarationsFilesByConfigPath
 };

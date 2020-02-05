@@ -3,9 +3,10 @@ const fs = require("fs-extra");
 const compiler = require("../utils/compiler");
 const listSubDirectories = require("../utils/listSubDirectories");
 const { getTsConfigByContext } = require("../utils/tsconfig");
-
 const {
   getTestContext,
+  handleWidget,
+  handlePageElementsMap,
   createDeclarationsFilesByConfigPath
 } = require("../utils/typesByContext");
 
@@ -26,6 +27,9 @@ describe("typescript - positive scenarios - configPaths flow", () => {
       fs.copySync(tsRootPath, testTmpDirPath);
       fs.writeFileSync(configurationFilename, tsConfigContent);
 
+      handleWidget(testTmpDirPath, true);
+      handlePageElementsMap(testTmpDirPath, true);
+
       expect(() => {
         compiler(configurationFilename);
       }).not.toThrow();
@@ -33,7 +37,6 @@ describe("typescript - positive scenarios - configPaths flow", () => {
   );
 });
 
-// TODO need to check the pageElementsMap code (generate it from map object)
 // TODO need to check the widgets functionality
 
 describe("typescript - positive scenarios - declarations flow", () => {
@@ -46,7 +49,10 @@ describe("typescript - positive scenarios - declarations flow", () => {
       fs.copySync(tsRootPath, testTmpDirPath);
       fs.writeFileSync(configurationFilename, getTsConfigByContext());
 
-      createDeclarationsFilesByConfigPath(tsRootPath, testTmpDirPath);
+      createDeclarationsFilesByConfigPath(tsRootPath, testTmpDirPath, {
+        elementsMap: handlePageElementsMap(testTmpDirPath),
+        widgets: handleWidget(testTmpDirPath)
+      });
 
       expect(() => {
         compiler(configurationFilename);

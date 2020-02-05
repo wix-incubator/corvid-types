@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "build": "npm run generate-dts && npm run generate-full-corvid-types && webpack",
-    "test": "webpack && jest",
+    "test": "jest",
     "generate-dts": "scripts/generate-types.js",
     "generate-full-corvid-types": "scripts/generate-full-corvid-types.js"
   },
@@ -18,8 +18,9 @@
   },
   "license": "MIT",
   "browser": "dist/corvidTypes.js",
-  "main": "dist/corvidTypes.js",
+  "main": "src/index.js",
   "files": [
+    "dist",
     "types",
     "configs"
   ],
