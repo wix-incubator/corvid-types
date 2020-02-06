@@ -13,22 +13,27 @@ const DEST_TYPES_PATH = "types";
 const TYPES_COMMON_PATH = path.join(DEST_TYPES_PATH, "common");
 const TYPES_PAGES_PATH = path.join(DEST_TYPES_PATH, "pages");
 
-async function generateDeclarations() {
+
+const cloneDocsRepo = () => {
   const tmpDir = tmp.dirSync();
-  fs.removeSync(DEST_TYPES_PATH);
-
-  fs.copySync(ORIGINAL_TYPES_PATH, DEST_TYPES_PATH);
-
   spawnSync("git", ["clone", WIX_CODE_DOCS_REMOTE, tmpDir.name], {
     stdio: "inherit"
   });
+  return tmpDir.name
+}
+
+async function generateDeclarations() {
+  const localDocsRepoPath = process.env.LOCAL_DOCS_REPO_PATH || cloneDocsRepo()
+
+  fs.removeSync(DEST_TYPES_PATH);
+  fs.copySync(ORIGINAL_TYPES_PATH, DEST_TYPES_PATH);
 
   spawnSync(
     "docworks",
     [
       "dts",
       "--local",
-      tmpDir.name,
+      localDocsRepoPath,
       "--out",
       DECLARATION_FILE_NAME,
       "--dir",
@@ -41,7 +46,7 @@ async function generateDeclarations() {
   );
 
   await $wGenerator(
-    tmpDir.name,
+    localDocsRepoPath,
     path.join(TYPES_PAGES_PATH, DECLARATION_FULL_FILE_NAME)
   );
 }
