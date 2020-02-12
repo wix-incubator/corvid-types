@@ -9,6 +9,6 @@ export function getWixLocation() {
 
 export function sayHello(name) {
     blockByEmail("test@wix.com").then(() => { })
-    wixUsersBackend.approveByEmail(name).then(str => console.group(str))
+    wixUsersBackend.approveByEmail(name).then(str => str)
     return `hello ${name}!`
 };

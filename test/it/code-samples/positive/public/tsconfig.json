@@ -1,9 +1,0 @@
-{
-    "extends": "../../../../../configs/tsconfig.public.json",
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "public/*": ["./*"]
-      }
-    }
-}

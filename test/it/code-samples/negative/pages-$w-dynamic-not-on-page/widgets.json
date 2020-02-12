@@ -1,0 +1,112 @@
+{
+  "widgets": [
+    {
+      "manifest": {
+        "AppType1": {
+          "tagname": "appType1",
+          "eventHandlers": {
+            "onSomeEvent": {
+              "type": "someEvent",
+              "description": "Some event"
+            },
+            "onEventWithParams": {
+              "type": "eventWithParams",
+              "description": "Event with params",
+              "params": [
+                { "name": "param1", "type": "number" },
+                { "name": "param2", "type": "string" }
+              ]
+            }
+          },
+          "synthetic": false,
+          "inherits": {},
+          "members": {
+            "iMethod": {
+              "description": "some function",
+              "kind": "function"
+            },
+            "property1": {
+              "description": "some member",
+              "kind": "member"
+            },
+            "property2": {
+              "description": "some other member",
+              "kind": "member"
+            },
+            "zProperty": {
+              "description": "some third member",
+              "kind": "member"
+            },
+            "methodWithParams": {
+              "description": "some function with params",
+              "kind": "function",
+              "params": [
+                { "name": "a", "type": "member" },
+                { "name": "b", "type": "member" }
+              ]
+            },
+            "mProperty": {
+              "description": "option with **markdown**",
+              "kind": "member"
+            }
+          },
+          "description": "some application type manifest"
+        }
+      }
+    },
+    {
+      "manifest": {
+        "AppType2": {
+          "tagname": "appType2",
+          "eventHandlers": {
+            "onSomeEvent": {
+              "type": "someEvent",
+              "description": "Some event"
+            },
+            "onEventWithParams": {
+              "type": "eventWithParams",
+              "description": "Event with params",
+              "params": [
+                { "name": "param1", "type": "number" },
+                { "name": "param2", "type": "string" }
+              ]
+            }
+          },
+          "synthetic": false,
+          "inherits": {},
+          "members": {
+            "iMethod": {
+              "description": "some function",
+              "kind": "function"
+            },
+            "property1": {
+              "description": "some member",
+              "kind": "member"
+            },
+            "property2": {
+              "description": "some other member",
+              "kind": "member"
+            },
+            "zProperty": {
+              "description": "some third member",
+              "kind": "member"
+            },
+            "methodWithParams": {
+              "description": "some function with params",
+              "kind": "function",
+              "params": [
+                { "name": "a", "type": "member" },
+                { "name": "b", "type": "member" }
+              ]
+            },
+            "mProperty": {
+              "description": "option with **markdown**",
+              "kind": "member"
+            }
+          },
+          "description": "some application type manifest"
+        }
+      }
+    }
+  ]
+}
