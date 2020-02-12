@@ -25,7 +25,6 @@ module.exports = function compiler(configFilePath) {
     after: [],
     afterDeclarations: []
   });
-
   ts.getPreEmitDiagnostics(program)
     .concat(emitResult.diagnostics)
     .forEach(diagnostic => {
