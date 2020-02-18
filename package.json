@@ -22,7 +22,8 @@
   "files": [
     "dist",
     "types",
-    "configs"
+    "configs",
+    "fullCorvidTypes.json"
   ],
   "types": "./types/index.d.ts",
   "keywords": [
