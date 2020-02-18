@@ -2,6 +2,7 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "typeRoots": ["../"],
-    "types": ["types/public"]
+    "types": ["types/public"],
+    "lib": ["ES2020", "WebWorker"]
   }
 }
