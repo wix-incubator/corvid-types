@@ -17,7 +17,7 @@
     "node": ">=10"
   },
   "license": "MIT",
-  "browser": "dist/corvidTypes.js",
+  "browser": "dist/corvidTypes.esm.js",
   "main": "src/index.js",
   "files": [
     "src",
@@ -37,6 +37,7 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@commitlint/travis-cli": "^8.1.0",
+    "@purtuga/esm-webpack-plugin": "^1.2.1",
     "babel-loader": "^8.0.6",
     "docworks-cli": "^1.10.4",
     "docworks-dts": "^1.10.3",

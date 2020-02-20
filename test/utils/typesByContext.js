@@ -5,7 +5,7 @@ const {
   declarations,
   getWidgetTypeDeclarations,
   getPageElementsTypeDeclarations
-} = require("../../dist/corvidTypes");
+} = require("../../dist/corvidTypes.umd.js");
 
 const getTestContext = testPath => {
   if (testPath.includes("/pages")) return "pages";
