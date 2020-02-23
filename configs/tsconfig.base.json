@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["./"],
     "lib": ["ES2020"],
     "allowJs": true,
     "noEmit": true,
