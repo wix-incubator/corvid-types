@@ -1,12 +1,12 @@
 const compiler = require("../utils/compiler");
 const listSubDirectories = require("../utils/listSubDirectories");
 const {
-  initContextEnv,
+  // initContextEnv,
   initEmptyEnv
 } = require("../utils/createTmpTestEnvioremnts");
 const {
   getDynamicPageTypings,
-  createDynamicPageTypings,
+  // createDynamicPageTypings,
   createDeclarationsFilesByConfigPath
 } = require("../utils/typesByContext");
 
@@ -18,20 +18,20 @@ const negativeRoots = listSubDirectories(NEGATIVE_ROOT_PATH).filter(
   subDirectory => !ignoredTests.includes(subDirectory)
 );
 
-describe("typescript - negative scenarios - configPaths flow", () => {
-  it.each(negativeRoots)(
-    "should fail compiling %s folder",
-    async tsRootPath => {
-      const testTmpDirPath = initContextEnv(tsRootPath);
+// describe("typescript - negative scenarios - configPaths flow", () => {
+//   it.each(negativeRoots)(
+//     "should fail compiling %s folder",
+//     async tsRootPath => {
+//       const testTmpDirPath = initContextEnv(tsRootPath);
 
-      createDynamicPageTypings(testTmpDirPath);
+//       createDynamicPageTypings(testTmpDirPath);
 
-      expect(() => {
-        compiler(`${testTmpDirPath}/tsconfig.json`);
-      }).toThrowErrorMatchingSnapshot();
-    }
-  );
-});
+//       expect(() => {
+//         compiler(`${testTmpDirPath}/tsconfig.json`);
+//       }).toThrowErrorMatchingSnapshot();
+//     }
+//   );
+// });
 
 describe("typescript - negative scenarios - declarations flow", () => {
   it.each(negativeRoots)(

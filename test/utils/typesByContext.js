@@ -30,12 +30,14 @@ const createDeclarationsFilesByConfigPath = (
   { elementsMap, widgets } = {}
 ) => {
   const types = getDeclarationsByTestPath(testPath, elementsMap, widgets);
+  console.log(types.map(p => p.path));
   types.forEach(file => {
     if (file.path.includes("node_modules")) {
       const relativePath = file.path.split("node_modules").pop();
       shell.mkdir("-p", `${tmpPath}${path.dirname(relativePath)}`);
       fs.writeFileSync(`${tmpPath}${relativePath}`, file.content);
     } else {
+      // console.log(file.content);
       shell.mkdir("-p", `${tmpPath}${path.dirname(file.path)}`);
       fs.writeFileSync(`${tmpPath}${file.path}`, file.content);
     }
