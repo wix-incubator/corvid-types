@@ -1,6 +1,6 @@
 {
   "name": "corvid-types",
-  "version": "0.1.94",
+  "version": "0.1.95",
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint .",
