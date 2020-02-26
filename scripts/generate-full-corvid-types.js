@@ -7,13 +7,18 @@ const without_ = require("lodash/without");
 
 const { TS_CONFIG_PATHS, TS_CONFIG_BASE_PATH } = require("../src/constants");
 const FULL_CORVID_DECLARATION_NAME = "fullCorvidTypes.json";
+const tmpDirs = [];
 
 const prepareEmptyTypescriptProgram = configPath => {
-  const tmpDirPath = tmp.dirSync().name;
+  const tmpDir = tmp.dirSync();
+  tmpDirs.push(tmpDir);
+
+  const tmpDirPath = tmpDir.name;
+  const corvidDir = path.join(__dirname, "../");
 
   const tmpConfigPath = `${tmpDirPath}/tsconfig.json`;
-  const tmpConfigContent = `{"extends": "${path.relative(
-    tmpConfigPath,
+  const tmpConfigContent = `{"extends": "${path.resolve(
+    corvidDir,
     configPath
   )}"}`;
 
@@ -68,6 +73,7 @@ async function generateFullCorvidDeclarations() {
     FULL_CORVID_DECLARATION_NAME,
     JSON.stringify(corvidLib, null, 2)
   );
+  tmpDirs.forEach(tmpDir => tmpDir.removeCallback());
 }
 
 generateFullCorvidDeclarations();
