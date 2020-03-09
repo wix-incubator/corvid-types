@@ -94,7 +94,11 @@ function convert$wServiceToNamespace(service) {
   const $wFuncType = convert$wOperationToFunctionType($wOperation);
   const operations = service.operations
     .filter(o => !is$wOperation(o))
-    .map(convertOperationToFunction);
+    .map(operation =>
+      convertOperationToFunction(service, operation, {
+        documentationGenerator: ({ summary }) => summary
+      })
+    );
 
   operations.push($wFuncType);
 
