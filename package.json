@@ -6,6 +6,7 @@
     "lint": "eslint .",
     "build": "npm run generate-dts && npm run generate-full-corvid-types && webpack",
     "test": "jest",
+    "test:debug": "node --inspect node_modules/.bin/jest",
     "generate-dts": "scripts/generate-types.js",
     "generate-full-corvid-types": "scripts/generate-full-corvid-types.js"
   },
