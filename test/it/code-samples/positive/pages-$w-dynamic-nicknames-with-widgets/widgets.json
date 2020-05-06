@@ -1,0 +1,90 @@
+{
+  "widgets": [
+    {
+      "name": "AppType1",
+      "events": {
+        "onSomeEvent": {
+          "type": "someEvent",
+          "description": "Some event"
+        },
+        "onSomeEvent2": {
+          "type": "onSomeEvent2",
+          "description": "Event with params"
+        }
+      },
+      "members": {
+        "iMethod": {
+          "description": "some function",
+          "kind": "function"
+        },
+        "zProperty": {
+          "description": "some third member",
+          "kind": "member"
+        },
+        "mProperty": {
+          "description": "option with **markdown**",
+          "kind": "member"
+        },
+        "methodWithParams": {
+          "description": "some function with params",
+          "kind": "function",
+          "params": [
+            {
+              "name": "a",
+              "type": "member"
+            },
+            {
+              "name": "b",
+              "type": "member"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "AppType2",
+      "events": {
+        "onOtherSomeEvent": {
+          "type": "someEvent",
+          "description": "Some event"
+        }
+      },
+      "members": {
+        "iMethod2": {
+          "description": "some function",
+          "kind": "function"
+        },
+        "zProperty2": {
+          "description": "some third member",
+          "kind": "member"
+        },
+        "mProperty2": {
+          "description": "option with **markdown**",
+          "kind": "member"
+        },
+        "methodWithNoParams": {
+          "description": "some function with params",
+          "kind": "function"
+        },
+        "methodWithParams3": {
+          "description": "some function with params",
+          "kind": "function",
+          "params": [
+            {
+              "name": "a",
+              "type": "member"
+            },
+            {
+              "name": "b",
+              "type": "member"
+            },
+            {
+              "name": "c",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

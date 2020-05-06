@@ -21,8 +21,6 @@ $w.onReady(function() {
 
   $w("#text1").text = lastClicked
   $w("#text2").text = previousPageURL
-  $w("#appwidget1").zProperty = "testo1"
-  $w("#appwidget2").zProperty2 = "testo2"
-  $w("#appwidget3").zProperty = "testo3"
+
 });
 
