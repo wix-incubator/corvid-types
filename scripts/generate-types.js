@@ -7,7 +7,7 @@ const { spawnSync } = require("child_process");
 
 const WIX_CODE_DOCS_REMOTE = "https://github.com/wix/wix-code-docs.git";
 const WIX_CODE_DOCS_API_URL = "https://www.wix.com/corvid/reference";
-const WIX_CODE_DOCS_TEMPLATE = `<%= model.summary %>\n\t[Read more..](${WIX_CODE_DOCS_API_URL}/<%= model.service %>.html#<%= model.member %>)`;
+const WIX_CODE_DOCS_TEMPLATE = `<%= model.summary %><% if (model.extra && model.extra.experimental) {%>\n@experimental <%= model.extra.experimental %><%}%>\n[Read more..](${WIX_CODE_DOCS_API_URL}/<%= model.service %>.html#<%= model.member %>)`;
 const DECLARATION_FILE_NAME = "declaration";
 const DECLARATION_FULL_FILE_NAME = "$w.d.ts";
 const ORIGINAL_TYPES_PATH = "src_types";
