@@ -73,6 +73,6 @@
   },
   "dependencies": {
     "@types/node": "^10.0.0",
-    "typescript": "^3.7.5"
+    "typescript": "3.7.5"
   }
 }
