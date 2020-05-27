@@ -17,10 +17,10 @@ const getDynamicTypes = ({ elementsMap, widgets }) => {
     });
   }
   if (widgets && widgets.length) {
-    widgets.forEach((manifest, index) => {
+    widgets.forEach(({ name, events, members }) => {
       dynamicTypes.push({
-        path: `/widgets${index}.d.ts`,
-        content: getWidgetTypeDeclarations(manifest)
+        path: `/widgets/${name}.d.ts`,
+        content: getWidgetTypeDeclarations({ name, events, members })
       });
     });
   }

@@ -1,33 +1,26 @@
-const getFunctionTypeParamsString = params => {
-  if (!params) {
-    return "";
-  }
-  return params
-    .reduce((acc, param) => `${acc}${param.name}: any, `, "")
-    .slice(0, -2);
-};
+const getFunctionTypeParamsString = (params = []) =>
+  params.map(param => `${param.name}: any `).join(",");
 
-const getMembersTypes = members => {
-  return Object.keys(members).reduce((acc, value) => {
-    const { kind, params } = members[value];
-    return `${acc} ${
-      kind === "member"
-        ? `${value}: any;\n`
-        : `${value}(${getFunctionTypeParamsString(params)});\n`
-    }`;
-  }, "");
-};
+const getEventHandlersTypes = eventHandlers =>
+  Object.keys(eventHandlers)
+    .map(eventName => `${eventName}(eventHandler: (event: any) => void );`)
+    .join("\n");
 
-const getWidgetTypeDeclarations = ({ manifest }) => {
-  return Object.keys(manifest).reduce((dts, className) => {
-    const { members = [] } = manifest[className];
-    // should it be part of the $w namespace
-    // need to understand which type should we extend, ($w.Node() or $w.Element)
-    // add typings of widget events
-    return `${dts} interface ${className} extends $w.Node { \n${getMembersTypes(
-      members
-    )} }`;
-  }, "");
+const getMembersTypes = members =>
+  Object.keys(members)
+    .map(name => {
+      const { kind, params } = members[name];
+      return `${
+        kind === "function"
+          ? `${name}(${getFunctionTypeParamsString(params)});`
+          : `${name}: any;`
+      }`;
+    })
+    .join("\n");
+
+const getWidgetTypeDeclarations = ({ name, members = {}, events = {} }) => {
+  return `interface ${name} extends $w.IFrame { 
+    ${getMembersTypes(members)} ${getEventHandlersTypes(events)}}`;
 };
 module.exports = {
   getWidgetTypeDeclarations
