@@ -2,6 +2,7 @@ node_modules
 dist
 types
 fullCorvidTypes.json
+wixModules.json
 .vscode
 .idea
 .history
