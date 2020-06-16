@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fs = require("fs-extra");
 const _ = require("lodash");
-const { corvidDir, createTsProgram } = require("./util");
+const { corvidDir, createTsProgram } = require("./createTypescriptProgram");
 
 const MODULE_LIST_FILE_NAME = "wixModules.json";
 const TS_CONFIG = {

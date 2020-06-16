@@ -52,7 +52,7 @@ module.exports = {
       return [...fullCorvidTypes.BASE, ...fullCorvidTypes.PUBLIC];
     }
   },
-  wixModulesNames,
+  getWixModulesList: () => wixModulesNames,
   getWidgetTypeDeclarations,
   getPageElementsTypeDeclarations
 };

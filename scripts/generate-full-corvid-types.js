@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fs = require("fs-extra");
 const without_ = require("lodash/without");
-const createTsProgram = require("./util").createTsProgram;
+const createTsProgram = require("./createTypescriptProgram").createTsProgram;
 
 const { TS_CONFIG_PATHS, TS_CONFIG_BASE_PATH } = require("../src/constants");
 const FULL_CORVID_DECLARATION_NAME = "fullCorvidTypes.json";
