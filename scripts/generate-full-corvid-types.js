@@ -1,48 +1,13 @@
 #!/usr/bin/env node
-const tmp = require("tmp");
 const fs = require("fs-extra");
-const path = require("path");
-const ts = require("typescript");
 const without_ = require("lodash/without");
+const createTsProgram = require("./createTypescriptProgram").createTsProgram;
 
 const { TS_CONFIG_PATHS, TS_CONFIG_BASE_PATH } = require("../src/constants");
 const FULL_CORVID_DECLARATION_NAME = "fullCorvidTypes.json";
-const tmpDirs = [];
-
-const prepareEmptyTypescriptProgram = configPath => {
-  const tmpDir = tmp.dirSync();
-  tmpDirs.push(tmpDir);
-
-  const tmpDirPath = tmpDir.name;
-  const corvidDir = path.join(__dirname, "../");
-
-  const tmpConfigPath = `${tmpDirPath}/tsconfig.json`;
-  const tmpConfigContent = `{"extends": "${path.resolve(
-    corvidDir,
-    configPath
-  )}"}`;
-
-  fs.writeFileSync(tmpConfigPath, tmpConfigContent);
-  fs.writeFileSync(`${tmpDirPath}/empty.js`, "");
-
-  return tmpConfigPath;
-};
 
 const getDeclarationFilesFromTsConfig = configPath => {
-  const host = ts.sys;
-  const tmpConfigPath = prepareEmptyTypescriptProgram(configPath);
-  const parsedCmd = ts.getParsedCommandLineOfConfigFile(
-    tmpConfigPath,
-    undefined,
-    host
-  );
-
-  const { options, fileNames } = parsedCmd;
-
-  const program = ts.createProgram({
-    rootNames: fileNames,
-    options
-  });
+  const program = createTsProgram(configPath);
 
   return program
     .getSourceFiles()
@@ -73,7 +38,6 @@ async function generateFullCorvidDeclarations() {
     FULL_CORVID_DECLARATION_NAME,
     JSON.stringify(corvidLib, null, 2)
   );
-  tmpDirs.forEach(tmpDir => tmpDir.removeCallback());
 }
 
 generateFullCorvidDeclarations();

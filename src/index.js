@@ -1,4 +1,5 @@
 const fullCorvidTypes = require("../fullCorvidTypes.json");
+const wixModulesNames = require("../wixModules.json");
 const { TS_CONFIG_PATHS } = require("./constants");
 const { getWidgetTypeDeclarations } = require("./widget");
 const getPageElementsTypeDeclarations = elementsMap =>
@@ -51,6 +52,7 @@ module.exports = {
       return [...fullCorvidTypes.BASE, ...fullCorvidTypes.PUBLIC];
     }
   },
+  getWixModulesList: () => wixModulesNames,
   getWidgetTypeDeclarations,
   getPageElementsTypeDeclarations
 };
