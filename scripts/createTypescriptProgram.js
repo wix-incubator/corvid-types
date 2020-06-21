@@ -1,10 +1,8 @@
 const tmp = require("tmp");
 const ts = require("typescript");
-const path = require("path");
 const fs = require("fs-extra");
 
 tmp.setGracefulCleanup(); // cleans tmp file on process exit
-exports.corvidDir = path.join(__dirname, "../");
 
 const prepareEmptyTypescriptProgram = configPath => {
   const tmpDir = tmp.dirSync();
@@ -12,10 +10,7 @@ const prepareEmptyTypescriptProgram = configPath => {
   const tmpDirPath = tmpDir.name;
 
   const tmpConfigPath = `${tmpDirPath}/tsconfig.json`;
-  const tmpConfigContent = `{"extends": "${path.resolve(
-    exports.corvidDir,
-    configPath
-  )}"}`;
+  const tmpConfigContent = `{"extends": "${configPath}"}`;
 
   fs.writeFileSync(tmpConfigPath, tmpConfigContent);
   fs.writeFileSync(`${tmpDirPath}/empty.js`, "");
@@ -23,7 +18,7 @@ const prepareEmptyTypescriptProgram = configPath => {
   return tmpConfigPath;
 };
 
-exports.createTsProgram = tsConfigPath => {
+module.exports = function createTsProgram(tsConfigPath) {
   const host = ts.sys;
   const tmpConfigPath = prepareEmptyTypescriptProgram(tsConfigPath);
   const parsedCmd = ts.getParsedCommandLineOfConfigFile(
