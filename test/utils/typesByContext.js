@@ -4,7 +4,8 @@ const shell = require("shelljs");
 const {
   declarations,
   getWidgetTypeDeclarations,
-  getPageElementsTypeDeclarations
+  getPageElementsTypeDeclarations,
+  getNpmDependenciesTypesDeclarations
 } = require("../../dist/corvidTypes.umd.js");
 
 const getTestContext = testPath => {
@@ -13,23 +14,30 @@ const getTestContext = testPath => {
   if (testPath.includes("/public")) return "public";
 };
 
-const getDeclarationsByTestPath = (testPath, elementsMap, widgets) => {
+const getDeclarationsByTestPath = (
+  testPath,
+  { dependencies = {}, elementsMap, widgets }
+) => {
   switch (getTestContext(testPath)) {
     case "pages":
-      return declarations.page({ elementsMap, widgets });
+      return declarations.page({ dependencies, elementsMap, widgets });
     case "backend":
-      return declarations.backend();
+      return declarations.backend({ dependencies });
     case "public":
-      return declarations.public();
+      return declarations.public({ dependencies });
   }
 };
 
 const createDeclarationsFilesByConfigPath = (
   testPath,
   tmpPath,
-  { elementsMap, widgets } = {}
+  { dependencies, elementsMap, widgets } = {}
 ) => {
-  const types = getDeclarationsByTestPath(testPath, elementsMap, widgets);
+  const types = getDeclarationsByTestPath(testPath, {
+    dependencies,
+    elementsMap,
+    widgets
+  });
   types.forEach(file => {
     if (file.path.includes("node_modules")) {
       const relativePath = file.path.split("node_modules").pop();
@@ -45,12 +53,31 @@ const createDeclarationsFilesByConfigPath = (
 const createDynamicPageTypings = testPath => {
   handlePageElementsMap(testPath, true);
   handleWidget(testPath, true);
+  handleDependencies(testPath, true);
 };
 
 const getDynamicPageTypings = testTmpDirPath => ({
   elementsMap: handlePageElementsMap(testTmpDirPath),
-  widgets: handleWidget(testTmpDirPath)
+  widgets: handleWidget(testTmpDirPath),
+  dependencies: handleDependencies(testTmpDirPath)
 });
+
+const handleDependencies = (testPath, shouldWrite = false) => {
+  let el;
+  if (fs.existsSync(`${testPath}/dependencies.json`)) {
+    el = JSON.parse(fs.readFileSync(`${testPath}/dependencies.json`, "utf8"));
+    fs.removeSync(`${testPath}/dependencies.json`);
+
+    if (shouldWrite) {
+      const dependencies = getNpmDependenciesTypesDeclarations(el);
+      dependencies.forEach((file, index) => {
+        fs.writeFileSync(`${testPath}/dependency${index}.d.ts`, file.content);
+      });
+    } else {
+      return el;
+    }
+  }
+};
 
 const handlePageElementsMap = (testPath, shouldWrite = false) => {
   let el;

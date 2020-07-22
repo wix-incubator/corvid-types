@@ -27,7 +27,6 @@ describe("typescript - positive scenarios - configPaths flow", () => {
   );
 });
 
-// todo:: seperate corvid-types changes to 2 commits
 describe("typescript - positive scenarios - declarations flow", () => {
   it.each(positiveRoots)(
     "should successfully compile %s folder",
