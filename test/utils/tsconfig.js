@@ -48,7 +48,7 @@ const getEmptyTsConfig = () => `{
 
 const getTsConfigByContext = (context, testPath) => {
   switch (context) {
-    case "pages":
+    case "page":
       return getPagesTsConfig(testPath);
     case "public":
       return getPublicTsConfig(testPath);
