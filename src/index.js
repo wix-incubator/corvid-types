@@ -9,6 +9,11 @@ const getPageElementsTypeDeclarations = elementsMap =>
     .join("") +
   "}";
 
+const getModuleTypeDeclaration = name => `declare module '${name}' {
+  const m: any;
+  export = m;
+}`;
+
 const getDynamicTypes = ({ elementsMap, widgets }) => {
   const dynamicTypes = [];
   if (elementsMap) {
@@ -28,6 +33,15 @@ const getDynamicTypes = ({ elementsMap, widgets }) => {
   return dynamicTypes;
 };
 
+const getNpmDependenciesTypesDeclarations = (dependencies = {}) => {
+  const dependenciesNames = Object.keys(dependencies);
+  if (!dependenciesNames.length) return [];
+  return dependenciesNames.map(packageName => ({
+    path: `/dependencies/${packageName}.${dependencies[packageName]}.d.ts`,
+    content: getModuleTypeDeclaration(packageName)
+  }));
+};
+
 module.exports = {
   configPaths: {
     page: `corvid-types/${TS_CONFIG_PATHS.PAGES}`,
@@ -35,24 +49,34 @@ module.exports = {
     public: `corvid-types/${TS_CONFIG_PATHS.PUBLIC}`
   },
   declarations: {
-    page: ({ elementsMap, widgets } = {}) => {
+    page: ({ dependencies, elementsMap, widgets } = {}) => {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PAGES,
         ...getDynamicTypes({
           elementsMap,
           widgets
-        })
+        }),
+        ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     },
-    backend: () => {
-      return [...fullCorvidTypes.BASE, ...fullCorvidTypes.BACKEND];
+    backend: ({ dependencies }) => {
+      return [
+        ...fullCorvidTypes.BASE,
+        ...fullCorvidTypes.BACKEND,
+        ...getNpmDependenciesTypesDeclarations(dependencies)
+      ];
     },
-    public: () => {
-      return [...fullCorvidTypes.BASE, ...fullCorvidTypes.PUBLIC];
+    public: ({ dependencies }) => {
+      return [
+        ...fullCorvidTypes.BASE,
+        ...fullCorvidTypes.PUBLIC,
+        ...getNpmDependenciesTypesDeclarations(dependencies)
+      ];
     }
   },
   getWixModulesList: () => wixModulesNames,
   getWidgetTypeDeclarations,
-  getPageElementsTypeDeclarations
+  getPageElementsTypeDeclarations,
+  getNpmDependenciesTypesDeclarations
 };
