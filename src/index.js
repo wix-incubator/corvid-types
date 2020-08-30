@@ -9,10 +9,15 @@ const getPageElementsTypeDeclarations = elementsMap =>
     .join("") +
   "}";
 
-const getModuleTypeDeclaration = name => `declare module '${name}' {
-  const m: any;
-  export = m;
-}`;
+const getModuleTypeDeclaration = name =>
+  `declare module '${name}' {
+    const m: any;
+    export = m;
+  }
+  declare module '${name}/*' {
+    const m: any;
+    export = m;
+  }`;
 
 const getDynamicTypes = ({ elementsMap, widgets }) => {
   const dynamicTypes = [];
