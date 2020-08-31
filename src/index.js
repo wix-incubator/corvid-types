@@ -10,14 +10,10 @@ const getPageElementsTypeDeclarations = elementsMap =>
   "}";
 
 const getModuleTypeDeclaration = name =>
-  `declare module '${name}' {
-    const m: any;
-    export = m;
-  }
-  declare module '${name}/*' {
-    const m: any;
-    export = m;
-  }`;
+  `
+    declare module '${name}';
+    declare module '${name}/*';
+  `;
 
 const getDynamicTypes = ({ elementsMap, widgets }) => {
   const dynamicTypes = [];
