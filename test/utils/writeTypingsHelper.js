@@ -26,7 +26,11 @@ module.exports = {
     });
     return dir;
   },
-  dynamic: (rootTestPath, context, { elementsMap, widgets, dependencies }) => {
+  dynamic: (
+    rootTestPath,
+    context,
+    { elementsMap, widgets, dependencies, jswFiles }
+  ) => {
     const dir = createTestEnvioremnt(rootTestPath, context);
     if (elementsMap) {
       fs.writeFileSync(`${dir}/elementsMap.d.ts`, elementsMap);
@@ -37,10 +41,14 @@ module.exports = {
       });
     }
     if (dependencies) {
-      dependencies.forEach((file, i) => {
-        fs.writeFileSync(`${dir}/dependency${i}.d.ts`, file.content);
+      dependencies.forEach((module, i) => {
+        fs.writeFileSync(`${dir}/dependency${i}.d.ts`, module);
       });
     }
+    if (jswFiles) {
+      fs.writeFileSync(`${dir}/jswUserModules.d.ts`, jswFiles);
+    }
+
     return dir;
   }
 };

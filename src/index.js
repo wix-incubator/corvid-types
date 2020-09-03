@@ -1,47 +1,22 @@
 const fullCorvidTypes = require("../fullCorvidTypes.json");
 const wixModulesNames = require("../wixModules.json");
 const { TS_CONFIG_PATHS } = require("./constants");
-const { getWidgetTypeDeclarations } = require("./widget");
-const getPageElementsTypeDeclarations = elementsMap =>
-  "type PageElementsMap = {\n" +
-  Object.keys(elementsMap)
-    .map(nickname => `  "#${nickname}": ${elementsMap[nickname]};\n`)
-    .join("") +
-  "}";
-
-const getModuleTypeDeclaration = name =>
-  `
-    declare module '${name}';
-    declare module '${name}/*';
-  `;
-
-const getDynamicTypes = ({ elementsMap, widgets }) => {
-  const dynamicTypes = [];
-  if (elementsMap) {
-    dynamicTypes.push({
-      path: "/elementsMap.d.ts",
-      content: getPageElementsTypeDeclarations(elementsMap)
-    });
-  }
-  if (widgets && widgets.length) {
-    widgets.forEach(({ name, events, members }) => {
-      dynamicTypes.push({
-        path: `/widgets/${name}.d.ts`,
-        content: getWidgetTypeDeclarations({ name, events, members })
-      });
-    });
-  }
-  return dynamicTypes;
-};
-
-const getNpmDependenciesTypesDeclarations = (dependencies = {}) => {
-  const dependenciesNames = Object.keys(dependencies);
-  if (!dependenciesNames.length) return [];
-  return dependenciesNames.map(packageName => ({
-    path: `/dependencies/${packageName}.${dependencies[packageName]}.d.ts`,
-    content: getModuleTypeDeclaration(packageName)
-  }));
-};
+const {
+  getAmbientModuleDeclaration,
+  getNpmDependenciesTypesDeclarations
+} = require("./dynamicTypes/npmDependencies");
+const {
+  getPageElementsTypeDeclarations,
+  getPageElementsRawDeclarations
+} = require("./dynamicTypes/elementsMap");
+const {
+  getWidgetsTypeDeclarations,
+  getWidgetDeclaration
+} = require("./dynamicTypes/widget");
+const {
+  getJswRawDeclaration,
+  getJswTypeDeclarations
+} = require("./dynamicTypes/jswFiles");
 
 module.exports = {
   configPaths: {
@@ -54,10 +29,9 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PAGES,
-        ...getDynamicTypes({
-          elementsMap,
-          widgets
-        }),
+        ...getJswTypeDeclarations(),
+        ...getPageElementsTypeDeclarations(elementsMap),
+        ...getWidgetsTypeDeclarations(widgets),
         ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     },
@@ -65,6 +39,7 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.BACKEND,
+        ...getJswTypeDeclarations(),
         ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     },
@@ -72,12 +47,14 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PUBLIC,
+        ...getJswTypeDeclarations(),
         ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     }
   },
   getWixModulesList: () => wixModulesNames,
-  getWidgetTypeDeclarations,
-  getPageElementsTypeDeclarations,
-  getNpmDependenciesTypesDeclarations
+  getWidgetTypeDeclarations: getWidgetDeclaration,
+  getPageElementsTypeDeclarations: getPageElementsRawDeclarations,
+  getAmbientModuleDeclaration,
+  getJswTypeDeclaration: getJswRawDeclaration
 };
