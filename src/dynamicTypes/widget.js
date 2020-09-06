@@ -23,14 +23,16 @@ const getWidgetDeclaration = ({ name, members = {}, events = {} }) => {
     ${getMembersTypes(members)} ${getEventHandlersTypes(events)}}`;
 };
 
+function getWidgetsTypeDeclarations(widgets) {
+  if (!widgets) return [];
+
+  return widgets.map(({ name, events, members }) => ({
+    path: `/widgets/${name}.d.ts`,
+    content: getWidgetDeclaration({ name, members, events })
+  }));
+}
+
 module.exports = {
   getWidgetDeclaration,
-  getWidgetsTypeDeclarations: function getWidgetsTypeDeclarations(widgets) {
-    if (!widgets) return [];
-
-    return widgets.map(({ name, events, members }) => ({
-      path: `/widgets/${name}.d.ts`,
-      content: getWidgetDeclaration({ name, members, events })
-    }));
-  }
+  getWidgetsTypeDeclarations
 };
