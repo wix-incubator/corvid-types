@@ -3,11 +3,10 @@ const path = require("path");
 const fs = require("fs-extra");
 const shell = require("shelljs");
 const { getEmptyTsConfig, getTsConfigByContext } = require("./tsconfig");
-const filterJson = src => !src.endsWith(".json");
 
 const createTestEnvioremnt = (tsRootPath, context) => {
   const testTmpDirPath = tmp.dirSync().name;
-  fs.copySync(tsRootPath, testTmpDirPath, { filter: filterJson });
+  fs.copySync(tsRootPath, testTmpDirPath);
   fs.writeFileSync(
     `${testTmpDirPath}/tsconfig.json`,
     context ? getTsConfigByContext(context, testTmpDirPath) : getEmptyTsConfig()

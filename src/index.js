@@ -17,6 +17,7 @@ const {
   getJswRawDeclaration,
   getJswTypeDeclarations
 } = require("./dynamicTypes/jswFiles");
+const getJsonTypeDeclarations = require("./dynamicTypes/jsonFiles");
 
 module.exports = {
   configPaths: {
@@ -30,6 +31,7 @@ module.exports = {
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PAGES,
         ...getJswTypeDeclarations(),
+        ...getJsonTypeDeclarations(),
         ...getPageElementsTypeDeclarations(elementsMap),
         ...getWidgetsTypeDeclarations(widgets),
         ...getNpmDependenciesTypesDeclarations(dependencies)
@@ -40,6 +42,7 @@ module.exports = {
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.BACKEND,
         ...getJswTypeDeclarations(),
+        ...getJsonTypeDeclarations(),
         ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     },
@@ -48,6 +51,7 @@ module.exports = {
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PUBLIC,
         ...getJswTypeDeclarations(),
+        ...getJsonTypeDeclarations(),
         ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     }
