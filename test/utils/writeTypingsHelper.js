@@ -37,8 +37,8 @@ module.exports = {
       });
     }
     if (dependencies) {
-      dependencies.forEach((file, i) => {
-        fs.writeFileSync(`${dir}/dependency${i}.d.ts`, file.content);
+      dependencies.forEach((module, i) => {
+        fs.writeFileSync(`${dir}/dependency${i}.d.ts`, module);
       });
     }
     return dir;
