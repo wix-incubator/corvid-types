@@ -13,6 +13,10 @@ const {
   getWidgetsTypeDeclarations,
   getWidgetDeclaration
 } = require("./dynamicTypes/widget");
+const {
+  getJswRawDeclaration,
+  getJswTypeDeclarations
+} = require("./dynamicTypes/jswFiles");
 
 module.exports = {
   configPaths: {
@@ -25,6 +29,7 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PAGES,
+        ...getJswTypeDeclarations(),
         ...getPageElementsTypeDeclarations(elementsMap),
         ...getWidgetsTypeDeclarations(widgets),
         ...getNpmDependenciesTypesDeclarations(dependencies)
@@ -34,6 +39,7 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.BACKEND,
+        ...getJswTypeDeclarations(),
         ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     },
@@ -41,6 +47,7 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PUBLIC,
+        ...getJswTypeDeclarations(),
         ...getNpmDependenciesTypesDeclarations(dependencies)
       ];
     }
@@ -48,5 +55,6 @@ module.exports = {
   getWixModulesList: () => wixModulesNames,
   getWidgetTypeDeclarations: getWidgetDeclaration,
   getPageElementsTypeDeclarations: getPageElementsRawDeclarations,
-  getAmbientModuleDeclaration
+  getAmbientModuleDeclaration,
+  getJswTypeDeclaration: getJswRawDeclaration
 };
