@@ -33,6 +33,6 @@ function getWidgetsTypeDeclarations(widgets) {
 }
 
 module.exports = {
-  getWidgetRawDeclaration,
-  getWidgetsTypeDeclarations
+  getRaw: getWidgetRawDeclaration,
+  getFiles: getWidgetsTypeDeclarations
 };

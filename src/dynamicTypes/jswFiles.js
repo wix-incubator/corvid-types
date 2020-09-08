@@ -13,6 +13,6 @@ function getJswTypeDeclarations() {
 }
 
 module.exports = {
-  getJswRawDeclaration,
-  getJswTypeDeclarations
+  getRaw: getJswRawDeclaration,
+  getFiles: getJswTypeDeclarations
 };

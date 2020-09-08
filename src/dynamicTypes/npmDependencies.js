@@ -15,6 +15,6 @@ function getPackagesTypeDeclarations(dependencies = {}) {
 }
 
 module.exports = {
-  getPackageRawDeclaration,
-  getPackagesTypeDeclarations
+  getRaw: getPackageRawDeclaration,
+  getFiles: getPackagesTypeDeclarations
 };

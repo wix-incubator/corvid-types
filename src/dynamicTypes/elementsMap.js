@@ -16,6 +16,6 @@ function getPageElementsTypeDeclarations(elementsMap) {
 }
 
 module.exports = {
-  getPageElementsRawDeclarations,
-  getPageElementsTypeDeclarations
+  getRaw: getPageElementsRawDeclarations,
+  getFiles: getPageElementsTypeDeclarations
 };
