@@ -2,6 +2,7 @@ const tmp = require("tmp");
 const path = require("path");
 const fs = require("fs-extra");
 const shell = require("shelljs");
+const _ = require("lodash");
 const { getEmptyTsConfig, getTsConfigByContext } = require("./tsconfig");
 
 const createTestEnvioremnt = (tsRootPath, context) => {
@@ -25,28 +26,18 @@ module.exports = {
     });
     return dir;
   },
-  dynamic: (
-    rootTestPath,
-    context,
-    { elementsMap, widgets, dependencies, jswFiles }
-  ) => {
+  dynamic: (rootTestPath, context, dynamicTypingsFiles) => {
     const dir = createTestEnvioremnt(rootTestPath, context);
-    if (elementsMap) {
-      fs.writeFileSync(`${dir}/elementsMap.d.ts`, elementsMap);
-    }
-    if (widgets) {
-      widgets.forEach((widget, i) => {
-        fs.writeFileSync(`${dir}/widget${i}.d.ts`, widget);
-      });
-    }
-    if (dependencies) {
-      dependencies.forEach((module, i) => {
-        fs.writeFileSync(`${dir}/dependency${i}.d.ts`, module);
-      });
-    }
-    if (jswFiles) {
-      fs.writeFileSync(`${dir}/jswUserModules.d.ts`, jswFiles);
-    }
+
+    _.forOwn(dynamicTypingsFiles, (content, fileName) => {
+      if (!_.isArray(content)) {
+        fs.writeFileSync(`${dir}/${fileName}.d.ts`, content);
+      } else {
+        _.forEach(content, (fileContent, index) =>
+          fs.writeFileSync(`${dir}/${fileName}${index}.d.ts`, fileContent)
+        );
+      }
+    });
 
     return dir;
   }

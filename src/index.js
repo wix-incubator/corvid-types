@@ -1,23 +1,12 @@
 const fullCorvidTypes = require("../fullCorvidTypes.json");
 const wixModulesNames = require("../wixModules.json");
 const { TS_CONFIG_PATHS } = require("./constants");
-const {
-  getAmbientModuleDeclaration,
-  getNpmDependenciesTypesDeclarations
-} = require("./dynamicTypes/npmDependencies");
-const {
-  getPageElementsTypeDeclarations,
-  getPageElementsRawDeclarations
-} = require("./dynamicTypes/elementsMap");
-const {
-  getWidgetsTypeDeclarations,
-  getWidgetDeclaration
-} = require("./dynamicTypes/widget");
-const {
-  getJswRawDeclaration,
-  getJswTypeDeclarations
-} = require("./dynamicTypes/jswFiles");
-const getJsonTypeDeclarations = require("./dynamicTypes/jsonFiles");
+const dynamicTypings = require("./dynamicTypes");
+
+const commonDynamicTypings = [
+  ...dynamicTypings.jsw.getFiles(),
+  ...dynamicTypings.json.getFiles()
+];
 
 module.exports = {
   configPaths: {
@@ -30,35 +19,33 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PAGES,
-        ...getJswTypeDeclarations(),
-        ...getJsonTypeDeclarations(),
-        ...getPageElementsTypeDeclarations(elementsMap),
-        ...getWidgetsTypeDeclarations(widgets),
-        ...getNpmDependenciesTypesDeclarations(dependencies)
+        ...commonDynamicTypings,
+        ...dynamicTypings.elementsMap.getFiles(elementsMap),
+        ...dynamicTypings.widget.getFiles(widgets),
+        ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
     backend: ({ dependencies }) => {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.BACKEND,
-        ...getJswTypeDeclarations(),
-        ...getJsonTypeDeclarations(),
-        ...getNpmDependenciesTypesDeclarations(dependencies)
+        ...commonDynamicTypings,
+        ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
     public: ({ dependencies }) => {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PUBLIC,
-        ...getJswTypeDeclarations(),
-        ...getJsonTypeDeclarations(),
-        ...getNpmDependenciesTypesDeclarations(dependencies)
+        ...commonDynamicTypings,
+        ...dynamicTypings.packages.getFiles(dependencies)
       ];
     }
   },
   getWixModulesList: () => wixModulesNames,
-  getWidgetTypeDeclarations: getWidgetDeclaration,
-  getPageElementsTypeDeclarations: getPageElementsRawDeclarations,
-  getAmbientModuleDeclaration,
-  getJswTypeDeclaration: getJswRawDeclaration
+  // Methods for Corvid-local (CLI)
+  getWidgetTypeDeclarations: dynamicTypings.widget.getRaw,
+  getPageElementsTypeDeclarations: dynamicTypings.elementsMap.getRaw,
+  getPackageTypeDecelerations: dynamicTypings.packages.getRaw,
+  getJswTypeDeclarations: dynamicTypings.jsw.getRaw
 };

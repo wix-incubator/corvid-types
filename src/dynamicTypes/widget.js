@@ -18,7 +18,7 @@ const getMembersTypes = members =>
     })
     .join("\n");
 
-const getWidgetDeclaration = ({ name, members = {}, events = {} }) => {
+const getWidgetRawDeclaration = ({ name, members = {}, events = {} }) => {
   return `interface ${name} extends $w.IFrame { 
     ${getMembersTypes(members)} ${getEventHandlersTypes(events)}}`;
 };
@@ -28,11 +28,11 @@ function getWidgetsTypeDeclarations(widgets) {
 
   return widgets.map(({ name, events, members }) => ({
     path: `/widgets/${name}.d.ts`,
-    content: getWidgetDeclaration({ name, members, events })
+    content: getWidgetRawDeclaration({ name, members, events })
   }));
 }
 
 module.exports = {
-  getWidgetDeclaration,
+  getWidgetRawDeclaration,
   getWidgetsTypeDeclarations
 };

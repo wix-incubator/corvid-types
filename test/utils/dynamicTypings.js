@@ -3,8 +3,8 @@ const _ = require("lodash");
 const {
   getWidgetTypeDeclarations,
   getPageElementsTypeDeclarations,
-  getAmbientModuleDeclaration,
-  getJswTypeDeclaration
+  getPackageTypeDecelerations,
+  getJswTypeDeclarations
 } = require("../../dist/corvidTypes.umd");
 
 module.exports = function getDynamicTypings({
@@ -21,7 +21,7 @@ module.exports = function getDynamicTypings({
   if (dependencies) {
     dynamicTypings.dependencies = _.chain(dependencies)
       .keys()
-      .map(getAmbientModuleDeclaration)
+      .map(getPackageTypeDecelerations)
       .value();
   }
 
@@ -29,7 +29,7 @@ module.exports = function getDynamicTypings({
     dynamicTypings.widgets = widgets.map(getWidgetTypeDeclarations);
   }
 
-  dynamicTypings.jswFiles = getJswTypeDeclaration();
+  dynamicTypings.jswFiles = getJswTypeDeclarations();
 
   return dynamicTypings;
 };

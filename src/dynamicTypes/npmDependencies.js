@@ -1,20 +1,20 @@
-const getAmbientModuleDeclaration = name =>
+const getPackageRawDeclaration = name =>
   `
     declare module '${name}';
     declare module '${name}/*';
   `;
 
-function getNpmDependenciesTypesDeclarations(dependencies = {}) {
+function getPackagesTypeDeclarations(dependencies = {}) {
   const dependenciesNames = Object.keys(dependencies);
   if (!dependenciesNames.length) return [];
 
   return dependenciesNames.map(packageName => ({
     path: `/dependencies/${packageName}.${dependencies[packageName]}.d.ts`,
-    content: getAmbientModuleDeclaration(packageName)
+    content: getPackageRawDeclaration(packageName)
   }));
 }
 
 module.exports = {
-  getAmbientModuleDeclaration,
-  getNpmDependenciesTypesDeclarations
+  getPackageRawDeclaration,
+  getPackagesTypeDeclarations
 };
