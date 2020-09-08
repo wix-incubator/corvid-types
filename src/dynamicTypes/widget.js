@@ -18,10 +18,21 @@ const getMembersTypes = members =>
     })
     .join("\n");
 
-const getWidgetTypeDeclarations = ({ name, members = {}, events = {} }) => {
+const getWidgetRawDeclaration = ({ name, members = {}, events = {} }) => {
   return `interface ${name} extends $w.IFrame { 
     ${getMembersTypes(members)} ${getEventHandlersTypes(events)}}`;
 };
+
+function getWidgetsTypeDeclarations(widgets) {
+  if (!widgets) return [];
+
+  return widgets.map(({ name, events, members }) => ({
+    path: `/widgets/${name}.d.ts`,
+    content: getWidgetRawDeclaration({ name, members, events })
+  }));
+}
+
 module.exports = {
-  getWidgetTypeDeclarations
+  getRaw: getWidgetRawDeclaration,
+  getFiles: getWidgetsTypeDeclarations
 };

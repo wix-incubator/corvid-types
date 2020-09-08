@@ -3,9 +3,9 @@
   "version": "0.1.108",
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint ./src/** ./test/** ./scripts/**",
     "build": "npm run generate-dts && npm run generate-full-corvid-types && npm run generate-module-list && webpack",
-    "test": "jest",
+    "test": "yarn run lint && jest",
     "test:debug": "node --inspect node_modules/.bin/jest",
     "generate-dts": "scripts/generate-types.js",
     "generate-full-corvid-types": "scripts/generate-full-corvid-types.js",

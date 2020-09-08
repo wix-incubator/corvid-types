@@ -2,12 +2,12 @@ const tmp = require("tmp");
 const path = require("path");
 const fs = require("fs-extra");
 const shell = require("shelljs");
+const _ = require("lodash");
 const { getEmptyTsConfig, getTsConfigByContext } = require("./tsconfig");
-const filterJson = src => !src.endsWith(".json");
 
 const createTestEnvioremnt = (tsRootPath, context) => {
   const testTmpDirPath = tmp.dirSync().name;
-  fs.copySync(tsRootPath, testTmpDirPath, { filter: filterJson });
+  fs.copySync(tsRootPath, testTmpDirPath);
   fs.writeFileSync(
     `${testTmpDirPath}/tsconfig.json`,
     context ? getTsConfigByContext(context, testTmpDirPath) : getEmptyTsConfig()
@@ -26,21 +26,19 @@ module.exports = {
     });
     return dir;
   },
-  dynamic: (rootTestPath, context, { elementsMap, widgets, dependencies }) => {
+  dynamic: (rootTestPath, context, dynamicTypingsFiles) => {
     const dir = createTestEnvioremnt(rootTestPath, context);
-    if (elementsMap) {
-      fs.writeFileSync(`${dir}/elementsMap.d.ts`, elementsMap);
-    }
-    if (widgets) {
-      widgets.forEach((widget, i) => {
-        fs.writeFileSync(`${dir}/widget${i}.d.ts`, widget);
-      });
-    }
-    if (dependencies) {
-      dependencies.forEach((file, i) => {
-        fs.writeFileSync(`${dir}/dependency${i}.d.ts`, file.content);
-      });
-    }
+
+    _.forOwn(dynamicTypingsFiles, (content, fileName) => {
+      if (!_.isArray(content)) {
+        fs.writeFileSync(`${dir}/${fileName}.d.ts`, content);
+      } else {
+        _.forEach(content, (fileContent, index) =>
+          fs.writeFileSync(`${dir}/${fileName}${index}.d.ts`, fileContent)
+        );
+      }
+    });
+
     return dir;
   }
 };

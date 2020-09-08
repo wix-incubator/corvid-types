@@ -3,12 +3,8 @@ const listSubDirectories = require("../utils/listSubDirectories");
 const writeTypingsHelper = require("../utils/writeTypingsHelper");
 const testParser = require("../utils/testParser");
 
-const {
-  declarations,
-  getWidgetTypeDeclarations,
-  getPageElementsTypeDeclarations,
-  getNpmDependenciesTypesDeclarations
-} = require("../../dist/corvidTypes.umd.js");
+const getDynamicTypings = require("../utils/dynamicTypings");
+const { declarations } = require("../../dist/corvidTypes.umd.js");
 
 const NEGATIVE_ROOT_PATH = "test/it/code-samples/negative";
 const ignoredTests = [
@@ -26,20 +22,10 @@ describe("typescript - negative scenarios - configPaths flow", () => {
         tsRootPath
       );
 
-      const dynamicTypings = {
-        elementsMap: elementsMap
-          ? getPageElementsTypeDeclarations(elementsMap)
-          : null,
-        dependencies: dependencies
-          ? getNpmDependenciesTypesDeclarations(dependencies)
-          : null,
-        widgets: widgets ? widgets.map(getWidgetTypeDeclarations) : null
-      };
-
       const testTmpDirPath = writeTypingsHelper.dynamic(
         tsRootPath,
         context,
-        dynamicTypings
+        getDynamicTypings({ elementsMap, widgets, dependencies })
       );
 
       expect(() => {
