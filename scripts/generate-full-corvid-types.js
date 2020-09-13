@@ -6,8 +6,12 @@ const without_ = require("lodash/without");
 const createTsProgram = require("./createTypescriptProgram");
 const { TS_CONFIG_PATHS, TS_CONFIG_BASE_PATH } = require("../src/constants");
 
-const FULL_CORVID_DECLARATION_NAME = "fullCorvidTypes.json";
 const projectRoot = path.join(__dirname, "../");
+const FULL_CORVID_DECLARATION_PATH = path.join(
+  projectRoot,
+  "dist",
+  "fullCorvidTypes.json"
+);
 
 const getDeclarationFilesFromTsConfig = configPath => {
   const program = createTsProgram(configPath);
@@ -41,8 +45,9 @@ async function generateFullCorvidDeclarations() {
     }));
   });
 
+  fs.ensureFileSync(FULL_CORVID_DECLARATION_PATH);
   fs.writeFileSync(
-    FULL_CORVID_DECLARATION_NAME,
+    FULL_CORVID_DECLARATION_PATH,
     JSON.stringify(corvidLib, null, 2)
   );
 }

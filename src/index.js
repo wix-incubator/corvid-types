@@ -1,5 +1,5 @@
-const fullCorvidTypes = require("../fullCorvidTypes.json");
-const wixModulesNames = require("../wixModules.json");
+const fullCorvidTypes = require("../dist/fullCorvidTypes.json");
+const wixModulesNames = require("../dist/wixModules.json");
 const { TS_CONFIG_PATHS } = require("./constants");
 const dynamicTypings = require("./dynamicTypes");
 
