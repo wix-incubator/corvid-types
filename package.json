@@ -25,9 +25,7 @@
     "src",
     "dist",
     "types",
-    "configs",
-    "fullCorvidTypes.json",
-    "wixModules.json"
+    "configs"
   ],
   "types": "./types/index.d.ts",
   "keywords": [
