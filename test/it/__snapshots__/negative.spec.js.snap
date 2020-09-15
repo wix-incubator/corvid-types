@@ -4,6 +4,12 @@ exports[`typescript - negative scenarios - configPaths flow should fail compilin
 
 exports[`typescript - negative scenarios - configPaths flow should fail compiling test/it/code-samples/negative/backend-unknown-module folder 1`] = `"unknown.js (2,15): Cannot find module 'custom-modulezzz' or its corresponding type declarations.,unknown.js (3,11): Cannot find name 'wixUnknownModule'."`;
 
+exports[`typescript - negative scenarios - configPaths flow should fail compiling test/it/code-samples/negative/pages-bad-usage-of-existing-prop-on-container-children folder 1`] = `"pageCode.js (2,19): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'."`;
+
+exports[`typescript - negative scenarios - configPaths flow should fail compiling test/it/code-samples/negative/pages-bad-usage-of-existing-prop-on-event-target folder 1`] = `"pageCode.js (2,26): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'."`;
+
+exports[`typescript - negative scenarios - configPaths flow should fail compiling test/it/code-samples/negative/pages-bad-usages-of-existing-prop-on-playable-mixin-next-previous folder 1`] = `"pageCode.js (3,41): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'.,pageCode.js (7,49): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'."`;
+
 exports[`typescript - negative scenarios - configPaths flow should fail compiling test/it/code-samples/negative/pages-node-module folder 1`] = `"node.js (1,20): Cannot find module 'fs' or its corresponding type declarations.,node.js (2,22): Cannot find module 'path' or its corresponding type declarations."`;
 
 exports[`typescript - negative scenarios - configPaths flow should fail compiling test/it/code-samples/negative/pages-unknown-module folder 1`] = `"unknown.js (2,15): Cannot find module 'custom-modulezzz' or its corresponding type declarations.,unknown.js (3,11): Cannot find name 'wixUnknownModule'."`;
@@ -17,6 +23,12 @@ exports[`typescript - negative scenarios - configPaths flow should fail compilin
 exports[`typescript - negative scenarios - declarations flow should fail compiling test/it/code-samples/negative/backend-$w-module folder 1`] = `"$w-module.js (1,1): Cannot use namespace '$w' as a value."`;
 
 exports[`typescript - negative scenarios - declarations flow should fail compiling test/it/code-samples/negative/backend-unknown-module folder 1`] = `"unknown.js (2,15): Cannot find module 'custom-modulezzz' or its corresponding type declarations.,unknown.js (3,11): Cannot find name 'wixUnknownModule'."`;
+
+exports[`typescript - negative scenarios - declarations flow should fail compiling test/it/code-samples/negative/pages-bad-usage-of-existing-prop-on-container-children folder 1`] = `"pageCode.js (2,19): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'."`;
+
+exports[`typescript - negative scenarios - declarations flow should fail compiling test/it/code-samples/negative/pages-bad-usage-of-existing-prop-on-event-target folder 1`] = `"pageCode.js (2,26): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'."`;
+
+exports[`typescript - negative scenarios - declarations flow should fail compiling test/it/code-samples/negative/pages-bad-usages-of-existing-prop-on-playable-mixin-next-previous folder 1`] = `"pageCode.js (3,41): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'.,pageCode.js (7,49): Argument of type 'string' is not assignable to parameter of type 'MouseEventHandler'."`;
 
 exports[`typescript - negative scenarios - declarations flow should fail compiling test/it/code-samples/negative/pages-node-module folder 1`] = `"node.js (1,20): Cannot find module 'fs' or its corresponding type declarations.,node.js (2,22): Cannot find module 'path' or its corresponding type declarations."`;
 
