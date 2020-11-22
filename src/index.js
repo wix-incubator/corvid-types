@@ -3,11 +3,6 @@ const wixModulesNames = require("../dist/wixModules.json");
 const { TS_CONFIG_PATHS } = require("./constants");
 const dynamicTypings = require("./dynamicTypes");
 
-const commonDynamicTypings = [
-  ...dynamicTypings.jsw.getFiles(),
-  ...dynamicTypings.json.getFiles()
-];
-
 module.exports = {
   configPaths: {
     page: `corvid-types/${TS_CONFIG_PATHS.PAGES}`,
@@ -19,7 +14,6 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PAGES,
-        ...commonDynamicTypings,
         ...dynamicTypings.elementsMap.getFiles(elementsMap),
         ...dynamicTypings.widget.getFiles(widgets),
         ...dynamicTypings.packages.getFiles(dependencies)
@@ -29,7 +23,6 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.BACKEND,
-        ...commonDynamicTypings,
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
@@ -37,7 +30,6 @@ module.exports = {
       return [
         ...fullCorvidTypes.BASE,
         ...fullCorvidTypes.PUBLIC,
-        ...commonDynamicTypings,
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     }
@@ -46,6 +38,5 @@ module.exports = {
   // Methods for Corvid-local (CLI)
   getWidgetTypeDeclarations: dynamicTypings.widget.getRaw,
   getPageElementsTypeDeclarations: dynamicTypings.elementsMap.getRaw,
-  getPackageTypeDecelerations: dynamicTypings.packages.getRaw,
-  getJswTypeDeclarations: dynamicTypings.jsw.getRaw
+  getPackageTypeDecelerations: dynamicTypings.packages.getRaw
 };
