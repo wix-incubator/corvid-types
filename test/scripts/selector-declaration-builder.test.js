@@ -13,10 +13,7 @@ describe("define $w.d.ts", () => {
   describe("IntersectionArrayAndBase declaration", () => {
     test("should generate IntersectionArrayAndBase declaration", () => {
       const dts = get$wDts();
-      const expectedDeceleration = `declare type IntersectionArrayAndBase<T, P> = {
-    [K in keyof T]: K extends P ? T[K] : T[K] & T[K][];
-};
-`;
+      const expectedDeceleration = `declare type IntersectionArrayAndBase<T, P>`;
 
       expect(dts).toContain(expectedDeceleration);
     });
@@ -59,7 +56,7 @@ describe("define $w.d.ts", () => {
     test("should generate $w function declaration", () => {
       const dts = get$wDts();
       const expectedDeceleration =
-        "declare function $w<T extends keyof WixElementSelector>(selector: T): WixElementSelector[T]";
+        "declare function $w<T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):";
 
       expect(dts).toContain(expectedDeceleration);
     });
@@ -92,7 +89,7 @@ describe("define $w.d.ts", () => {
     test("should generate $w function type declaration", () => {
       const dts = get$wDts();
       const expectedDeceleration =
-        "type $w = <T extends keyof WixElementSelector>(selector: T)=>WixElementSelector[T]";
+        "type $w = <T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>";
 
       expect(dts).toContain(expectedDeceleration);
     });
