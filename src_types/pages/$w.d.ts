@@ -7,6 +7,9 @@ declare type IntersectionArrayAndBase<T, P> = {
 declare type IsWixElementSelector<S> = S extends keyof WixElementSelector ? WixElementSelector[S] : never;
 declare type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>;
 
+/**
+ * Selects and returns elements from a page.
+ */
 declare function $w<T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):
     S extends keyof WixElementSelector 
         ? WixElementSelector[S]
