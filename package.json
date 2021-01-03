@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint ./src/** ./test/** ./scripts/**",
     "build": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && webpack",
+    "build-custom": "CUSTOM_SERVICES=1 npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && webpack",
     "test": "npm run lint && jest",
     "test:debug": "node --inspect node_modules/.bin/p",
     "patch-declarations": "node scripts/patch-declarations.js",
