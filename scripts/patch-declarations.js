@@ -31,7 +31,8 @@ function run(sourceFilePath, outDirFilePath) {
 
 const DECLARATIONS_PATH = path.join(
   __dirname,
-  "../types/common/declaration.d.ts"
+  process.env.CUSTOM_SERVICES ? "../customTypes" : "../",
+  "types/common/declaration.d.ts"
 );
 if (!fs.existsSync(DECLARATIONS_PATH)) {
   throw new Error(`Cannot find the declaration file at [${DECLARATIONS_PATH}]`);

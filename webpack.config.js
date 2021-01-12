@@ -1,13 +1,18 @@
 const path = require("path");
 const EsmWebpackPlugin = require("@purtuga/esm-webpack-plugin");
 const env = process.env.NODE_ENV || "development";
-const DIST = path.join(__dirname, "./dist");
+const WITH_CUSTOMS = !!process.env.CUSTOM_SERVICES;
+const DIST = path.join(__dirname, WITH_CUSTOMS ? "customTypes" : "", "dist");
+const INDEX_FILE = WITH_CUSTOMS
+  ? "./src/customTypesIndex.js"
+  : "./src/index.js";
+
 const baseConfig = libraryTarget =>
   Object.assign(
     {
       mode: env === "development" ? "development" : "production",
       entry: {
-        corvidTypes: "./src/index.js"
+        corvidTypes: INDEX_FILE
       },
       output: {
         library: "corvidTypes",

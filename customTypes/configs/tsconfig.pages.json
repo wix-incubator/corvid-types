@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "typeRoots": ["../"],
+    "types": ["types/pages"],
+    "lib": ["ES2020", "WebWorker"]
+  }
+} 

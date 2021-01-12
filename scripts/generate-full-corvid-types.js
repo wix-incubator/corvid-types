@@ -3,12 +3,15 @@ const fs = require("fs-extra");
 const path = require("path");
 const without_ = require("lodash/without");
 
+const customConfigPrefix = process.env.CUSTOM_SERVICES ? "customTypes" : ".";
+
 const createTsProgram = require("./createTypescriptProgram");
 const { TS_CONFIG_PATHS, TS_CONFIG_BASE_PATH } = require("../src/constants");
 
 const projectRoot = path.join(__dirname, "../");
 const FULL_CORVID_DECLARATION_PATH = path.join(
   projectRoot,
+  customConfigPrefix,
   "dist",
   "fullCorvidTypes.json"
 );
@@ -32,7 +35,7 @@ async function generateFullCorvidDeclarations() {
   Object.keys(TS_CONFIG_PATHS).forEach(context => {
     corvidLib[context] = without_(
       getDeclarationFilesFromTsConfig(
-        path.join(projectRoot, TS_CONFIG_PATHS[context])
+        path.join(projectRoot, customConfigPrefix, TS_CONFIG_PATHS[context])
       ),
       ...corvidLib.BASE
     );

@@ -4,8 +4,9 @@
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint ./src/** ./test/** ./scripts/**",
-    "build": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && webpack",
-    "build-custom": "CUSTOM_SERVICES=1 npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && webpack",
+    "build": "npm run build-normal && npm run build-custom",
+    "build-normal": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && webpack",
+    "build-custom": "export CUSTOM_SERVICES=1 && npm run build-normal",
     "test": "npm run lint && jest",
     "test:debug": "node --inspect node_modules/.bin/p",
     "patch-declarations": "node scripts/patch-declarations.js",

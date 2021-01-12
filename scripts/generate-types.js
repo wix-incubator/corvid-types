@@ -5,19 +5,20 @@ const path = require("path");
 const $wGenerator = require("./selector-declaration-generator");
 const { spawnSync } = require("child_process");
 
+// Remove this and corresponding if's when we have wix-data autocomplete working
+const WITH_CUSTOM = !!process.env.CUSTOM_SERVICES;
+
 const WIX_CODE_DOCS_REMOTE = "https://github.com/wix/wix-code-docs.git";
 const WIX_CODE_DOCS_API_URL = "https://www.wix.com/corvid/reference";
 const WIX_CODE_DOCS_TEMPLATE = `<%= model.summary %>\n\t[Read more](${WIX_CODE_DOCS_API_URL}/<%= model.service %>.html#<%= model.member %>)`;
 const DECLARATION_FILE_NAME = "declaration";
 const DECLARATION_FULL_FILE_NAME = "$w.d.ts";
 const ORIGINAL_TYPES_PATH = "src_types";
-const DEST_TYPES_PATH = "types";
+const DEST_TYPES_PATH = `${WITH_CUSTOM ? "customTypes/" : ""}types`;
 const TYPES_COMMON_PATH = path.join(DEST_TYPES_PATH, "common");
 const TYPES_PAGES_PATH = path.join(DEST_TYPES_PATH, "pages");
-const CUSTOM_FILES_PATH = "customTypes";
-
-// Remove this and corresponding if's when we have wix-data autocomplete working
-const WITH_CUSTOM = !!process.env.CUSTOM_SERVICES;
+const CUSTOM_MODULES_PATH = "customTypes/modules";
+const CUSTOM_NAMESPACES_PATH = "customTypes/namespaces";
 
 const cloneDocsRepo = () => {
   const tmpDir = tmp.dirSync();
@@ -29,10 +30,11 @@ const cloneDocsRepo = () => {
 
 const streamFileToStream = (appendStream, readPath) => {
   const readStream = fs.createReadStream(readPath);
-  readStream.pipe(appendStream);
+  readStream.pipe(appendStream, { end: false });
 
   return new Promise((resolve, reject) => {
     appendStream.on("end", () => resolve(appendStream));
+    readStream.on("end", () => resolve(appendStream));
     appendStream.on("error", error => reject(error));
     readStream.on("error", error => reject(error));
   });
@@ -57,11 +59,24 @@ async function generateDeclarations() {
     WIX_CODE_DOCS_TEMPLATE
   ];
 
-  let customFiles = [];
+  const customFiles = { modules: [], namespaces: [] };
   if (WITH_CUSTOM) {
-    customFiles = await fs.readdir(CUSTOM_FILES_PATH);
-    customFiles.forEach(filename => {
-      dockworksParams.push("--ignore");
+    await Promise.all([
+      fs
+        .readdir(CUSTOM_MODULES_PATH)
+        .then(files => (customFiles.modules = files)),
+      fs
+        .readdir(CUSTOM_NAMESPACES_PATH)
+        .then(files => (customFiles.namespaces = files))
+    ]);
+
+    customFiles.modules.forEach(filename => {
+      dockworksParams.push("--ignoreModule");
+      dockworksParams.push(filename.replace(".d.ts", ""));
+    });
+
+    customFiles.namespaces.forEach(filename => {
+      dockworksParams.push("--ignoreNamespace");
       dockworksParams.push(filename.replace(".d.ts", ""));
     });
   }
@@ -77,20 +92,32 @@ async function generateDeclarations() {
 
   if (!WITH_CUSTOM) return;
 
-  // flag: a is for append
+  // flag: a for append
   const writeStream = fs.createWriteStream(
     `${TYPES_COMMON_PATH}/${DECLARATION_FILE_NAME}.d.ts`,
     { flags: "a" }
   );
   // Chain promises streaming files one by one
-  await customFiles.reduce(
-    (promiseChain, filename) =>
-      promiseChain.then(stream =>
-        streamFileToStream(stream, `${CUSTOM_FILES_PATH}/${filename}`)
-      ),
-    Promise.resolve(writeStream)
-  );
+  await customFiles.namespaces
+    .reduce(
+      (promiseChain, filename) =>
+        promiseChain.then(stream =>
+          streamFileToStream(stream, `${CUSTOM_NAMESPACES_PATH}/${filename}`)
+        ),
+      Promise.resolve(writeStream)
+    )
+    .then(() =>
+      customFiles.modules.reduce(
+        (promiseChain, filename) =>
+          promiseChain.then(stream =>
+            streamFileToStream(stream, `${CUSTOM_MODULES_PATH}/${filename}`)
+          ),
+        Promise.resolve(writeStream)
+      )
+    );
+
   writeStream.end();
+  writeStream.close();
 }
 
 generateDeclarations();

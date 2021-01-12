@@ -4,3 +4,7 @@ types
 .vscode
 .idea
 .history
+
+# remove after we're done with CUSTOM_SERVICES
+customTypes/dist
+customTypes/types
