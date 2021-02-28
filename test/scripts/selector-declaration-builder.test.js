@@ -13,7 +13,7 @@ describe("define $w.d.ts", () => {
   describe("IntersectionArrayAndBase declaration", () => {
     test("should generate IntersectionArrayAndBase declaration", () => {
       const dts = get$wDts();
-      const expectedDeceleration = `declare type IntersectionArrayAndBase<T, P>`;
+      const expectedDeceleration = `type IntersectionArrayAndBase<T, P>`;
 
       expect(dts).toContain(expectedDeceleration);
     });
@@ -42,21 +42,11 @@ describe("define $w.d.ts", () => {
     });
   });
 
-  describe("WixElementSelector", () => {
-    test("should generate WixElementSelector type", () => {
-      const dts = get$wDts();
-      const expectedDeceleration =
-        "type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>";
-
-      expect(dts).toContain(expectedDeceleration);
-    });
-  });
-
   describe("$w function declaration", () => {
     test("should generate $w function declaration", () => {
       const dts = get$wDts();
       const expectedDeceleration =
-        "declare function $w<T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):";
+        "declare function $w<T extends WixElementSelector, S extends string>(selector: T | MultiSelector<S>):";
 
       expect(dts).toContain(expectedDeceleration);
     });
@@ -89,7 +79,7 @@ describe("define $w.d.ts", () => {
     test("should generate $w function type declaration", () => {
       const dts = get$wDts();
       const expectedDeceleration =
-        "type $w = <T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>";
+        "type $w = <T extends WixElementSelector, S extends string>(selector: T | MultiSelector<S>) =>";
 
       expect(dts).toContain(expectedDeceleration);
     });

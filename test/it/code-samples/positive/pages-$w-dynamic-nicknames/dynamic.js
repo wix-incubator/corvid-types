@@ -21,6 +21,10 @@ $w.onReady(function() {
 
   $w("#text1").text = lastClicked
   $w("#text2").text = previousPageURL
+  $w("Button").hide()
+  $w("Button").forEach(b => b.show())
+  $w("Button, Text").anyProperty()
+  $w("#button1, Text, Document").anyProperty2
 
 });
 
