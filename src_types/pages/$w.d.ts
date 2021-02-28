@@ -8,29 +8,19 @@ declare type IsWixElementSelector<S> = S extends keyof WixElementSelector ? WixE
 declare type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>;
 
 /**
- * Selects and returns elements from a page.
+ * $W_GLOBAL_DECLARATION_COMMENT
  */
 declare function $w<T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):
     S extends keyof WixElementSelector 
         ? WixElementSelector[S]
         : any
 /**
- * The `$w` namespace contains everything you need in order to work
- *  with your site's components.
+ * $W_NAMESPACE_COMMENT
  */
 declare namespace $w {
+    /** ##$W_NAMESPACE_MEMBERS## */
     /**
-     * Gets a selector function for a specific context.
-     */
-    function at(context: $w.Event.EventContext): $w.$w;
-
-    /**
-     * Sets the function that runs when all the page elements have finished loading.
-     */
-    function onReady(initFunction: $w.ReadyHandler): void;
-
-    /**
-     * Selects and returns elements from a page.
+     * $W_$W_DECLARATION_COMMENT
      */
     type $w = <T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>
         S extends keyof WixElementSelector 
