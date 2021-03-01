@@ -95,7 +95,7 @@ describe("define $w.d.ts", () => {
     test("should generate $w function type declaration", () => {
       const dts = get$wDts();
       const expectedDeceleration =
-        "type $w = <T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>";
+        "type $w = <T extends WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>";
 
       expect(dts).toContain(expectedDeceleration);
     });
