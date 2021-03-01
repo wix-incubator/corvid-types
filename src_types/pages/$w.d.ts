@@ -27,7 +27,7 @@ declare namespace $w {
     /**
      * $W_$W_DECLARATION_COMMENT
      */
-    type $w = <T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>
+    type $w = <T extends WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>
         S extends keyof WixElements 
             ? WixElements[S]
             : any
