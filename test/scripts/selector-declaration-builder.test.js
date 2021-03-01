@@ -43,11 +43,17 @@ describe("define $w.d.ts", () => {
   });
 
   describe("WixElementSelector", () => {
+    test("should generate WixElements type", () => {
+      const dts = get$wDts();
+      const expectedDeceleration =
+        "type WixElements = PageElementsMap & TypeSelectorMap";
+
+      expect(dts).toContain(expectedDeceleration);
+    });
     test("should generate WixElementSelector type", () => {
       const dts = get$wDts();
       const expectedDeceleration =
-        "type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>";
-
+        "type WixElementSelector = NicknameSelector | TypeSelector";
       expect(dts).toContain(expectedDeceleration);
     });
   });
@@ -56,7 +62,7 @@ describe("define $w.d.ts", () => {
     test("should generate $w function declaration", () => {
       const dts = get$wDts();
       const expectedDeceleration =
-        "declare function $w<T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):";
+        "declare function $w<T extends WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):";
 
       expect(dts).toContain(expectedDeceleration);
     });
