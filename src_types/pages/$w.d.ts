@@ -4,20 +4,15 @@ declare type IntersectionArrayAndBase<T, P> = {
     [K in keyof T]: K extends P ? T[K] : T[K] & T[K][];
 };
 
+declare type IsWixElementSelector<S> = S extends keyof WixElementSelector ? WixElementSelector[S] : never;
+declare type WixElementSelector = PageElementsMap & IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>;
 
-declare type TypeSelectorMap = IntersectionArrayAndBase<TypeNameToSdkType, 'Document'>;
-declare type WixElements = PageElementsMap & TypeSelectorMap
-declare type NicknameSelector = keyof PageElementsMap
-declare type TypeSelector = keyof TypeSelectorMap
-
-declare type WixElementSelector = NicknameSelector | TypeSelector
-declare type IsWixElementSelector<S> = S extends WixElementSelector ? WixElements[S] : never;
 /**
  * $W_GLOBAL_DECLARATION_COMMENT
  */
-declare function $w<T extends WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):
-    S extends keyof WixElements 
-        ? WixElements[S]
+declare function $w<T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>):
+    S extends keyof WixElementSelector 
+        ? WixElementSelector[S]
         : any
 /**
  * $W_NAMESPACE_COMMENT
@@ -28,8 +23,8 @@ declare namespace $w {
      * $W_$W_DECLARATION_COMMENT
      */
     type $w = <T extends keyof WixElementSelector, S extends string>(selector: T | S & IsWixElementSelector<S>) =>
-        S extends keyof WixElements 
-            ? WixElements[S]
+        S extends keyof WixElementSelector 
+            ? WixElementSelector[S]
             : any
 }
 
