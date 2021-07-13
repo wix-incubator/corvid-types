@@ -1,61 +1,127 @@
-const path = require("path");
 const ts = require("typescript");
-const fs = require("fs-extra");
 
-const PROJECT_ROOT_PATH = path.join(__dirname, "../");
-const EVENTS_FILE_PATH = path.join(PROJECT_ROOT_PATH, "dist", "$wEvents.json");
-const DECLARATIONS_PATH = path.join(
-  __dirname,
-  "../types/common/declaration.d.ts"
-);
-
-const isBaseType$wNode = baseType => {
-  const parentName = baseType.parent ? baseType.parent.getEscapedName() : null;
+const isMemberEventHandler = member => {
   return (
-    ["Element", "Node"].includes(baseType.getEscapedName()) &&
-    parentName === "$w"
+    ts.isMethodSignature(member) && member.name.escapedText.match(/^on[A-Z]/)
   );
 };
 
-const doesInheritFrom$wNode = (typeChecker, node) => {
-  const baseTypes = typeChecker
-    .getBaseTypes(node)
-    .map(baseType => baseType.getSymbol());
-  return baseTypes.some(isBaseType$wNode);
+const getBaseClassesNames = node => {
+  if (node.heritageClauses == null) {
+    return [];
+  }
+
+  return node.heritageClauses
+    .map(clause => clause.types)
+    .flat()
+    .map(t => t.expression.name.escapedText);
 };
 
-function run() {
-  const tsProgram = ts.createProgram([DECLARATIONS_PATH], {});
-  const typeChecker = tsProgram.getTypeChecker();
-  const sourceFile = tsProgram.getSourceFile(DECLARATIONS_PATH);
+class EventsGenerator {
+  constructor(declarationsPath) {
+    this.tsProgram = ts.createProgram([declarationsPath], {});
+    this.typeChecker = this.tsProgram.getTypeChecker();
+    this.sourceFile = this.tsProgram.getSourceFile(declarationsPath);
+    this.$wNode = this.get$wModuleStatement(this.sourceFile);
+  }
 
-  fs.ensureFileSync(EVENTS_FILE_PATH);
+  doesInheritFrom$wNode(node) {
+    return getBaseClassesNames(node).some(baseClassName =>
+      ["Element", "Node"].includes(baseClassName)
+    );
+  }
 
-  const $wNode = sourceFile.statements.find(
-    statement =>
-      ts.isModuleDeclaration(statement) && statement.name.escapedText === "$w"
-  );
+  get$wModuleStatement() {
+    return this.sourceFile.statements.find(
+      statement =>
+        ts.isModuleDeclaration(statement) && statement.name.escapedText === "$w"
+    );
+  }
 
-  $wNode.body.statements.forEach(statement => {
-    if (
-      ts.isInterfaceDeclaration(statement) &&
-      doesInheritFrom$wNode(typeChecker, statement)
-    ) {
-      console.log(
-        `\n${statement.name.escapedText}\n===============\n`,
-        statement.members.map(member => member.name.escapedText).join(", ")
-      );
+  buildHandler(member) {
+    return {
+      name: member.name.escapedText,
+      description: member.jsDoc ? member.jsDoc[0].comment : "",
+      kind: "function",
+      handlerArgs: member.parameters.map(parameter => {
+        const typeNode = this.typeChecker.getTypeAtLocation(parameter);
+        const aliasSymbol = typeNode.aliasSymbol;
+        return {
+          name: parameter.name.escapedText,
+          type: aliasSymbol
+            ? `${aliasSymbol.parent.escapedName}.${aliasSymbol.escapedName}`
+            : undefined
+        };
+      })
+    };
+  }
+
+  getInterfaceHandlersSetRecursivley(interfaceNode) {
+    const { members } = interfaceNode;
+    if (members == null || members.length === 0) {
+      return [];
     }
-  });
 
-  // const example =
-  //   namespaceDeclarations[0].body.statements[0].heritageClauses[0];
+    let rootHandlers = {};
+    members.filter(isMemberEventHandler).forEach(member => {
+      rootHandlers[member.name.escapedText] = this.buildHandler(member);
+    });
 
-  // fs.writeFileSync(EVENTS_FILE_PATH, JSON.stringify(sourceFile.statements));
+    const baseClassesNodes = getBaseClassesNames(interfaceNode)
+      .map(baseClassName => this.getStatementByInterfaceName(baseClassName))
+      .filter(Boolean);
+
+    if (baseClassesNodes == null || baseClassesNodes.length == 0) {
+      return rootHandlers;
+    }
+
+    const baseClassHandlers = baseClassesNodes
+      .map(baseClassNode =>
+        this.getInterfaceHandlersSetRecursivley(baseClassNode)
+      )
+      .reduce(
+        (handlersSoFar, handlersSet) => ({ ...handlersSoFar, ...handlersSet }),
+        {}
+      );
+
+    return { ...rootHandlers, ...baseClassHandlers };
+  }
+
+  getStatementByInterfaceName(interfaceName) {
+    return this.$wNode.body.statements.find(
+      statement =>
+        ts.isInterfaceDeclaration(statement) &&
+        statement.name.escapedText === interfaceName
+    );
+  }
+
+  generateEvents() {
+    const $wInterfaces = this.$wNode.body.statements.filter(
+      statement =>
+        ts.isInterfaceDeclaration(statement) &&
+        this.doesInheritFrom$wNode(statement)
+    );
+
+    return $wInterfaces.map(interfaceNode => {
+      const handlers = Object.values(
+        this.getInterfaceHandlersSetRecursivley(interfaceNode)
+      );
+      return {
+        name: interfaceNode.name.escapedText,
+        handlers: handlers.map(handler => ({
+          origin: interfaceNode.name.escapedText,
+          ...handler
+        }))
+      };
+    });
+  }
 }
 
-if (!fs.existsSync(DECLARATIONS_PATH)) {
-  throw new Error(`Cannot find the declaration file at [${DECLARATIONS_PATH}]`);
-}
+const generateEvents = declarationsPath => {
+  const eventsGenerator = new EventsGenerator(declarationsPath);
+  return eventsGenerator.generateEvents();
+};
 
-run();
+module.exports = {
+  generateEvents
+};
