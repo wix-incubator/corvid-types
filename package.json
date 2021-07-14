@@ -8,6 +8,7 @@
     "test": "npm run lint && jest",
     "test:debug": "node --inspect node_modules/.bin/p",
     "patch-declarations": "node scripts/patch-declarations.js",
+    "generate-events": "node scripts/generate-events.js",
     "generate-dts": "scripts/generate-types.js",
     "generate-full-corvid-types": "scripts/generate-full-corvid-types.js",
     "generate-module-list": "scripts/generate-wix-module-list.js"
