@@ -1,14 +1,22 @@
 {
   "compilerOptions": {
     "module": "commonjs",                           
-    "lib": ["ES2020"],
+    "target": "es2015",
     "allowJs": true,
     "checkJs": false,
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "types": ["node", "typescript", "jest"],
+    "skipDefaultLibCheck": true,
+    "stripInternal": true,
+    "strictPropertyInitialization": true
   },
   "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],
   "exclude": [

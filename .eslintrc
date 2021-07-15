@@ -1,4 +1,5 @@
 {
+    "root": true,
     "env": {
         "commonjs": true,
         "es2020": true,
@@ -14,32 +15,38 @@
     "rules": {
         "import/no-extraneous-dependencies": "error"
     },
-    "plugins": ["jest", "prettier"],
-    "extends": ["eslint:recommended", "plugin:jest/recommended", "plugin:prettier/recommended", "plugin:import/errors", "plugin:import/warnings"],
+    "plugins": ["jest"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:jest/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:prettier/recommended"
+    ],
     "overrides": [
         {
-          "files": ["**/*.ts", "**/*.tsx"],
+          "files": ["**/*.ts"],
           "parser": "@typescript-eslint/parser",
-          "parserOptions": { 
+          "parserOptions": {
+            "project": "tsconfig.json",
             "sourceType": "module",
             "ecmaFeatures": {
-              "jsx": true
+              "jsx": false
             }
           },
-          "plugins": ["@typescript-eslint"],
           "rules": {
-            "prettier/prettier": ["error", {
-              "printWidth": 80,
-              "semi": true,
-              "singleQuote": true,
-              "trailingComma": "all",
-              "parser": "typescript"
-            }],
-            "no-use-before-define": "off",
-            "@typescript-eslint/no-use-before-define": ["error"]
+            "import/named": 0,
+            "import/namespace": 0,
+            "import/default": 0,
+            "import/no-named-as-default-member": 0
           },
+          "plugins": ["jest", "@typescript-eslint"],
           "extends": [
-            "plugin:@typescript-eslint/recommended"
+            "eslint:recommended",
+            "plugin:jest/recommended",
+            "plugin:import/typescript",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:prettier/recommended"
           ]
         }
     ]
