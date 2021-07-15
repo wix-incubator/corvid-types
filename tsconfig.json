@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",                           
+    "lib": ["ES2020"],
+    "allowJs": true,
+    "checkJs": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist"
+  },
+  "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src_types",
+    "types",
+    "configs",
+    "./test/scripts/fixtures/badSyntax.d.ts"
+  ],
+}
