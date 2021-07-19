@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",                           
+    "module": "commonjs",
+    "lib": ["ES2020"],
     "target": "es2015",
     "allowJs": true,
     "checkJs": false,
@@ -16,7 +17,8 @@
     "types": ["node", "typescript", "jest"],
     "skipDefaultLibCheck": true,
     "stripInternal": true,
-    "strictPropertyInitialization": true
+    "strictPropertyInitialization": true,
+    "resolveJsonModule": true
   },
   "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],
   "exclude": [
