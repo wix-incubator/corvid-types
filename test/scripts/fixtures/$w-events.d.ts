@@ -6,20 +6,36 @@
   interface Element extends $w.Node, $w.ViewportMixin {
     readonly rendered: boolean;
 
-    /**
-     * Adds an event handler that runs when an element is displayed
-     *  in the viewable part of the current window.
-     * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)
+     /**
+     * Adds an event handler that runs when the mouse pointer is moved
+     *  onto the element.
+     * 
+     * > **Deprecation note:** The $w parameter of event handlers is being deprecated. To get
+     * > a scoped selector for working with elements in repeater items, use the [$w.at()]($w.html#at) function
+     * > and pass it the context property of the event parameter: `$item = $w.at(event.context)`. To learn more, see
+     * > [here](https://www.wix.com/velo/forum/wix-tips-and-updates/removal-of-the-w-parameter-from-event-handlers).
+     * 
+     *  You can also [define an event handler using the Properties and Events panel](https://support.wix.com/en/article/velo-reacting-to-user-actions-using-events).
+     * 	[Read more](https://www.wix.com/corvid/reference/$w.Element.html#onMouseIn) 
+     *  @eventType mouseenter
      */
-    onMouseIn(handler: $w.Event): $w.Element;
+     onMouseIn(handler: $w.MouseEventHandler): $w.Element;
 
-    /**
-     * Adds an event handler that runs when an element is displayed
-     *  in the viewable part of the current window.
-     * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)
-     */
-    onMouseOut(handler: $w.Event): $w.Element;
-  }
+      /**
+      * Adds an event handler that runs when the mouse pointer is moved
+      *  off of the element.
+      * 
+      *  > **Deprecation note:** The $w parameter of event handlers is being deprecated. To get
+      *  > a scoped selector for working with elements in repeater items, use the [$w.at()]($w.html#at) function
+      *  > and pass it the context property of the event parameter: `$item = $w.at(event.context)`. To learn more, see
+      *  > [here](https://www.wix.com/velo/forum/tips-tutorials-examples/removal-of-the-w-parameter-from-event-handlers).
+      * 
+      *  You can also [define an event handler using the Properties and Events panel](https://support.wix.com/en/article/velo-reacting-to-user-actions-using-events).
+      * 	[Read more](https://www.wix.com/corvid/reference/$w.Element.html#onMouseOut) 
+      *  @eventType mouseleave
+      */
+     onMouseOut(handler: $w.MouseEventHandler): $w.Element;
+  };
   
   interface Event {
       readonly target: $w.Element;
@@ -29,24 +45,36 @@
   type EventHandler = (event: $w.Event) => void;
 
   interface ClickableMixin {
-      onClick(handler: $w.Event): $w.Element;
-      onDblClick(handler: $w.Event): $w.Element;
+      /**
+       * Adds an event handler that runs when the element is clicked.
+       * 	[Read more](https://www.wix.com/corvid/reference/$w.ClickableMixin.html#onClick) 
+       *  @eventType click
+       */
+      onClick(handler: $w.MouseEventHandler): $w.Element;
+
+      /**
+      * Adds an event handler that runs when the element is double-clicked.
+      * 	[Read more](https://www.wix.com/corvid/reference/$w.ClickableMixin.html#onDblClick) 
+      *  @eventType dblClick
+      */
+      onDblClick(handler: $w.MouseEventHandler): $w.Element;
   }
 
   interface ViewportMixin {
 
-    /**
+     /**
      * Adds an event handler that runs when an element is displayed
      *  in the viewable part of the current window.
-     * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)
+     * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter) 
+     *  @eventType viewportEnter
      */
      onViewportEnter(handler: $w.EventHandler): $w.Element;
-
      /**
-      * Adds an event handler that runs when an element is no longer
-      *  displayed in the viewable part of the current window.
-      * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportLeave)
-      */
+     * Adds an event handler that runs when an element is no longer
+     *  displayed in the viewable part of the current window.
+     * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportLeave) 
+     *  @eventType viewportLeave
+     */
      onViewportLeave(handler: $w.EventHandler): $w.Element;
   }
 
@@ -74,7 +102,6 @@
   interface Anchor extends $w.Node, $w.ViewportMixin {
     readonly name: string;
   }
-
 
   interface Button extends $w.Element, $w.ClickableMixin, $w.StyleMixin, $w.LabelMixin {
     label: string;

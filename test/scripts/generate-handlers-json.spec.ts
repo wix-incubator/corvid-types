@@ -1,4 +1,4 @@
-import getDriver, { Driver } from "./generate-components-handlers.driver";
+import getDriver, { Driver } from "./generate-handlers-json.driver";
 
 describe("generate-events", () => {
   let driver: Driver;
@@ -9,7 +9,7 @@ describe("generate-events", () => {
   it("should return the base element event handlers", () => {
     driver.given.mockDeclarationsFile();
 
-    const elementHandlers = driver.get.getComponentHandlersNames("Element");
+    const elementHandlers = driver.get.componentHandlersNames("Element");
 
     expect(elementHandlers).toEqual([
       "onMouseIn",
@@ -22,31 +22,28 @@ describe("generate-events", () => {
   it("should search recursivley for handlers", () => {
     driver.given.mockDeclarationsFile();
 
-    const elementHandlers = driver.get.getComponentHandlersNames("Chatbox");
+    const elementHandlers = driver.get.componentHandlersNames("Chatbox");
 
     expect(elementHandlers).toEqual([
-      "onMaximize",
-      "onMessageReceived",
-      "onMessageSent",
-      "onMinimize",
-      "onViewportEnter",
-      "onViewportLeave",
       "onMouseIn",
-      "onMouseOut"
+      "onMouseOut",
+      "onViewportEnter",
+      "onViewportLeave"
     ]);
   });
 
   it("should return an object with all the handler details", () => {
     driver.given.mockDeclarationsFile();
 
-    const button = driver.get.componentByName("Button");
+    const buttonHandlers = driver.get.eventHandlersByComponentName("Button");
 
-    expect(button?.handlers).toContainEqual({
+    expect(buttonHandlers).toContainEqual({
       origin: "Button",
       name: "onViewportEnter",
       description:
         "Adds an event handler that runs when an element is displayed\n in the viewable part of the current window.\n\t[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)",
       kind: "function",
+      type: "viewportEnter",
       handlerArgs: [
         {
           name: "handler",
