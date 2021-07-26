@@ -4,38 +4,6 @@ const ComponentsHandlers: ComponentDefinitionsMap = {
     name: "Chatbox",
     handlers: [
       {
-        name: "onMaximize",
-        origin: "Chatbox",
-        description:
-          "An event that fires when the chatbox is maximized.\n\t[Read more](https://www.wix.com/corvid/reference/$w.Chatbox.html#onMaximize)",
-        kind: "function",
-        handlerArgs: []
-      },
-      {
-        name: "onMessageReceived",
-        origin: "Chatbox",
-        description:
-          "An event that fires when a site visitor receives a chat message.\n\t[Read more](https://www.wix.com/corvid/reference/$w.Chatbox.html#onMessageReceived)",
-        kind: "function",
-        handlerArgs: [{ name: "message", type: "$w.Chatbox.Message" }]
-      },
-      {
-        name: "onMessageSent",
-        origin: "Chatbox",
-        description:
-          "An event that fires when a site visitor sends a chat message.\n\t[Read more](https://www.wix.com/corvid/reference/$w.Chatbox.html#onMessageSent)",
-        kind: "function",
-        handlerArgs: [{ name: "message", type: "$w.Chatbox.Message" }]
-      },
-      {
-        name: "onMinimize",
-        origin: "Chatbox",
-        description:
-          "An event that fires when the chatbox is minimized.\n\t[Read more](https://www.wix.com/corvid/reference/$w.Chatbox.html#onMinimize)",
-        kind: "function",
-        handlerArgs: []
-      },
-      {
         name: "onViewportEnter",
         origin: "Chatbox",
         description:
@@ -606,14 +574,6 @@ const ComponentsHandlers: ComponentDefinitionsMap = {
           "Adds an event handler that runs when an element is no longer\n displayed in the viewable part of the current window.\n\t[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportLeave)",
         kind: "function",
         handlerArgs: [{ name: "handler", type: "$w.EventHandler" }]
-      },
-      {
-        name: "onCustomValidation",
-        origin: "FormElement",
-        description:
-          "Adds an event handler that runs when the element's validation is checked.\n\t[Read more](https://www.wix.com/corvid/reference/$w.ValidatableMixin.html#onCustomValidation)",
-        kind: "function",
-        handlerArgs: [{ name: "validator", type: "$w.Validator" }]
       },
       {
         name: "onChange",

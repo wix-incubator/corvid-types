@@ -12,6 +12,7 @@ export interface Driver {
     mockDeclarationsFile: () => void;
   };
   get: {
+    events: () => ComponentDefinitionsMap;
     componentByName: (name: string) => ComponentDefinition | undefined;
     getComponentHandlersNames: (componentName: string) => string[] | undefined;
   };
@@ -27,6 +28,9 @@ const getDriver = (): Driver => {
       }
     },
     get: {
+      events() {
+        return events;
+      },
       componentByName(name: string): ComponentDefinition | undefined {
         return events[name];
       },

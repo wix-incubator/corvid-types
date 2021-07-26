@@ -22,10 +22,18 @@ interface HandlerArgs {
   type?: string;
 }
 
-const HANDLER_REGEX = new RegExp(/^on[A-Z]/);
-const isMemberEventHandler = (member: ts.TypeElement): boolean => {
+const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
+
+const isMemberEventHandler = (
+  member: ts.MethodSignature,
+  typeChecker: ts.TypeChecker
+): boolean => {
+  const docTags = typeChecker
+    .getSymbolAtLocation(member.name)
+    ?.getJsDocTags(typeChecker);
   return (
-    ts.isMethodSignature(member) && HANDLER_REGEX.test(member.name.getText())
+    docTags != null &&
+    docTags.some(tag => tag.name === EVENT_TYPE_JS_DOC_TAG_NAME)
   );
 };
 
@@ -131,7 +139,7 @@ const buildEventsGenerator = (
 
       const rootHandlers = interfaceNode.members
         .filter((member): member is ts.MethodSignature =>
-          isMemberEventHandler(member)
+          isMemberEventHandler(member as ts.MethodSignature, typeChecker)
         )
         .map(member => this.buildHandler(member, interfaceName));
 
@@ -207,6 +215,11 @@ const getEventsGenerator = (declarationsPath: string) => {
 export const generateComponentsHandlers = (
   declarationsPath: string
 ): ComponentDefinitionsMap => {
-  const eventsGenerator = getEventsGenerator(declarationsPath);
-  return eventsGenerator.generateComponentsHandlers();
+  try {
+    const eventsGenerator = getEventsGenerator(declarationsPath);
+    return eventsGenerator.generateComponentsHandlers();
+  } catch (e) {
+    console.error(e);
+    return {};
+  }
 };

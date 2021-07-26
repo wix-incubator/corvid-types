@@ -6,6 +6,23 @@ describe("generate-events", () => {
     driver = getDriver();
   });
 
+  it.only("should return a .d.ts file with handler declarations", () => {
+    driver.given.mockDeclarationsFile();
+
+    const events = driver.get.events();
+
+    expect(events).toContain(
+      `/**
+         * Adds an event handler that runs when an element is displayed
+         *  in the viewable part of the current window.
+         * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)
+         *  @eventType viewportEnter
+         */
+       onViewportEnter(handler: $w.EventHandler): $w.Element;
+      `
+    );
+  });
+
   it("should return the base element event handlers", () => {
     driver.given.mockDeclarationsFile();
 
@@ -25,14 +42,10 @@ describe("generate-events", () => {
     const elementHandlers = driver.get.getComponentHandlersNames("Chatbox");
 
     expect(elementHandlers).toEqual([
-      "onMaximize",
-      "onMessageReceived",
-      "onMessageSent",
-      "onMinimize",
-      "onViewportEnter",
-      "onViewportLeave",
       "onMouseIn",
-      "onMouseOut"
+      "onMouseOut",
+      "onViewportEnter",
+      "onViewportLeave"
     ]);
   });
 
