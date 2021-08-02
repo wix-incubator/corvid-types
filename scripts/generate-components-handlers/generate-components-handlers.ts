@@ -1,25 +1,17 @@
 import * as ts from "typescript";
 
-export interface ComponentDefinitionsMap {
-  [name: string]: ComponentDefinition;
+export interface ComponentsEventsMap {
+  [name: string]: ComponentEventMethods;
 }
 
-export interface ComponentDefinition {
+export interface ComponentEventMethods {
   name: string;
-  handlers: ComponentHandler[];
+  methods: Method[];
 }
 
-interface ComponentHandler {
-  name: string;
-  description?: string;
-  kind: "function";
-  handlerArgs: Array<HandlerArgs>;
-  origin: string;
-}
-
-interface HandlerArgs {
-  name: string;
-  type?: string;
+interface Method {
+  signature: ts.MethodSignature;
+  documentation: string;
 }
 
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
@@ -41,7 +33,7 @@ const buildEventsGenerator = (
   typeChecker: ts.TypeChecker,
   $wBody: ts.ModuleBlock
 ) => {
-  const handlersCache: ComponentDefinitionsMap = {};
+  const handlersCache: ComponentsEventsMap = {};
   const completed: { [name: string]: boolean } = {};
   return {
     getBaseClassesNames(node: ts.InterfaceDeclaration): string[] {
@@ -61,30 +53,30 @@ const buildEventsGenerator = (
         )
         .map(expression => expression.name.getText());
     },
-    doesInheritFrom$wNode(node: ts.InterfaceDeclaration): boolean {
-      return this.getBaseClassesNames(node).some(baseClassName =>
-        ["Element", "Node"].includes(baseClassName)
-      );
-    },
-    buildHandler(member: ts.MethodSignature, origin: string): ComponentHandler {
+    buildHandler(member: ts.MethodSignature): Method {
+      const symbol = typeChecker.getSymbolAtLocation(member.name);
+      const eventTypeTag = symbol
+        ?.getJsDocTags(typeChecker)
+        .find(tag => tag.name === EVENT_TYPE_JS_DOC_TAG_NAME);
       return {
-        name: member.name?.getText() ?? "",
-        origin,
-        description: typeChecker
-          .getSymbolAtLocation(member.name)
-          ?.getDocumentationComment(typeChecker)
-          ?.map(part => part.text)
-          .join(),
-        kind: "function",
-        handlerArgs: member.parameters.map(parameter => {
-          const typeNode = typeChecker.getTypeAtLocation(parameter);
-          return {
-            name: parameter.name.getText(),
-            type: typeNode.aliasSymbol
-              ? typeChecker.getFullyQualifiedName(typeNode.aliasSymbol)
-              : undefined
-          };
-        })
+        signature: member,
+        documentation: ts.displayPartsToString([
+          { text: "*", kind: "text" },
+          ...(symbol?.getDocumentationComment(typeChecker) ?? []).map(
+            commentLine => ({
+              text: `\n * ${commentLine.text}`,
+              kind: "text"
+            })
+          ),
+          { text: "\n", kind: "text" },
+          {
+            text: `* @${eventTypeTag?.name} ${ts.displayPartsToString(
+              eventTypeTag?.text
+            )}`,
+            kind: "text"
+          },
+          { text: "\n", kind: "text" }
+        ])
       };
     },
     getStatementByInterfaceName(
@@ -99,49 +91,19 @@ const buildEventsGenerator = (
         }
       );
     },
-    combineHandlers(
-      interfaceName: string,
-      rootHandlers: ComponentHandler[],
-      baseClassesDefinitions: ComponentDefinition[]
-    ): ComponentDefinition {
-      const combinedHandlers: { [name: string]: ComponentHandler } = {};
-      rootHandlers.forEach(
-        handler => (combinedHandlers[handler.name] = handler)
-      );
-
-      baseClassesDefinitions
-        .reduce<ComponentHandler[]>((handlersSoFar, definition) => {
-          return [...handlersSoFar, ...definition.handlers];
-        }, [])
-        .forEach(handler => {
-          if (combinedHandlers[handler.name]) {
-            return;
-          }
-
-          combinedHandlers[handler.name] = handler;
-        });
-
-      return {
-        name: interfaceName,
-        handlers: Object.values(combinedHandlers).map(handler => ({
-          ...handler,
-          origin: interfaceName
-        }))
-      };
-    },
     getInterfaceHandlersSetRecursivley(
       interfaceNode: ts.InterfaceDeclaration
-    ): ComponentDefinition {
+    ): ComponentEventMethods {
       const interfaceName = interfaceNode.name.getText();
       if (completed[interfaceName]) {
         return handlersCache[interfaceName];
       }
 
-      const rootHandlers = interfaceNode.members
+      const rootMembers = interfaceNode.members
         .filter((member): member is ts.MethodSignature =>
           isMemberEventHandler(member as ts.MethodSignature, typeChecker)
         )
-        .map(member => this.buildHandler(member, interfaceName));
+        .map(member => this.buildHandler(member));
 
       const baseClassesNodes = this.getBaseClassesNames(interfaceNode)
         .map(baseClassName => this.getStatementByInterfaceName(baseClassName))
@@ -149,26 +111,28 @@ const buildEventsGenerator = (
           Boolean(statement)
         );
 
-      const baseHandlers = baseClassesNodes.map(baseClassNode =>
-        this.getInterfaceHandlersSetRecursivley(baseClassNode)
-      );
-      const componentDefinition = this.combineHandlers(
-        interfaceName,
-        rootHandlers,
-        baseHandlers
-      );
+      const baseHandlers = baseClassesNodes
+        .map(baseClassNode =>
+          this.getInterfaceHandlersSetRecursivley(baseClassNode)
+        )
+        .flat();
+
+      const componentDefinition = {
+        name: interfaceName,
+        methods: [
+          ...rootMembers,
+          ...baseHandlers.map(base => base.methods).flat()
+        ]
+      };
 
       handlersCache[interfaceName] = componentDefinition;
       completed[interfaceName] = true;
       return componentDefinition;
     },
-    generateComponentsHandlers(): ComponentDefinitionsMap {
+    generateComponentsHandlers(): ComponentsEventsMap {
       const $wInterfaces = $wBody.statements.filter(
         (statement): statement is ts.InterfaceDeclaration => {
-          return (
-            ts.isInterfaceDeclaration(statement) &&
-            this.doesInheritFrom$wNode(statement)
-          );
+          return ts.isInterfaceDeclaration(statement);
         }
       );
 
@@ -214,12 +178,7 @@ const getEventsGenerator = (declarationsPath: string) => {
 
 export const generateComponentsHandlers = (
   declarationsPath: string
-): ComponentDefinitionsMap => {
-  try {
-    const eventsGenerator = getEventsGenerator(declarationsPath);
-    return eventsGenerator.generateComponentsHandlers();
-  } catch (e) {
-    console.error(e);
-    return {};
-  }
+): ComponentsEventsMap => {
+  const eventsGenerator = getEventsGenerator(declarationsPath);
+  return eventsGenerator.generateComponentsHandlers();
 };

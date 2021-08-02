@@ -8,7 +8,7 @@
     "test": "npm run lint && jest",
     "test:debug": "node --inspect node_modules/.bin/p",
     "patch-declarations": "node scripts/patch-declarations.js",
-    "generate-components-handlers": "ts-node scripts/generate-components-handlers/generate-handlers-ts-file.ts && eslint src/dynamicTypes/components-handlers.ts --fix",
+    "generate-components-handlers": "ts-node scripts/generate-components-handlers/generate-handlers-ts-file.ts",
     "generate-dts": "scripts/generate-types.js",
     "generate-full-corvid-types": "scripts/generate-full-corvid-types.js",
     "generate-module-list": "scripts/generate-wix-module-list.js"

@@ -6,33 +6,31 @@ describe("generate-events", () => {
     driver = getDriver();
   });
 
-  it.only("should return a .d.ts file with handler declarations", () => {
+  it("should return a .d.ts file with handler declarations", () => {
     driver.given.mockDeclarationsFile();
 
-    const events = driver.get.events();
-
-    expect(events).toContain(
-      `/**
-         * Adds an event handler that runs when an element is displayed
-         *  in the viewable part of the current window.
-         * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)
-         *  @eventType viewportEnter
-         */
-       onViewportEnter(handler: $w.EventHandler): $w.Element;
-      `
+    const viewportEvents = driver.get.componentByName("ViewportMixin");
+    const viewportEventNames = driver.get.getComponentHandlersNames(
+      "ViewportMixin"
     );
+
+    expect(viewportEvents).toBeDefined();
+    expect(viewportEventNames).toEqual([
+      "onViewportEnter(handler: $w.EventHandler): $w.Element;",
+      "onViewportLeave(handler: $w.EventHandler): $w.Element;"
+    ]);
   });
 
-  it("should return the base element event handlers", () => {
+  it("should declare the direct event handlers", () => {
     driver.given.mockDeclarationsFile();
 
     const elementHandlers = driver.get.getComponentHandlersNames("Element");
 
     expect(elementHandlers).toEqual([
-      "onMouseIn",
-      "onMouseOut",
-      "onViewportEnter",
-      "onViewportLeave"
+      "onMouseIn(handler: $w.MouseEventHandler): $w.Element;",
+      "onMouseOut(handler: $w.MouseEventHandler): $w.Element;",
+      "onViewportEnter(handler: $w.EventHandler): $w.Element;",
+      "onViewportLeave(handler: $w.EventHandler): $w.Element;"
     ]);
   });
 
@@ -42,30 +40,23 @@ describe("generate-events", () => {
     const elementHandlers = driver.get.getComponentHandlersNames("Chatbox");
 
     expect(elementHandlers).toEqual([
-      "onMouseIn",
-      "onMouseOut",
-      "onViewportEnter",
-      "onViewportLeave"
+      "onMouseIn(handler: $w.MouseEventHandler): $w.Element;",
+      "onMouseOut(handler: $w.MouseEventHandler): $w.Element;",
+      "onViewportEnter(handler: $w.EventHandler): $w.Element;",
+      "onViewportLeave(handler: $w.EventHandler): $w.Element;"
     ]);
   });
 
   it("should return an object with all the handler details", () => {
     driver.given.mockDeclarationsFile();
 
-    const button = driver.get.componentByName("Button");
+    const onViewPortEnterDocumentation = driver.get.getMethodDocumentation(
+      "Button",
+      "onViewportEnter"
+    );
 
-    expect(button?.handlers).toContainEqual({
-      origin: "Button",
-      name: "onViewportEnter",
-      description:
-        "Adds an event handler that runs when an element is displayed\n in the viewable part of the current window.\n\t[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)",
-      kind: "function",
-      handlerArgs: [
-        {
-          name: "handler",
-          type: "$w.EventHandler"
-        }
-      ]
-    });
+    expect(onViewPortEnterDocumentation).toBe(
+      "Adds an event handler that runs when an element is displayed\n in the viewable part of the current window.\n\t[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter)"
+    );
   });
 });

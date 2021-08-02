@@ -1,8 +1,8 @@
 import path from "path";
 import {
   generateComponentsHandlers,
-  ComponentDefinition,
-  ComponentDefinitionsMap
+  ComponentEventMethods,
+  ComponentsEventsMap
 } from "../../scripts/generate-components-handlers/generate-components-handlers";
 
 const FIXTURE_PATH = path.join(__dirname, "./fixtures/$w-events.d.ts");
@@ -12,14 +12,17 @@ export interface Driver {
     mockDeclarationsFile: () => void;
   };
   get: {
-    events: () => ComponentDefinitionsMap;
-    componentByName: (name: string) => ComponentDefinition | undefined;
+    componentByName: (name: string) => ComponentEventMethods | undefined;
     getComponentHandlersNames: (componentName: string) => string[] | undefined;
+    getMethodDocumentation: (
+      componentName: string,
+      methodName: string
+    ) => string | undefined;
   };
 }
 
 const getDriver = (): Driver => {
-  let events: ComponentDefinitionsMap;
+  let events: ComponentsEventsMap;
 
   return {
     given: {
@@ -28,17 +31,23 @@ const getDriver = (): Driver => {
       }
     },
     get: {
-      events() {
-        return events;
-      },
-      componentByName(name: string): ComponentDefinition | undefined {
+      componentByName(name: string): ComponentEventMethods | undefined {
         return events[name];
       },
-      getComponentHandlersNames(componentName: string) {
+      getComponentHandlersNames(componentName: string): string[] | undefined {
         const component = this.componentByName(componentName);
         return component
-          ? component.handlers.map(handler => handler.name)
+          ? component.methods.map(method => method.signature.getText())
           : undefined;
+      },
+      getMethodDocumentation(
+        componentName: string,
+        methodName: string
+      ): string | undefined {
+        const component = this.componentByName(componentName);
+        return component?.methods.find(method =>
+          method.signature.name.getText().includes(methodName)
+        )?.documentation;
       }
     }
   };

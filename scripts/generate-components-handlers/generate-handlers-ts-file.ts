@@ -1,23 +1,20 @@
 import path from "path";
 import fs from "fs";
 import * as ts from "typescript";
-import { generateComponentsHandlers } from "./generate-components-handlers";
+import {
+  generateComponentsHandlers,
+  ComponentEventMethods
+} from "./generate-components-handlers";
 
 const DECLARATION_PATH = path.join("types/common", "declaration.d.ts");
-const OUTPUT_FILENAME = "components-handlers.ts";
-const COMPONENTS_EVENTS_PATH = path.join("src/dynamicTypes", OUTPUT_FILENAME);
-const IMPORT_HANDLERS_TYPES_PATH =
-  "../../scripts/generate-components-handlers/generate-components-handlers";
+const OUTPUT_FILENAME = "components-handlers.d.ts";
+const COMPONENTS_EVENTS_PATH = path.join("src_types/common", OUTPUT_FILENAME);
 
-const createComponentsHandlersTSFile = (): void => {
-  const importDeclaration = createTypeImportDeclaration();
-  const variableStatement = createComponentsHandlersVariable();
-  const exportDeclaration = createExportDeclaration();
-
+const createComponentsHandlersDTSFile = (): void => {
   const outputFile = ts.factory.createSourceFile(
-    [importDeclaration, variableStatement, exportDeclaration],
+    [createEventHandlersModuleDeclaration()],
     ts.factory.createToken(ts.SyntaxKind.EndOfFileToken),
-    ts.NodeFlags.JavaScriptFile
+    ts.NodeFlags.Namespace
   );
 
   const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
@@ -25,62 +22,74 @@ const createComponentsHandlersTSFile = (): void => {
   fs.writeFileSync(COMPONENTS_EVENTS_PATH, result);
 };
 
-const createTypeImportDeclaration = () => {
-  const importSpecifier = ts.factory.createImportSpecifier(
-    undefined,
-    ts.factory.createIdentifier("ComponentDefinitionsMap")
-  );
-  const namedImports = ts.factory.createNamedImports([importSpecifier]);
-  const importClause = ts.factory.createImportClause(
-    false,
-    undefined,
-    namedImports
-  );
-  const importDeclaration = ts.factory.createImportDeclaration(
-    undefined,
-    undefined,
-    importClause,
-    ts.factory.createStringLiteral(IMPORT_HANDLERS_TYPES_PATH)
-  );
-  return importDeclaration;
-};
+const createEventHandlersModuleDeclaration = (): ts.ModuleDeclaration => {
+  const componentsEventHandlers = generateComponentsHandlers(DECLARATION_PATH);
 
-const createComponentsHandlersVariable = () => {
-  const componentsHandlers = generateComponentsHandlers(DECLARATION_PATH);
-  const handlersSourceFile = ts.parseJsonText(
-    "handlers.ts",
-    JSON.stringify(componentsHandlers)
-  );
+  // const outputFile = ts.factory.createSourceFile(
+  //   [],
+  //   ts.factory.createToken(ts.SyntaxKind.EndOfFileToken),
+  //   ts.NodeFlags.JavaScriptFile
+  // );
 
-  const statements = handlersSourceFile.statements;
-  if (statements.length === 0 || !statements[0]) {
-    throw new Error("No statements in the computed components handlers");
-  }
+  // const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
 
-  const variableDeclaration = ts.factory.createVariableDeclaration(
-    "ComponentsHandlers",
+  // const printedNodes = Object.values(componentsEventHandlers).map(
+  //   componentEvents =>
+  //     componentEvents.methods.map(
+  //       method =>
+  //         `${method.documentation}\n
+  //   ${printer.printNode(ts.EmitHint.Unspecified, method.signature, outputFile)}`
+  //     )
+  // );
+
+  const interfaceDeclarations = Object.values(componentsEventHandlers)
+    .filter(component => component.methods.length > 0)
+    .map(component => createComponentInterface(component));
+
+  const moduleBlock = ts.factory.createModuleBlock(interfaceDeclarations);
+
+  return ts.factory.createModuleDeclaration(
     undefined,
-    ts.factory.createTypeReferenceNode("ComponentDefinitionsMap"),
-    statements[0].expression
-  );
-  const variableStatement = ts.factory.createVariableStatement(
-    undefined,
-    ts.factory.createVariableDeclarationList(
-      [variableDeclaration],
-      ts.NodeFlags.Const
-    )
-  );
-  return variableStatement;
-};
-
-const createExportDeclaration = () => {
-  return ts.factory.createExportDefault(
-    ts.factory.createIdentifier("ComponentsHandlers")
+    [ts.factory.createModifier(ts.SyntaxKind.DeclareKeyword)],
+    ts.factory.createIdentifier("$wEventHandlers"),
+    moduleBlock,
+    ts.NodeFlags.Namespace
   );
 };
 
-if (require.main === module) {
-  createComponentsHandlersTSFile();
+function createComponentInterface(
+  component: ComponentEventMethods
+): ts.InterfaceDeclaration {
+  return ts.factory.createInterfaceDeclaration(
+    undefined,
+    undefined,
+    component.name,
+    undefined,
+    undefined,
+    component.methods.map(method => {
+      // const sig = method.signature;
+      // const withDocs = ts.addSyntheticLeadingComment(
+      //   sig,
+      //   ts.SyntaxKind.MultiLineCommentTrivia,
+      //   method.documentation
+      // );
+
+      return ts.setSyntheticLeadingComments(method.signature, [
+        {
+          text: method.documentation,
+          pos: -1,
+          end: -1,
+          kind: ts.SyntaxKind.MultiLineCommentTrivia,
+          hasTrailingNewLine: true,
+          hasLeadingNewline: true
+        }
+      ]);
+    })
+  );
 }
 
-export default createComponentsHandlersTSFile;
+if (require.main === module) {
+  createComponentsHandlersDTSFile();
+}
+
+export default createComponentsHandlersDTSFile;
