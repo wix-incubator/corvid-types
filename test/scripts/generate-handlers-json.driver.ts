@@ -1,14 +1,9 @@
-import path from "path";
-import getEventsHandlersService, {
-  ComponentsMap,
-  EventHandler
-} from "../../scripts/generate-components-handlers/generate-handlers-json";
-
-const FIXTURE_PATH = path.join(__dirname, "./fixtures/$w-events.d.ts");
+import getEventsHandlersService from "../../scripts/generate-components-handlers/event-handlers-generator";
+import { ComponentsMap, EventHandler } from "../../scripts/types";
 
 export interface Driver {
   given: {
-    mockDeclarationsFile: () => void;
+    mockDeclarationsFile: (path: string) => void;
   };
   get: {
     events: () => ComponentsMap;
@@ -22,9 +17,9 @@ const getDriver = (): Driver => {
 
   return {
     given: {
-      mockDeclarationsFile: () => {
+      mockDeclarationsFile: (declarationsPath: string) => {
         const generatedEvents = getEventsHandlersService().generate(
-          FIXTURE_PATH
+          declarationsPath
         );
         if (!generatedEvents) {
           throw new Error("Could not generate events");

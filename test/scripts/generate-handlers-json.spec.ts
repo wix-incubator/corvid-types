@@ -1,4 +1,7 @@
+import path from "path";
 import getDriver, { Driver } from "./generate-handlers-json.driver";
+
+const FIXTURE_PATH = path.join(__dirname, "./fixtures/$w-events.d.ts");
 
 describe("generate-events", () => {
   let driver: Driver;
@@ -7,7 +10,7 @@ describe("generate-events", () => {
   });
 
   it("should return the base element event handlers", () => {
-    driver.given.mockDeclarationsFile();
+    driver.given.mockDeclarationsFile(FIXTURE_PATH);
 
     const elementHandlers = driver.get.componentHandlersNames("Element");
 
@@ -20,7 +23,7 @@ describe("generate-events", () => {
   });
 
   it("should search recursivley for handlers", () => {
-    driver.given.mockDeclarationsFile();
+    driver.given.mockDeclarationsFile(FIXTURE_PATH);
 
     const elementHandlers = driver.get.componentHandlersNames("Chatbox");
 
@@ -33,7 +36,7 @@ describe("generate-events", () => {
   });
 
   it("should return an object with all the handler details", () => {
-    driver.given.mockDeclarationsFile();
+    driver.given.mockDeclarationsFile(FIXTURE_PATH);
 
     const buttonHandlers = driver.get.eventHandlersByComponentName("Button");
 
