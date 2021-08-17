@@ -30,6 +30,11 @@ const baseConfig = libraryTarget =>
           {
             test: /\.d.ts$/i,
             use: "raw-loader"
+          },
+          {
+            test: /\.(t|j)s?$/,
+            use: "ts-loader",
+            exclude: [/node_modules/]
           }
         ]
       }

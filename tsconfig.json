@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",                           
+    "target": "es2015",
+    "allowJs": true,
+    "checkJs": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "types": ["node", "typescript", "jest"],
+    "skipDefaultLibCheck": true,
+    "stripInternal": true,
+    "strictPropertyInitialization": true
+  },
+  "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src_types",
+    "types",
+    "configs",
+    "./test/scripts/fixtures/badSyntax.d.ts"
+  ],
+}

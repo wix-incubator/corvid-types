@@ -1,2 +1,7 @@
 node_modules
-test/it/code-samples
+dist
+src_types
+types
+.vscode
+test/it/code-samples/*
+test/scripts/fixtures/*
