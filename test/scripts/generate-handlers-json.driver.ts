@@ -1,19 +1,19 @@
 import getEventsHandlersService from "../../scripts/generate-components-handlers/event-handlers-generator";
-import { ComponentsMap, EventHandler } from "../../scripts/types";
+import { ComponentsEventHandlers, EventHandler } from "../../scripts/types";
 
 export interface Driver {
   given: {
     mockDeclarationsFile: (path: string) => void;
   };
   get: {
-    events: () => ComponentsMap;
+    events: () => ComponentsEventHandlers;
     eventHandlersByComponentName: (name: string) => EventHandler[] | undefined;
     componentHandlersNames: (componentName: string) => string[] | undefined;
   };
 }
 
 const getDriver = (): Driver => {
-  let events: ComponentsMap;
+  let events: ComponentsEventHandlers;
 
   return {
     given: {
