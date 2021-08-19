@@ -1,44 +1,25 @@
 import * as ts from "typescript";
+import { ComponentsEventHandlers, EventHandler } from "../types";
 
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
 
-type ComponentsMap = {
+interface ComponentsEventHandlersCache {
   [name: string]: EventHandler[];
-};
-
-export type ComponentEventMethods = EventHandler[];
-
-export interface EventHandler {
-  origin: string;
-  name: string;
-  description: string;
-  kind: "function";
-  type: string;
-  handlerArgs: HandlerArg[];
-}
-
-interface HandlerArg {
-  name: string;
-  type: string | undefined;
-}
-
-interface ComponentsEventsCache {
-  [name: string]: ComponentEventMethods;
 }
 
 type CompletedComponentsFlags = {
   [name: string]: boolean;
 };
 
-type EventHandlersGenerator = {
-  generate: () => ComponentsMap;
+type EventHandlersParser = {
+  parse: () => ComponentsEventHandlers;
 };
 
-const getEventHandlersGenerator = (
+const getEventHandlersParser = (
   typeChecker: ts.TypeChecker,
   eventHandlersModuleBody: ts.ModuleBlock
-): EventHandlersGenerator => {
-  const handlersCache: ComponentsEventsCache = {};
+): EventHandlersParser => {
+  const handlersCache: ComponentsEventHandlersCache = {};
   const completed: CompletedComponentsFlags = {};
 
   const buildEventHandler = (
@@ -152,7 +133,7 @@ const getEventHandlersGenerator = (
   const getEventHandlers = (
     rootInterfaceName: string,
     interfaceNode: ts.InterfaceDeclaration
-  ): ComponentEventMethods => {
+  ): EventHandler[] => {
     const interfaceName = interfaceNode.name.getText();
     if (completed[interfaceName]) {
       return handlersCache[interfaceName];
@@ -174,7 +155,7 @@ const getEventHandlersGenerator = (
     return componentHandlers;
   };
 
-  const generateComponentsMapEventHandlers = (): ComponentsMap => {
+  const generateComponentsMapEventHandlers = (): ComponentsEventHandlers => {
     const interfaces = eventHandlersModuleBody.statements.filter(
       (statement): statement is ts.InterfaceDeclaration => {
         return ts.isInterfaceDeclaration(statement);
@@ -190,8 +171,8 @@ const getEventHandlersGenerator = (
   };
 
   return {
-    generate: generateComponentsMapEventHandlers
+    parse: generateComponentsMapEventHandlers
   };
 };
 
-export default getEventHandlersGenerator;
+export default getEventHandlersParser;

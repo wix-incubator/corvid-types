@@ -90,7 +90,17 @@
       maximize(): Promise<void>;
       minimize(): Promise<void>;
       onMaximize(): void;
+
+      /**
+       * onMessageReceived
+       *  @eventType messageReceived
+       */
       onMessageReceived(message: $w.Chatbox.Message): void;
+
+      /**
+       * onMessageSent
+       *  @eventType messageSent
+       */
       onMessageSent(message: $w.Chatbox.Message): void;
       onMinimize(): void;
       onViewportEnter(handler: $w.EventHandler): $w.Element;

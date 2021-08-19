@@ -1,4 +1,4 @@
-export type ComponentsMap = {
+export type ComponentsEventHandlers = {
   [name: string]: EventHandler[];
 };
 

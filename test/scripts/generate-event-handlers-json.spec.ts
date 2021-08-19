@@ -28,6 +28,8 @@ describe("generate-events", () => {
     const elementHandlers = driver.get.componentHandlersNames("Chatbox");
 
     expect(elementHandlers).toEqual([
+      "onMessageReceived",
+      "onMessageSent",
       "onMouseIn",
       "onMouseOut",
       "onViewportEnter",

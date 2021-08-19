@@ -36,7 +36,7 @@ module.exports = {
     }
   },
   getWixModulesList: () => wixModulesNames,
-  getComponentsEventsHandlers: () => eventHandlers,
+  getComponentsEventHandlers: () => eventHandlers,
   // Methods for Corvid-local (CLI)
   getWidgetTypeDeclarations: dynamicTypings.widget.getRaw,
   getPageElementsTypeDeclarations: dynamicTypings.elementsMap.getRaw,

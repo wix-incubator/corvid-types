@@ -1,17 +1,15 @@
 import * as ts from "typescript";
 import { createCompilerHostForFile } from "./utils";
-import getEventHandlersGenerator from "./events-handlers-parser";
+import getEventHandlersParser from "./event-handlers-parser";
 import fs from "fs";
 import Constants from "../constants";
-import { ComponentsMap, EventHandler } from "../types";
+import { ComponentsEventHandlers } from "../types";
 
-export type EventsHandlersService = {
-  generate: (declarationsPath: string) => ComponentsMap | null;
+export type EventHandlersService = {
+  generate: (declarationsPath: string) => ComponentsEventHandlers | null;
 };
 
-export type ComponentEventMethods = EventHandler[];
-
-const getEventsHandlersService = (): EventsHandlersService => {
+const getEventsHandlersService = (): EventHandlersService => {
   const createProgram = (declarationsFileContents: string): ts.Program => {
     const file = {
       fileName: Constants.DECLARATIONS_DTS_FILENAME,
@@ -63,7 +61,7 @@ const getEventsHandlersService = (): EventsHandlersService => {
    */
   const generateComponentsEventHandlersFromDTS = (
     declarationsPath: string
-  ): ComponentsMap => {
+  ): ComponentsEventHandlers => {
     const declarationsFileContents = fs.readFileSync(declarationsPath, "utf-8");
     if (!declarationsFileContents) {
       throw new Error(`${declarationsPath} was not found`);
@@ -74,14 +72,11 @@ const getEventsHandlersService = (): EventsHandlersService => {
     const sourceFile = getSourceFile(program);
     const eventHandlersModuleBody = getEventHandlersModuleBody(sourceFile);
 
-    return getEventHandlersGenerator(
-      typeChecker,
-      eventHandlersModuleBody
-    ).generate();
+    return getEventHandlersParser(typeChecker, eventHandlersModuleBody).parse();
   };
 
   return {
-    generate: (declarationsPath: string): ComponentsMap | never => {
+    generate: (declarationsPath: string): ComponentsEventHandlers | never => {
       return generateComponentsEventHandlersFromDTS(declarationsPath);
     }
   };
