@@ -32,30 +32,6 @@ const getEventsHandlersService = (): EventHandlersService => {
     return sourceFile;
   };
 
-  const getEventHandlersModuleBody = (
-    sourceFile: ts.SourceFile
-  ): ts.ModuleBlock => {
-    const eventHandlersModule = sourceFile.statements.find(
-      (statement): statement is ts.ModuleDeclaration => {
-        return (
-          ts.isModuleDeclaration(statement) &&
-          statement.name.text === Constants.EVENTS_INTERFACE_NAME
-        );
-      }
-    );
-
-    if (
-      !eventHandlersModule ||
-      !eventHandlersModule?.body ||
-      !ts.isModuleBlock(eventHandlersModule?.body)
-    ) {
-      throw new Error(
-        `Failed finding the ${Constants.EVENTS_INTERFACE_NAME} interface`
-      );
-    }
-    return eventHandlersModule.body;
-  };
-
   /**
    * @throws {Error} in case of parsing failure
    */
@@ -70,9 +46,8 @@ const getEventsHandlersService = (): EventHandlersService => {
     const program = createProgram(declarationsFileContents);
     const typeChecker = program.getTypeChecker();
     const sourceFile = getSourceFile(program);
-    const eventHandlersModuleBody = getEventHandlersModuleBody(sourceFile);
 
-    return getEventHandlersParser(typeChecker, eventHandlersModuleBody).parse();
+    return getEventHandlersParser(typeChecker, sourceFile).parse();
   };
 
   return {

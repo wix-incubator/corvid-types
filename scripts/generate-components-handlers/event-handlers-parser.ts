@@ -1,5 +1,6 @@
 import * as ts from "typescript";
 import { ComponentsEventHandlers, EventHandler } from "../types";
+import Constants from "../constants";
 
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
 
@@ -17,10 +18,11 @@ type EventHandlersParser = {
 
 const getEventHandlersParser = (
   typeChecker: ts.TypeChecker,
-  eventHandlersModuleBody: ts.ModuleBlock
+  sourceFile: ts.SourceFile
 ): EventHandlersParser => {
   const handlersCache: ComponentsEventHandlersCache = {};
   const completed: CompletedComponentsFlags = {};
+  let eventHandlersModuleBody: ts.ModuleBlock;
 
   const buildEventHandler = (
     interfaceName: string,
@@ -155,7 +157,32 @@ const getEventHandlersParser = (
     return componentHandlers;
   };
 
+  const getEventHandlersModuleBody = (
+    sourceFile: ts.SourceFile
+  ): ts.ModuleBlock => {
+    const eventHandlersModule = sourceFile.statements.find(
+      (statement): statement is ts.ModuleDeclaration => {
+        return (
+          ts.isModuleDeclaration(statement) &&
+          statement.name.text === Constants.EVENTS_INTERFACE_NAME
+        );
+      }
+    );
+
+    if (
+      !eventHandlersModule ||
+      !eventHandlersModule?.body ||
+      !ts.isModuleBlock(eventHandlersModule?.body)
+    ) {
+      throw new Error(
+        `Failed finding the ${Constants.EVENTS_INTERFACE_NAME} interface`
+      );
+    }
+    return eventHandlersModule.body;
+  };
+
   const generateComponentsMapEventHandlers = (): ComponentsEventHandlers => {
+    eventHandlersModuleBody = getEventHandlersModuleBody(sourceFile);
     const interfaces = eventHandlersModuleBody.statements.filter(
       (statement): statement is ts.InterfaceDeclaration => {
         return ts.isInterfaceDeclaration(statement);
