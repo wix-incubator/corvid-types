@@ -12,7 +12,7 @@ describe("generate-events", () => {
   it("should return the base element event handlers", () => {
     driver.given.mockDeclarationsFile(FIXTURE_PATH);
 
-    const elementHandlers = driver.get.componentHandlersNames("Element");
+    const elementHandlers = driver.get.componentHandlersNames("$w.Element");
 
     expect(elementHandlers).toEqual([
       "onMouseIn",
@@ -25,7 +25,7 @@ describe("generate-events", () => {
   it("should search recursivley for handlers", () => {
     driver.given.mockDeclarationsFile(FIXTURE_PATH);
 
-    const elementHandlers = driver.get.componentHandlersNames("Chatbox");
+    const elementHandlers = driver.get.componentHandlersNames("$w.Chatbox");
 
     expect(elementHandlers).toEqual([
       "onMessageReceived",
@@ -40,7 +40,7 @@ describe("generate-events", () => {
   it("should return an object with all the handler details", () => {
     driver.given.mockDeclarationsFile(FIXTURE_PATH);
 
-    const buttonHandlers = driver.get.eventHandlersByComponentName("Button");
+    const buttonHandlers = driver.get.eventHandlersByComponentName("$w.Button");
 
     expect(buttonHandlers).toContainEqual({
       origin: "Button",

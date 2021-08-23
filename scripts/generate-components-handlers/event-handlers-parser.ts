@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { ComponentsEventHandlers, EventHandler } from "../types";
+import { ComponentsEventHandlers, EventHandler } from "../../src/types";
 import Constants from "../constants";
 
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
@@ -192,7 +192,10 @@ const getEventHandlersParser = (
     return interfaces.reduce((componentsMap, interfaceNode) => {
       const interfaceNodeName = interfaceNode.name.getText();
       return Object.assign(componentsMap, {
-        [interfaceNodeName]: getEventHandlers(interfaceNodeName, interfaceNode)
+        [`${Constants.EVENTS_INTERFACE_NAME}.${interfaceNodeName}`]: getEventHandlers(
+          interfaceNodeName,
+          interfaceNode
+        )
       });
     }, {});
   };

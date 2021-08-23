@@ -1,5 +1,5 @@
-import getEventsHandlersService from "../../scripts/generate-components-handlers/event-handlers-generator";
-import { ComponentsEventHandlers, EventHandler } from "../../scripts/types";
+import generateComponentsEventHandlersFromDTS from "../../scripts/generate-components-handlers/event-handlers-generator";
+import { ComponentsEventHandlers, EventHandler } from "../../src/types";
 
 export interface Driver {
   given: {
@@ -18,7 +18,7 @@ const getDriver = (): Driver => {
   return {
     given: {
       mockDeclarationsFile: (declarationsPath: string) => {
-        const generatedEvents = getEventsHandlersService().generate(
+        const generatedEvents = generateComponentsEventHandlersFromDTS(
           declarationsPath
         );
         if (!generatedEvents) {

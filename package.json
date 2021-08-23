@@ -4,8 +4,9 @@
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint ./src/** ./test/** ./scripts/**",
-    "build": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && npm run generate-event-handlers && webpack",
+    "build": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && npm run generate-event-handlers && npm run types && webpack",
     "test": "npm run lint && jest",
+    "types": "tsc src/types.ts --declaration --emitDeclarationOnly --outDir dist",
     "test:debug": "node --inspect node_modules/.bin/p",
     "patch-declarations": "node scripts/patch-declarations.js",
     "generate-event-handlers": "ts-node scripts/generate-components-handlers/generate-event-handlers-json.ts",
@@ -29,7 +30,7 @@
     "types",
     "configs"
   ],
-  "types": "./types/index.d.ts",
+  "types": "./dist/types.d.ts",
   "keywords": [
     "corvid",
     "corvid-cli",

@@ -15,3 +15,9 @@ interface HandlerArg {
   name: string;
   type: string | undefined;
 }
+
+export interface EventHandlersService {
+  getComponentEventHandlers: (
+    componentName: string
+  ) => EventHandler[] | undefined;
+}

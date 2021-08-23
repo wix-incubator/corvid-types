@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import Constants from "../constants";
-import getEventsHandlersService from "./event-handlers-generator";
+import generateComponentsEventHandlersFromDTS from "./event-handlers-generator";
 
 const OUTPUT_PATH = path.join(
   __dirname,
@@ -14,7 +14,7 @@ const DECLARATIONS_DTS_PATH = path.join(
   Constants.DECLARATIONS_DTS_ROOT_PATH
 );
 
-const generatedEvents = getEventsHandlersService().generate(
+const generatedEvents = generateComponentsEventHandlersFromDTS(
   DECLARATIONS_DTS_PATH
 );
 fs.writeFileSync(OUTPUT_PATH, JSON.stringify(generatedEvents));
