@@ -15,6 +15,9 @@ const baseConfig = libraryTarget =>
         path: DIST,
         filename: `[name].${libraryTarget}.js`
       },
+      resolve: {
+        extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]
+      },
       module: {
         rules: [
           {

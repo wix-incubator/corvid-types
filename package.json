@@ -4,10 +4,12 @@
   "description": "Type definitions for Corvid by Wix",
   "scripts": {
     "lint": "eslint ./src/** ./test/** ./scripts/**",
-    "build": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && webpack",
+    "build": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && npm run generate-event-handlers && npm run types && webpack",
     "test": "npm run lint && jest",
+    "types": "tsc src/types.ts --declaration --emitDeclarationOnly --outDir dist",
     "test:debug": "node --inspect node_modules/.bin/p",
     "patch-declarations": "node scripts/patch-declarations.js",
+    "generate-event-handlers": "ts-node scripts/generate-components-handlers/generate-event-handlers-json.ts",
     "generate-dts": "scripts/generate-types.js",
     "generate-full-corvid-types": "scripts/generate-full-corvid-types.js",
     "generate-module-list": "scripts/generate-wix-module-list.js"
@@ -28,7 +30,7 @@
     "types",
     "configs"
   ],
-  "types": "./types/index.d.ts",
+  "types": "./dist/types.d.ts",
   "keywords": [
     "corvid",
     "corvid-cli",
@@ -64,7 +66,7 @@
     "raw-loader": "^4.0.0",
     "shelljs": "^0.8.3",
     "tmp": "^0.1.0",
-    "ts-jest": "24.3.0",
+    "ts-jest": "^24.3.0",
     "ts-loader": "^8.1.0",
     "ts-node": "^9.1.1",
     "typescript": "^4.3.5",

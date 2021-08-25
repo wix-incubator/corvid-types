@@ -1,5 +1,6 @@
 const fullCorvidTypes = require("../dist/fullCorvidTypes.json");
 const wixModulesNames = require("../dist/wixModules.json");
+const eventHandlersService = require("./dynamicTypes/eventHandlersService");
 const { TS_CONFIG_PATHS } = require("./constants");
 const dynamicTypings = require("./dynamicTypes");
 
@@ -35,6 +36,7 @@ module.exports = {
     }
   },
   getWixModulesList: () => wixModulesNames,
+  eventHandlersService,
   // Methods for Corvid-local (CLI)
   getWidgetTypeDeclarations: dynamicTypings.widget.getRaw,
   getPageElementsTypeDeclarations: dynamicTypings.elementsMap.getRaw,
