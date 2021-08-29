@@ -9,7 +9,6 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
@@ -19,6 +18,9 @@
     "stripInternal": true,
     "strictPropertyInitialization": true,
     "resolveJsonModule": true,
+    "declaration": true,
+    "outDir": "dist/types",
+    "declarationMap": true
   },
   "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],
   "exclude": [

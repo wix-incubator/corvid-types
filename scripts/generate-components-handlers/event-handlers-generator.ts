@@ -3,7 +3,7 @@ import { createCompilerHostForFile } from "./utils";
 import getEventHandlersParser from "./event-handlers-parser";
 import fs from "fs";
 import Constants from "../constants";
-import { ComponentsEventHandlers } from "../../src/types";
+import { ComponentsEventHandlers } from "../../src/dynamicTypes/eventHandlersService";
 
 const createProgram = (declarationsFileContents: string): ts.Program => {
   const file = {

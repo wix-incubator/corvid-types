@@ -1,5 +1,8 @@
 import * as ts from "typescript";
-import { ComponentsEventHandlers, EventHandler } from "../../src/types";
+import {
+  ComponentsEventHandlers,
+  EventHandler
+} from "../../src/dynamicTypes/eventHandlersService";
 import Constants from "../constants";
 
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
