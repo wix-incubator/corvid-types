@@ -2,7 +2,7 @@ import generateComponentsEventHandlersFromDTS from "../../scripts/generate-compo
 import {
   ComponentsEventHandlers,
   EventHandler
-} from "../../src/dynamicTypes/eventHandlersService";
+} from "../../scripts/generate-components-handlers/event-handlers-parser";
 
 export interface Driver {
   given: {

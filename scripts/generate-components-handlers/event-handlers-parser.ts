@@ -1,11 +1,25 @@
 import * as ts from "typescript";
-import {
-  ComponentsEventHandlers,
-  EventHandler
-} from "../../src/dynamicTypes/eventHandlersService";
 import Constants from "../constants";
 
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
+
+export type ComponentsEventHandlers = {
+  [name: string]: EventHandler[];
+};
+
+export interface EventHandler {
+  origin: string;
+  name: string;
+  description: string;
+  kind: "function";
+  type: string;
+  handlerArgs: HandlerArg[];
+}
+
+interface HandlerArg {
+  name: string;
+  type: string | undefined;
+}
 
 interface ComponentsEventHandlersCache {
   [name: string]: EventHandler[];
