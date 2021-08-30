@@ -7,7 +7,7 @@ const baseConfig = libraryTarget =>
     {
       mode: env === "development" ? "development" : "production",
       entry: {
-        corvidTypes: "./src/index.js"
+        corvidTypes: "./src/index.ts"
       },
       output: {
         library: "corvidTypes",

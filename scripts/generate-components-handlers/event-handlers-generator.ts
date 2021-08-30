@@ -1,9 +1,10 @@
 import * as ts from "typescript";
 import { createCompilerHostForFile } from "./utils";
-import getEventHandlersParser from "./event-handlers-parser";
+import getEventHandlersParser, {
+  ComponentsEventHandlers
+} from "./event-handlers-parser";
 import fs from "fs";
 import Constants from "../constants";
-import { ComponentsEventHandlers } from "../../src/types";
 
 const createProgram = (declarationsFileContents: string): ts.Program => {
   const file = {
