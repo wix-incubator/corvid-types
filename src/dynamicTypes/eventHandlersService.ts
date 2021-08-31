@@ -9,15 +9,26 @@ export interface EventHandlersService {
   getComponentEventHandlers: (
     componentName: string
   ) => EventHandler[] | undefined;
+  registerComponentEventHandlers: (
+    componentName: string,
+    handlers: EventHandler[]
+  ) => void;
 }
 
-const eventHandlers = eventHandlersJSON as ComponentsEventHandlers;
+const $wEventHandlers = eventHandlersJSON as ComponentsEventHandlers;
+const eventHandlers = { ...$wEventHandlers };
 
 const eventHandlersService: EventHandlersService = {
   getComponentEventHandlers: (
     componentName: string
   ): EventHandler[] | undefined => {
     return eventHandlers[componentName];
+  },
+  registerComponentEventHandlers(
+    componentName: string,
+    handlers: EventHandler[]
+  ): void {
+    eventHandlers[componentName] = handlers;
   }
 };
 
