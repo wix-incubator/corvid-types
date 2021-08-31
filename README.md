@@ -1,38 +1,46 @@
 <p align="center">
   <img width="200" src="https://static.wixstatic.com/media/85a3c2_d1356dc7622b48cab7017b24d9fa922c~mv2.png">
 </p>
-<h2 align="center">Corvid Types</h2>
+<h2 align="center"><strong>Velo Types</strong> <span style="font-size: 12px; font-style: italic;">(Corvid)</span></h2>
 <p align="center">
-  <b>TypeScript type definitions for <a href="https://www.wix.com/corvid/reference/">Corvid APIs</a></b>
+  <b>TypeScript type definitions for <a href="https://www.wix.com/velo/reference/">Velo APIs</a></b>
 </p>
 <br>
 
-[![npm version](https://img.shields.io/npm/v/corvid-types.svg?style=flat)](https://www.npmjs.com/package/corvid-types)
-[![Status](http://img.shields.io/travis/com/wix-incubator/corvid-types/master.svg?style=flat)](https://travis-ci.com/wix-incubator/corvid-types)  
+[![npm version][npm-badge]][npm]
+[![Build status](build-status)][build]  
+
+**👩🏻‍💻 Type Declarations**: provides Typescript type declarations depending on the Wix editor context.
+
+**🏃🏽 Intellisense**: Intellisense autocompletions for the Wix code editor.
 
 > **Important:**
 Features relating to the Local Editor are currently in the stage of alpha release and are still being developed. Future functionality may not be backward compatible. When using these features, you assume the risks associated with the use of such an alpha version.
 
+<hr />
 
-This package contains type definitions for Corvid by Wix.
-It is intended to be used with the [`corvid-cli`](https://github.com/wix-incubator/corvid#corvid-local-development) to provide a stunning code intelligence experience in your local IDE.    
+## Table of Contents
 
-# How to Use
-You can install the `corvid-types` package manually or let [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) do everything for you!
-### create-corvid-app
-Just run 
-    ```
-    npx create-corvid-app <folder-name> [your-wix-site-url]
-    ```
-The [`create-corvid-app`](https://www.npmjs.com/package/create-corvid-app) will install `corvid-types` locally and you are ready to go.
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
 
-### Manual Installation 
-1. Navigate to the folder where you have cloned your site to and install `corvid-types` 
-    ```
-    npm install --save-dev corvid-types
-    ```
-2. Open a Local Wix Editor:
-    ```
-    npx corvid open-editor
-    ```
-3. Click the **Save** button in the local editor window
+# Introduction
+This package contains type definitions for Velo by Wix.
+
+It exposes the following:
+* `declarations`: type declarations for different contexts: `page`, `backend` or `public`.
+* `getWixModulesList`: returns a list of wix modules for autocompletion purposes. See full list of modules [here](https://www.wix.com/velo/reference/).
+* `eventHandlersService`: the service provides meta-data about components' event handlers
+* `getPageElementsTypeDeclarations`: returns the types of elements that are currently on the Wix editor page. Used to provide TS autocompletion.
+* `getPackageTypeDecelerations`: returns types for packages installed via NPM. Used to provide autocompletion.
+
+# Getting Started
+Install by running:
+```shell
+npm install corvid-types
+```
+
+[npm]: https://www.npmjs.com/package/corvid-types
+[npm-badge]: https://img.shields.io/npm/v/corvid-types.svg?style=flat
+[build]: https://travis-ci.com/wix-incubator/corvid-types
+[build-badge]: http://img.shields.io/travis/com/wix-incubator/corvid-types/master.svg?style=flat
