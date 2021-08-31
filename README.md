@@ -8,7 +8,7 @@
 <br>
 
 [![npm version][npm-badge]][npm]
-[![Build status](build-status)][build]  
+[![Build status][build-badge]][build]
 
 **👩🏻‍💻 Type Declarations**: provides Typescript type declarations depending on the Wix editor context.
 
