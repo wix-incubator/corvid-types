@@ -14,9 +14,6 @@
 
 **🏃🏽 Intellisense**: Intellisense autocompletions for the Wix code editor.
 
-> **Important:**
-Features relating to the Local Editor are currently in the stage of alpha release and are still being developed. Future functionality may not be backward compatible. When using these features, you assume the risks associated with the use of such an alpha version.
-
 <hr />
 
 ## Table of Contents
