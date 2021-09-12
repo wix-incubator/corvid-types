@@ -3,6 +3,9 @@ on:
   push:
     tags: 
       - '**'
+  repository_dispatch:
+    types: [docs_updated]
+
 jobs:
   build:
     runs-on: ubuntu-latest
