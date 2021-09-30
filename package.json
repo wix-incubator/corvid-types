@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "browser": "dist/corvidTypes.esm.js",
-  "main": "src/index.ts",
+  "main": "dist/corvidTypes.esm.js",
   "files": [
     "src",
     "dist",
