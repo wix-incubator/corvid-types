@@ -1,8 +1,6 @@
 import generateComponentsEventHandlersFromDTS from "../../scripts/generate-components-handlers/event-handlers-generator";
-import {
-  ComponentsEventHandlers,
-  EventHandler
-} from "../../scripts/generate-components-handlers/event-handlers-parser";
+import { ComponentsEventHandlers } from "../../scripts/generate-components-handlers/event-handlers-parser";
+import { EventHandler } from "../../src/dynamicTypes/eventHandlersService";
 
 export interface Driver {
   given: {

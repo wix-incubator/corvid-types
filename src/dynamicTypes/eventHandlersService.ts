@@ -1,10 +1,20 @@
 import eventHandlersJSON from "../../dist/eventHandlers.json";
-import {
-  ComponentsEventHandlers,
-  EventHandler
-} from "../../scripts/generate-components-handlers/event-handlers-parser";
+import { ComponentsEventHandlers } from "../../scripts/generate-components-handlers/event-handlers-parser";
 
-export { EventHandler } from "../../scripts/generate-components-handlers/event-handlers-parser";
+export interface EventHandler {
+  origin: string;
+  name: string;
+  description: string;
+  kind: "function";
+  type: string;
+  handlerArgs: HandlerArg[];
+}
+
+export interface HandlerArg {
+  name: string;
+  type: string | undefined;
+}
+
 export interface EventHandlersService {
   getComponentEventHandlers: (
     componentName: string
