@@ -1,5 +1,11 @@
 import * as ts from "typescript";
 import Constants from "../constants";
+import {
+  getBaseClassesNames,
+  getMethodParameterTypeDeclaration,
+  getStatementByInterfaceName,
+  isFunctionTypeNodeWithParameters
+} from "./utils";
 
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
 
@@ -41,71 +47,60 @@ const getEventHandlersParser = (
   const completed: CompletedComponentsFlags = {};
   let eventHandlersModuleBody: ts.ModuleBlock;
 
+  const getHandlerArguments = (
+    methodSignature: ts.MethodSignature
+  ): HandlerArg[] => {
+    const parameterTypeDeclaration = getMethodParameterTypeDeclaration(
+      eventHandlersModuleBody,
+      methodSignature
+    );
+    if (
+      parameterTypeDeclaration == null ||
+      !isFunctionTypeNodeWithParameters(parameterTypeDeclaration.type)
+    ) {
+      return [];
+    }
+
+    const eventHandlerParameter = parameterTypeDeclaration.type.parameters[0];
+    return [
+      {
+        name: eventHandlerParameter.name.getText(),
+        type: eventHandlerParameter.type?.getText()
+      }
+    ];
+  };
+
   const buildEventHandler = (
     interfaceName: string,
-    member: ts.MethodSignature
+    methodSignature: ts.MethodSignature
   ): EventHandler => {
-    const symbol = typeChecker.getSymbolAtLocation(member.name);
+    const symbol = typeChecker.getSymbolAtLocation(methodSignature.name);
     const type = symbol?.getJsDocTags()?.[0]?.text;
     if (!type) {
       throw new Error(
-        `The member must have a @eventtype JSDoc tag: ${member.name.getText()}`
+        `The member must have a @eventtype JSDoc tag: ${methodSignature.name.getText()}`
       );
     }
 
     return {
       origin: interfaceName,
-      name: member.name.getText(),
+      name: methodSignature.name.getText(),
       description: ts.displayPartsToString(
         symbol?.getDocumentationComment(typeChecker)
       ),
       kind: "function",
       type: ts.displayPartsToString(type),
-      handlerArgs: member.parameters.map(parameter => ({
-        name: parameter.name.getText(),
-        type: parameter.type?.getText()
-      }))
+      handlerArgs: getHandlerArguments(methodSignature)
     };
   };
 
-  const isMemberEventHandler = (member: ts.MethodSignature): boolean => {
+  const isMethodEventHandler = (member: ts.MethodSignature): boolean => {
     const docTags = typeChecker
       .getSymbolAtLocation(member.name)
       ?.getJsDocTags();
     return (
       docTags != null &&
       docTags.some(tag => tag.name === EVENT_TYPE_JS_DOC_TAG_NAME)
-    );
-  };
-
-  const getBaseClassesNames = (node: ts.InterfaceDeclaration): string[] => {
-    if (node.heritageClauses == null) {
-      return [];
-    }
-
-    return node.heritageClauses
-      .map(clause => clause.types)
-      .reduce<ts.ExpressionWithTypeArguments[]>(
-        (res, types) => [...res, ...types],
-        []
-      )
-      .map(type => type.expression)
-      .filter((expression): expression is ts.PropertyAccessExpression =>
-        ts.isPropertyAccessExpression(expression)
-      )
-      .map(expression => expression.name.getText());
-  };
-
-  const getStatementByInterfaceName = (
-    interfaceName: string
-  ): ts.InterfaceDeclaration | undefined => {
-    return eventHandlersModuleBody.statements.find(
-      (statement): statement is ts.InterfaceDeclaration => {
-        return (
-          ts.isInterfaceDeclaration(statement) &&
-          statement.name.getText() === interfaceName
-        );
-      }
     );
   };
 
@@ -129,7 +124,7 @@ const getEventHandlersParser = (
   ): EventHandler[] => {
     return interfaceNode.members
       .filter((member): member is ts.MethodSignature =>
-        isMemberEventHandler(member as ts.MethodSignature)
+        isMethodEventHandler(member as ts.MethodSignature)
       )
       .map(member => buildEventHandler(rootInterfaceName, member));
   };
@@ -139,7 +134,9 @@ const getEventHandlersParser = (
     interfaceNode: ts.InterfaceDeclaration
   ): EventHandler[] => {
     const baseClassesNodes = getBaseClassesNames(interfaceNode)
-      .map(baseClassName => getStatementByInterfaceName(baseClassName))
+      .map(baseClassName =>
+        getStatementByInterfaceName(eventHandlersModuleBody, baseClassName)
+      )
       .filter((statement): statement is ts.InterfaceDeclaration =>
         Boolean(statement)
       );

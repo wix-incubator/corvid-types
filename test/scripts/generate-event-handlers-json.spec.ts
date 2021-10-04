@@ -51,8 +51,22 @@ describe("generate-events", () => {
       type: "viewportEnter",
       handlerArgs: [
         {
-          name: "handler",
-          type: "$w.EventHandler"
+          name: "event",
+          type: "$w.Event"
+        }
+      ]
+    });
+    expect(buttonHandlers).toContainEqual({
+      origin: "Button",
+      name: "onClick",
+      description:
+        "Adds an event handler that runs when the element is clicked.\n\t[Read more](https://www.wix.com/corvid/reference/$w.ClickableMixin.html#onClick)",
+      kind: "function",
+      type: "click",
+      handlerArgs: [
+        {
+          name: "event",
+          type: "$w.MouseEvent"
         }
       ]
     });

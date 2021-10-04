@@ -40,3 +40,80 @@ export const createCompilerHostForFile = (
     getEnvironmentVariable: () => ""
   };
 };
+
+export const getStatementByInterfaceName = (
+  rootModuleBlock: ts.ModuleBlock,
+  interfaceName: string
+): ts.InterfaceDeclaration | undefined => {
+  return rootModuleBlock.statements.find(
+    (statement): statement is ts.InterfaceDeclaration => {
+      return (
+        ts.isInterfaceDeclaration(statement) &&
+        statement.name.getText() === interfaceName
+      );
+    }
+  );
+};
+
+export const getTypeNodeByName = (
+  rootModuleBlock: ts.ModuleBlock,
+  typeName: string
+): ts.TypeAliasDeclaration | undefined => {
+  return rootModuleBlock.statements.find(
+    (statement): statement is ts.TypeAliasDeclaration => {
+      return (
+        ts.isTypeAliasDeclaration(statement) &&
+        statement.name.getText() === typeName
+      );
+    }
+  );
+};
+
+export const getTypeEntityName = (entityName: ts.EntityName): string => {
+  return ts.isQualifiedName(entityName)
+    ? entityName.right.getText()
+    : entityName.getText();
+};
+
+export const getMethodParameterTypeDeclaration = (
+  rootModuleBlock: ts.ModuleBlock,
+  methodSignature: ts.MethodSignature
+): ts.TypeAliasDeclaration | undefined => {
+  if (methodSignature.parameters.length === 0) {
+    return;
+  }
+
+  const handlerParam = methodSignature.parameters[0];
+  if (handlerParam.type == null || !ts.isTypeReferenceNode(handlerParam.type)) {
+    return;
+  }
+
+  const handlerTypeNameText = getTypeEntityName(handlerParam.type.typeName);
+  return getTypeNodeByName(rootModuleBlock, handlerTypeNameText);
+};
+
+export const isFunctionTypeNodeWithParameters = (
+  typeNode: ts.TypeNode
+): typeNode is ts.FunctionTypeNode => {
+  return ts.isFunctionTypeNode(typeNode) && typeNode.parameters.length > 0;
+};
+
+export const getBaseClassesNames = (
+  node: ts.InterfaceDeclaration
+): string[] => {
+  if (node.heritageClauses == null) {
+    return [];
+  }
+
+  return node.heritageClauses
+    .map(clause => clause.types)
+    .reduce<ts.ExpressionWithTypeArguments[]>(
+      (res, types) => [...res, ...types],
+      []
+    )
+    .map(type => type.expression)
+    .filter((expression): expression is ts.PropertyAccessExpression =>
+      ts.isPropertyAccessExpression(expression)
+    )
+    .map(expression => expression.name.getText());
+};
