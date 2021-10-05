@@ -25,11 +25,6 @@ script:
 
 jobs:
   include:
-    - name: Commit lint
-      stage: test
-      script:
-        - yarn commitlint-travis
-
     - name: Test
       stage: test
       script:

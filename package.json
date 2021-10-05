@@ -39,9 +39,6 @@
   "dependencies": {},
   "devDependencies": {
     "@babel/preset-env": "^7.8.3",
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
-    "@commitlint/travis-cli": "^8.1.0",
     "@purtuga/esm-webpack-plugin": "^1.2.1",
     "@types/jest": "^24.9.1",
     "@types/node": "^16.3.3",
@@ -76,8 +73,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
