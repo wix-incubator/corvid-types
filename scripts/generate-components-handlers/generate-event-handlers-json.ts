@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import Constants from "../constants";
 import generateComponentsEventHandlersFromDTS from "./event-handlers-generator";
-
+// consider extracting ../../ into a var relative to root 
 const OUTPUT_PATH = path.join(
   __dirname,
   "../../dist/",

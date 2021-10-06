@@ -43,6 +43,7 @@ const getEventHandlersParser = (
   typeChecker: ts.TypeChecker,
   sourceFile: ts.SourceFile
 ): EventHandlersParser => {
+  // imo you can use only the handlersCache and ask _.has insted of completed[COMP_TYPE]
   const handlersCache: ComponentsEventHandlersCache = {};
   const completed: CompletedComponentsFlags = {};
   let eventHandlersModuleBody: ts.ModuleBlock;
@@ -161,6 +162,7 @@ const getEventHandlersParser = (
       interfaceNode
     );
 
+    // can you brifly explain this logic?
     const componentHandlers = mergeEventHandlers(
       rootMembers,
       baseHandlers
@@ -170,7 +172,7 @@ const getEventHandlersParser = (
     completed[interfaceName] = true;
     return componentHandlers;
   };
-
+// i think get$wComponentModuleBody is a better name for this function
   const getEventHandlersModuleBody = (
     sourceFile: ts.SourceFile
   ): ts.ModuleBlock => {
@@ -183,11 +185,13 @@ const getEventHandlersParser = (
       }
     );
 
+    // i would extract this logic to a function that better explains what do we check here
     if (
       !eventHandlersModule ||
       !eventHandlersModule?.body ||
       !ts.isModuleBlock(eventHandlersModule?.body)
     ) {
+      // why do we throw here? shouldn't it fail sylintly? 
       throw new Error(
         `Failed finding the ${Constants.EVENTS_INTERFACE_NAME} interface`
       );
@@ -206,6 +210,7 @@ const getEventHandlersParser = (
     return interfaces.reduce((componentsMap, interfaceNode) => {
       const interfaceNodeName = interfaceNode.name.getText();
       return Object.assign(componentsMap, {
+        // you can use here EVENTS_MODULE_PREFIX
         [`${Constants.EVENTS_INTERFACE_NAME}.${interfaceNodeName}`]: getEventHandlers(
           interfaceNodeName,
           interfaceNode

@@ -3,7 +3,8 @@ import {
   ComponentsEventHandlers,
   EventHandler
 } from "../../scripts/generate-components-handlers/event-handlers-parser";
-
+// why do we need to import and export this interface
+// if both uses this type i would extracy it to a constant file becasue webpack will probebly build the script file as well
 export { EventHandler } from "../../scripts/generate-components-handlers/event-handlers-parser";
 export interface EventHandlersService {
   getComponentEventHandlers: (

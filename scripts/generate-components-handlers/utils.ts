@@ -11,11 +11,13 @@ export const createCompilerHostForFile = (
 ): ts.CompilerHost => {
   return {
     getSourceFile: fileName => {
+      // why not doing if(file.sourceFile) ? i think it's more readable
       file.sourceFile =
         file.sourceFile ||
         ts.createSourceFile(
           fileName,
           file.content,
+          // why is the script target set to ES2015
           ts.ScriptTarget.ES2015,
           true
         );
@@ -23,6 +25,7 @@ export const createCompilerHostForFile = (
     },
     getDefaultLibFileName: (defaultLibOptions: ts.CompilerOptions): string =>
       "/" + ts.getDefaultLibFileName(defaultLibOptions),
+    // maybe should be dropped or consider using _.noop
     writeFile: () => {
       // do nothing.
     },
@@ -34,6 +37,7 @@ export const createCompilerHostForFile = (
     readFile: () => {
       return file.content;
     },
+    // why do we need this?
     getCanonicalFileName: fileName => fileName,
     useCaseSensitiveFileNames: () => true,
     getNewLine: () => "\n",
@@ -68,7 +72,8 @@ export const getTypeNodeByName = (
     }
   );
 };
-
+// a quiestion, what will happen if we will expose some modules a bit different? 
+// for example from new (): Promise<void>; to new: () => Promise<void>; ?
 export const getTypeEntityName = (entityName: ts.EntityName): string => {
   return ts.isQualifiedName(entityName)
     ? entityName.right.getText()
@@ -79,11 +84,13 @@ export const getMethodParameterTypeDeclaration = (
   rootModuleBlock: ts.ModuleBlock,
   methodSignature: ts.MethodSignature
 ): ts.TypeAliasDeclaration | undefined => {
+  // use _.isEmpty
   if (methodSignature.parameters.length === 0) {
     return;
   }
-
+  // imo const [handlerParam] = methodSignature.parameters is better
   const handlerParam = methodSignature.parameters[0];
+  // consider extracting to a function that will describe better what it does and don't use == you can probebly use _.isEmpty or _.isNull
   if (handlerParam.type == null || !ts.isTypeReferenceNode(handlerParam.type)) {
     return;
   }
@@ -95,12 +102,14 @@ export const getMethodParameterTypeDeclaration = (
 export const isFunctionTypeNodeWithParameters = (
   typeNode: ts.TypeNode
 ): typeNode is ts.FunctionTypeNode => {
+  // use _.isEmpty
   return ts.isFunctionTypeNode(typeNode) && typeNode.parameters.length > 0;
 };
 
 export const getBaseClassesNames = (
   node: ts.InterfaceDeclaration
 ): string[] => {
+  // _.isEmpty || _.isNull ?
   if (node.heritageClauses == null) {
     return [];
   }
