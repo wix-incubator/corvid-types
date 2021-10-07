@@ -42,6 +42,7 @@
       readonly type: string;
   }
 
+  type MouseEventHandler = (event: $w.MouseEvent, $w: $w.$w) => void;
   type EventHandler = (event: $w.Event) => void;
 
   interface ClickableMixin {
