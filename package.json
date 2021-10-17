@@ -5,6 +5,7 @@
   "scripts": {
     "lint": "eslint ./src/** ./test/** ./scripts/**",
     "build": "npm run generate-dts && npm run patch-declarations && npm run generate-full-corvid-types && npm run generate-module-list && npm run generate-event-handlers && webpack && npm run types",
+    "build:beta": "DOCS_BRANCH=beta-autocomplete-poc npm run build",
     "test": "npm run lint && jest",
     "types": "tsc -p ./tsconfig.json --emitDeclarationOnly",
     "test:debug": "node --inspect node_modules/.bin/p",
