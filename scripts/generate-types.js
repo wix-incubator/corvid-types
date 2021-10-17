@@ -14,10 +14,16 @@ const ORIGINAL_TYPES_PATH = "src_types";
 const DEST_TYPES_PATH = "types";
 const TYPES_COMMON_PATH = path.join(DEST_TYPES_PATH, "common");
 const TYPES_PAGES_PATH = path.join(DEST_TYPES_PATH, "pages");
+const DOCS_BRANCH = process.env.DOCS_BRANCH;
 
 const cloneDocsRepo = () => {
   const tmpDir = tmp.dirSync();
-  spawnSync("git", ["clone", WIX_CODE_DOCS_REMOTE, tmpDir.name], {
+  const commandOptions = ["clone", WIX_CODE_DOCS_REMOTE, tmpDir.name];
+  if (DOCS_BRANCH) {
+    commandOptions.splice(1, 0, "--single-branch", "--branch", DOCS_BRANCH);
+    console.info(`Building definitions based on ${DOCS_BRANCH} branch`);
+  }
+  spawnSync("git", commandOptions, {
     stdio: "inherit"
   });
   return tmpDir.name;
