@@ -1,8 +1,10 @@
 name: Publish
 on:
   push:
-    tags: 
-      - '**'
+   branches:
+     - master
+   tags: 
+     - '**'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,5 +23,15 @@ jobs:
         run: yarn test
       - name: Publish 
         run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Generate new tag
+        run: npm config set git-tag-version false && npm version patch
+      - name: Build Beta
+        run: yarn build:beta
+      - name: Test
+        run: yarn test
+      - name: Publish 
+        run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
