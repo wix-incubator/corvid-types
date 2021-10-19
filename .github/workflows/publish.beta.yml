@@ -19,7 +19,12 @@ jobs:
         run: yarn build:beta
       - name: Test
         run: yarn test
-      - name: Publish 
+      - name: Get Version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Create Beta Version
+        run: npm --no-git-tag-version version ${{ steps.get_version.outputs.VERSION }}-beta 
+      - name: Publish Beta
         run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
