@@ -18,7 +18,7 @@ module.exports = {
   declarations: {
     page: ({ dependencies, elementsMap, widgets }: any = {}) => {
       return [
-        ...(fullCorvidTypes as any).BASE,
+        // ...(fullCorvidTypes as any).BASE,
         ...(fullCorvidTypes as any).PAGES,
         ...dynamicTypings.elementsMap.getFiles(elementsMap),
         ...dynamicTypings.widget.getFiles(widgets),
@@ -27,14 +27,14 @@ module.exports = {
     },
     backend: ({ dependencies }: any) => {
       return [
-        ...(fullCorvidTypes as any).BASE,
+        // ...(fullCorvidTypes as any).BASE,
         ...(fullCorvidTypes as any).BACKEND,
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
     public: ({ dependencies }: any) => {
       return [
-        ...(fullCorvidTypes as any).BASE,
+        // ...(fullCorvidTypes as any).BASE,
         ...(fullCorvidTypes as any).PUBLIC,
         ...dynamicTypings.packages.getFiles(dependencies)
       ];

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ES2020"],
+    "noLib": true,
     "allowJs": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,

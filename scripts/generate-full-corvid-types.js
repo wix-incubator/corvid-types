@@ -44,6 +44,7 @@ async function generateFullCorvidDeclarations() {
       content: fs.readFileSync(path, "utf8")
     }));
   });
+  delete corvidLib.BASE;
 
   fs.ensureFileSync(FULL_CORVID_DECLARATION_PATH);
   fs.writeFileSync(
