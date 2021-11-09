@@ -5,7 +5,7 @@ const path = require("path");
 const extractDtsModules = require("./extractDtsModules");
 
 const projectRoot = path.join(__dirname, "../");
-const MODULE_LIST_FILE_PATH = path.join(projectRoot, "dist", "wixModules.json");
+const MODULE_LIST_FILE_PATH = path.join(projectRoot, "wixModules.json");
 const TARGET_DTS = [path.join(projectRoot, "types/common/declaration.d.ts")];
 
 function generateModuleList() {

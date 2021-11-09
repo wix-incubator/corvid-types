@@ -1,4 +1,4 @@
-import eventHandlersJSON from "../../dist/eventHandlers.json";
+import eventHandlersJSON from "../../eventHandlers.json";
 import { ComponentsEventHandlers } from "../../scripts/generate-components-handlers/event-handlers-parser";
 
 export interface EventHandler {

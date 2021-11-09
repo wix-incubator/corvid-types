@@ -38,7 +38,7 @@ describe("typescript - positive scenarios - declarations flow", () => {
         tsRootPath
       );
 
-      const allTypes = declarations[context]({
+      const allTypes = await declarations[context]({
         elementsMap,
         widgets,
         dependencies

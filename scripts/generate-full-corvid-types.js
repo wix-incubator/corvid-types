@@ -1,17 +1,16 @@
 #!/usr/bin/env node
 const fs = require("fs-extra");
 const path = require("path");
-const without_ = require("lodash/without");
 
 const createTsProgram = require("./createTypescriptProgram");
-const { TS_CONFIG_PATHS, TS_CONFIG_BASE_PATH } = require("../src/constants");
+const { TS_CONFIG_PATHS } = require("../src/constants");
 
 const projectRoot = path.join(__dirname, "../");
 const FULL_CORVID_DECLARATION_PATH = path.join(
   projectRoot,
-  "dist",
   "fullCorvidTypes.json"
 );
+const FULL_LIB_DECLARATION_PATH = path.join(projectRoot, "corvidTypesLib.json");
 
 const getDeclarationFilesFromTsConfig = configPath => {
   const program = createTsProgram(configPath);
@@ -23,34 +22,29 @@ const getDeclarationFilesFromTsConfig = configPath => {
 };
 
 async function generateFullCorvidDeclarations() {
-  const corvidLib = {
-    BASE: getDeclarationFilesFromTsConfig(
-      path.join(projectRoot, TS_CONFIG_BASE_PATH)
-    )
-  };
+  const corvidLib = {};
+  const libs = {};
 
   Object.keys(TS_CONFIG_PATHS).forEach(context => {
-    corvidLib[context] = without_(
-      getDeclarationFilesFromTsConfig(
-        path.join(projectRoot, TS_CONFIG_PATHS[context])
-      ),
-      ...corvidLib.BASE
+    corvidLib[context] = getDeclarationFilesFromTsConfig(
+      path.join(projectRoot, TS_CONFIG_PATHS[context])
     );
   });
 
   Object.keys(corvidLib).forEach(context => {
-    corvidLib[context] = corvidLib[context].map(path => ({
-      path: path.split("corvid-types").pop(),
-      content: fs.readFileSync(path, "utf8")
-    }));
+    corvidLib[context] = corvidLib[context].map(path => {
+      const fixedPath = path.split("corvid-types").pop();
+      libs[fixedPath] = fs.readFileSync(path, "utf8");
+      return fixedPath;
+    });
   });
-  delete corvidLib.BASE;
 
   fs.ensureFileSync(FULL_CORVID_DECLARATION_PATH);
   fs.writeFileSync(
     FULL_CORVID_DECLARATION_PATH,
     JSON.stringify(corvidLib, null, 2)
   );
+  fs.writeFileSync(FULL_LIB_DECLARATION_PATH, JSON.stringify(libs, null, 2));
 }
 
 generateFullCorvidDeclarations();

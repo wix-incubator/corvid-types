@@ -1,7 +1,15 @@
 const path = require("path");
 const EsmWebpackPlugin = require("@purtuga/esm-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const env = process.env.NODE_ENV || "development";
 const DIST = path.join(__dirname, "./dist");
+const copyPluginOptions = {
+  patterns: [
+    { from: "types/**/*", to: DIST },
+    { from: "node_modules/@types/node/**/*", to: DIST }
+  ]
+};
+
 const baseConfig = libraryTarget =>
   Object.assign(
     {
@@ -26,7 +34,8 @@ const baseConfig = libraryTarget =>
             use: {
               loader: "babel-loader",
               options: {
-                presets: ["@babel/preset-env"]
+                presets: ["@babel/preset-env"],
+                plugins: ["@babel/plugin-syntax-dynamic-import"]
               }
             }
           },
@@ -42,7 +51,9 @@ const baseConfig = libraryTarget =>
         ]
       }
     },
-    libraryTarget === "esm" ? { plugins: [new EsmWebpackPlugin()] } : {}
+    libraryTarget === "esm"
+      ? { plugins: [new EsmWebpackPlugin()] }
+      : { plugins: [new CopyPlugin(copyPluginOptions)] }
   );
 
 module.exports = [baseConfig("esm"), baseConfig("umd")];

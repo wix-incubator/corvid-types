@@ -6,6 +6,7 @@
     "allowJs": true,
     "checkJs": false,
     "strict": true,
+    "noEmit": false,
     "noImplicitAny": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
