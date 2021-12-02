@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noLib": false,
+    "lib": ["ES2020"]
+  }
+}
