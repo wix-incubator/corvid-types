@@ -4,7 +4,7 @@
 import fullCorvidTypes from "../dist/fullCorvidTypes.json";
 import wixModulesNames from "../dist/wixModules.json";
 import eventHandlersService from "./dynamicTypes/eventHandlersService";
-import { TS_CONFIG_PATHS } from "./constants";
+import { TS_CONFIG_PATHS, BASE_LIBS } from "./constants";
 import dynamicTypings from "./dynamicTypes";
 
 export * from "./dynamicTypes/eventHandlersService";
@@ -15,26 +15,51 @@ module.exports = {
     backend: `corvid-types/${TS_CONFIG_PATHS.BACKEND}`,
     public: `corvid-types/${TS_CONFIG_PATHS.PUBLIC}`
   },
+  baseLibs: {
+    page: BASE_LIBS.PAGES,
+    backend: BASE_LIBS.BACKEND,
+    public: BASE_LIBS.PUBLIC
+  },
   declarations: {
-    page: ({ dependencies, elementsMap, widgets }: any = {}) => {
+    page: ({
+      includeBaseLibs = true,
+      dependencies,
+      elementsMap,
+      widgets
+    }: any = {}) => {
+      const baseLibs = includeBaseLibs
+        ? [
+            ...(fullCorvidTypes as any).TARGET_ES,
+            ...(fullCorvidTypes as any).WEB_WORKER
+          ]
+        : [];
       return [
-        ...(fullCorvidTypes as any).BASE,
+        ...baseLibs,
         ...(fullCorvidTypes as any).PAGES,
         ...dynamicTypings.elementsMap.getFiles(elementsMap),
         ...dynamicTypings.widget.getFiles(widgets),
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
-    backend: ({ dependencies }: any) => {
+    backend: ({ includeBaseLibs = true, dependencies }: any) => {
+      const baseLibs = includeBaseLibs
+        ? [...(fullCorvidTypes as any).TARGET_ES]
+        : [];
       return [
-        ...(fullCorvidTypes as any).BASE,
+        ...baseLibs,
         ...(fullCorvidTypes as any).BACKEND,
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
-    public: ({ dependencies }: any) => {
+    public: ({ includeBaseLibs = true, dependencies }: any) => {
+      const baseLibs = includeBaseLibs
+        ? [
+            ...(fullCorvidTypes as any).TARGET_ES,
+            ...(fullCorvidTypes as any).WEB_WORKER
+          ]
+        : [];
       return [
-        ...(fullCorvidTypes as any).BASE,
+        ...baseLibs,
         ...(fullCorvidTypes as any).PUBLIC,
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
