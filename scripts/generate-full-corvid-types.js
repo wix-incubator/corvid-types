@@ -29,17 +29,30 @@ async function generateFullCorvidDeclarations() {
     );
   });
 
-  Object.keys(corvidLib).forEach(context => {
-    corvidLib[context] = corvidLib[context].map(path => ({
-      path: path.split("corvid-types").pop(),
-      content: fs.readFileSync(path, "utf8")
-    }));
-  });
+  const uniqueLibs = [
+    ...new Set(
+      Object.values(corvidLib).reduce((soFar, libs) => {
+        return [...soFar, ...libs];
+      }, [])
+    )
+  ];
+
+  const libs = uniqueLibs.map(path => ({
+    path: path.split("corvid-types").pop(),
+    content: fs.readFileSync(path, "utf8")
+  }));
 
   fs.ensureFileSync(FULL_CORVID_DECLARATION_PATH);
   fs.writeFileSync(
     FULL_CORVID_DECLARATION_PATH,
-    JSON.stringify(corvidLib, null, 2)
+    JSON.stringify(
+      {
+        libs,
+        contexts: corvidLib
+      },
+      null,
+      2
+    )
   );
 }
 

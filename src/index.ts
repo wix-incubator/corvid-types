@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-import fullCorvidTypes from "../dist/fullCorvidTypes.json";
 import wixModulesNames from "../dist/wixModules.json";
 import eventHandlersService from "./dynamicTypes/eventHandlersService";
+import {
+  getCollectionLibs,
+  LibCollections
+} from "./dynamicTypes/fullCorvidTypes";
 import { TS_CONFIG_PATHS, BASE_LIBS } from "./constants";
 import dynamicTypings from "./dynamicTypes";
 
@@ -29,13 +32,13 @@ module.exports = {
     }: any = {}) => {
       const baseLibs = includeBaseLibs
         ? [
-            ...(fullCorvidTypes as any).TARGET_ES,
-            ...(fullCorvidTypes as any).WEB_WORKER
+            ...getCollectionLibs(LibCollections.TARGET_ES),
+            ...getCollectionLibs(LibCollections.WEB_WORKER)
           ]
         : [];
       return [
         ...baseLibs,
-        ...(fullCorvidTypes as any).PAGES,
+        ...getCollectionLibs(LibCollections.PAGES),
         ...dynamicTypings.elementsMap.getFiles(elementsMap),
         ...dynamicTypings.widget.getFiles(widgets),
         ...dynamicTypings.packages.getFiles(dependencies)
@@ -43,24 +46,24 @@ module.exports = {
     },
     backend: ({ includeBaseLibs = true, dependencies }: any) => {
       const baseLibs = includeBaseLibs
-        ? [...(fullCorvidTypes as any).TARGET_ES]
+        ? getCollectionLibs(LibCollections.TARGET_ES)
         : [];
       return [
         ...baseLibs,
-        ...(fullCorvidTypes as any).BACKEND,
+        ...getCollectionLibs(LibCollections.BACKEND),
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
     public: ({ includeBaseLibs = true, dependencies }: any) => {
       const baseLibs = includeBaseLibs
         ? [
-            ...(fullCorvidTypes as any).TARGET_ES,
-            ...(fullCorvidTypes as any).WEB_WORKER
+            ...getCollectionLibs(LibCollections.TARGET_ES),
+            ...getCollectionLibs(LibCollections.WEB_WORKER)
           ]
         : [];
       return [
         ...baseLibs,
-        ...(fullCorvidTypes as any).PUBLIC,
+        ...getCollectionLibs(LibCollections.PUBLIC),
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     }
