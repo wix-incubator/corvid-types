@@ -12,6 +12,7 @@ function changeWixAuthElevateFunctionType(ast) {
       statement.name.escapedText === "elevate"
   );
 
+  // ast code was added with the help of https://ts-ast-viewer.com/#
   elevateFunction.typeParameters = [getFunctionTypeParameter()];
   elevateFunction.parameters = [getFunctionParameter()];
   elevateFunction.type = getFunctionReturnType();
