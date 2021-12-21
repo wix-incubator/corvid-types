@@ -6,11 +6,19 @@ function changeWixAuthElevateFunctionType(ast) {
       ts.isModuleDeclaration(statement) && statement.name.text === "wix-auth"
   );
 
+  if (!wixAuthModule) {
+    return ast;
+  }
+
   const elevateFunction = wixAuthModule.body.statements.find(
     statement =>
       ts.isFunctionDeclaration(statement) &&
       statement.name.escapedText === "elevate"
   );
+
+  if (!elevateFunction) {
+    return ast;
+  }
 
   // ast code was added with the help of https://ts-ast-viewer.com/#
   elevateFunction.typeParameters = [getFunctionTypeParameter()];
