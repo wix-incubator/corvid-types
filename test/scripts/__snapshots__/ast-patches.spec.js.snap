@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ast patches ChangeWixAuthElevateFunctionType Should apply patch 1`] = `
+"declare module 'wix-auth' {
+    /**
+     * Returns an instance of the specified function for which the site visitor's permissions have been elevated to the highest level required.
+     * 	[Read more](https://www.wix.com/corvid/reference/wix-auth.html#elevate)
+     */
+    function elevate<T extends (...arg: any) => any>(func: T): (...param: Parameters<T>) => ReturnType<T>;
+}
+"
+`;
