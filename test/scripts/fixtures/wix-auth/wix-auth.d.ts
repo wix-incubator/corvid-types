@@ -1,3 +1,5 @@
+// It compares the result to a snapshot, if lint fixes this file snapshot will fail
+/* eslint-disable */
 declare module 'wix-auth' {
   /**
    * Returns an instance of the specified function for which the site visitor's permissions have been elevated to the highest level required.
@@ -5,3 +7,4 @@ declare module 'wix-auth' {
    */
   function elevate(functionName: Function): Function;
 }
+/* eslint-enable */
