@@ -1,5 +1,3 @@
-import fullCorvidTypesJSON from "../../dist/fullCorvidTypes.json";
-
 export enum LibCollections {
   BACKEND = "BACKEND",
   PUBLIC = "PUBLIC",
@@ -18,9 +16,14 @@ type FullCorvidTypes = {
   libs: Array<Lib>;
 };
 
-export const fullCorvidTypes = fullCorvidTypesJSON as FullCorvidTypes;
+export const getCollectionLibs = async (
+  key: LibCollections
+): Promise<Lib[]> => {
+  const fullCorvidTypesModule = await import(
+    /* webpackPrefetch: true */ "../../dist/fullCorvidTypes.json"
+  );
+  const fullCorvidTypes: FullCorvidTypes = fullCorvidTypesModule.default;
 
-export const getCollectionLibs = (key: LibCollections): Lib[] => {
   return fullCorvidTypes.contexts[key]
     .map(libPath => {
       return fullCorvidTypes.libs.find(lib => libPath.includes(lib.path));

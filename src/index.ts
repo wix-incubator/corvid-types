@@ -24,7 +24,7 @@ module.exports = {
     public: BASE_LIBS.PUBLIC
   },
   declarations: {
-    page: ({
+    page: async ({
       includeBaseLibs = true,
       dependencies,
       elementsMap,
@@ -32,38 +32,38 @@ module.exports = {
     }: any = {}) => {
       const baseLibs = includeBaseLibs
         ? [
-            ...getCollectionLibs(LibCollections.TARGET_ES),
-            ...getCollectionLibs(LibCollections.WEB_WORKER)
+            ...(await getCollectionLibs(LibCollections.TARGET_ES)),
+            ...(await getCollectionLibs(LibCollections.WEB_WORKER))
           ]
         : [];
       return [
         ...baseLibs,
-        ...getCollectionLibs(LibCollections.PAGES),
+        ...(await getCollectionLibs(LibCollections.PAGES)),
         ...dynamicTypings.elementsMap.getFiles(elementsMap),
         ...dynamicTypings.widget.getFiles(widgets),
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
-    backend: ({ includeBaseLibs = true, dependencies }: any) => {
+    backend: async ({ includeBaseLibs = true, dependencies }: any) => {
       const baseLibs = includeBaseLibs
-        ? getCollectionLibs(LibCollections.TARGET_ES)
+        ? await getCollectionLibs(LibCollections.TARGET_ES)
         : [];
       return [
         ...baseLibs,
-        ...getCollectionLibs(LibCollections.BACKEND),
+        ...(await getCollectionLibs(LibCollections.BACKEND)),
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     },
-    public: ({ includeBaseLibs = true, dependencies }: any) => {
+    public: async ({ includeBaseLibs = true, dependencies }: any) => {
       const baseLibs = includeBaseLibs
         ? [
-            ...getCollectionLibs(LibCollections.TARGET_ES),
-            ...getCollectionLibs(LibCollections.WEB_WORKER)
+            ...(await getCollectionLibs(LibCollections.TARGET_ES)),
+            ...(await getCollectionLibs(LibCollections.WEB_WORKER))
           ]
         : [];
       return [
         ...baseLibs,
-        ...getCollectionLibs(LibCollections.PUBLIC),
+        ...(await getCollectionLibs(LibCollections.PUBLIC)),
         ...dynamicTypings.packages.getFiles(dependencies)
       ];
     }
