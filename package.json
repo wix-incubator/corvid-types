@@ -20,11 +20,11 @@
     "url": "https://github.com/wix-incubator/corvid-types"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12.22.0"
   },
   "license": "MIT",
-  "browser": "dist/corvidTypes.esm.js",
-  "main": "dist/corvidTypes.esm.js",
+  "browser": "dist/corvidTypes.js",
+  "main": "dist/corvidTypes.js",
   "files": [
     "src",
     "dist",
@@ -39,38 +39,37 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@babel/preset-env": "^7.8.3",
-    "@purtuga/esm-webpack-plugin": "^1.2.1",
+    "@babel/preset-env": "^7.16.5",
     "@types/jest": "^24.9.1",
     "@types/node": "^16.3.3",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.2.3",
     "docworks-cli": "^1.11.0",
     "docworks-dts": "^1.11.0",
     "docworks-repo": "^1.9.1",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-jest": "^25.3.2",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-webpack-plugin": "^2.5.4",
+    "eslint-webpack-plugin": "^3.1.1",
     "fs-extra": "^8.1.0",
     "husky": "^3.0.5",
-    "jest": "^24.9.0",
+    "jest": "^27.4.5",
     "lint-staged": "^9.2.5",
     "lodash": "^4.17.15",
     "prettier": "^1.18.2",
     "raw-loader": "^4.0.0",
     "shelljs": "^0.8.3",
     "tmp": "^0.1.0",
-    "ts-jest": "^24.3.0",
-    "ts-loader": "^8.1.0",
+    "ts-jest": "^27.1.2",
+    "ts-loader": "^9.2.6",
     "ts-node": "^9.1.1",
     "typescript": "^4.3.5",
-    "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack": "~5.65.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.9.1"
   },
   "husky": {
     "hooks": {

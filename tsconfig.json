@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "lib": ["ES2020"],
+    "module": "esnext",
     "target": "es2015",
     "allowJs": true,
     "checkJs": false,
@@ -20,7 +19,13 @@
     "resolveJsonModule": true,
     "declaration": true,
     "outDir": "dist/types",
-    "declarationMap": true
+    "declarationMap": true,
+    "removeComments": false
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
   },
   "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],
   "exclude": [
@@ -30,5 +35,5 @@
     "types",
     "configs",
     "./test/scripts/fixtures/badSyntax.d.ts"
-  ],
+  ]
 }

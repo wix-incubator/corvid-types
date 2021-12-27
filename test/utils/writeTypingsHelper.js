@@ -14,6 +14,7 @@ const createTestEnvioremnt = (tsRootPath, context) => {
   );
   return testTmpDirPath;
 };
+
 module.exports = {
   full: (rootTestPath, types) => {
     const dir = createTestEnvioremnt(rootTestPath);
