@@ -3,12 +3,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import wixModulesNames from "../dist/wixModules.json";
 import eventHandlersService from "./dynamicTypes/eventHandlersService";
-import {
-  getCollectionLibs,
-  LibCollections
-} from "./dynamicTypes/fullCorvidTypes";
 import { TS_CONFIG_PATHS, BASE_LIBS } from "./constants";
-import dynamicTypings from "./dynamicTypes";
+import { packages, elementsMap, widget, typesLoader } from "./dynamicTypes";
+
+const { getCollectionLibs, LibCollections } = typesLoader;
 
 export * from "./dynamicTypes/eventHandlersService";
 
@@ -39,9 +37,9 @@ module.exports = {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.PAGES)),
-        ...dynamicTypings.elementsMap.getFiles(elementsMap),
-        ...dynamicTypings.widget.getFiles(widgets),
-        ...dynamicTypings.packages.getFiles(dependencies)
+        ...elementsMap.getFiles(elementsMap),
+        ...widget.getFiles(widgets),
+        ...packages.getFiles(dependencies)
       ];
     },
     backend: async ({ includeBaseLibs = true, dependencies }: any) => {
@@ -51,7 +49,7 @@ module.exports = {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.BACKEND)),
-        ...dynamicTypings.packages.getFiles(dependencies)
+        ...packages.getFiles(dependencies)
       ];
     },
     public: async ({ includeBaseLibs = true, dependencies }: any) => {
@@ -64,14 +62,14 @@ module.exports = {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.PUBLIC)),
-        ...dynamicTypings.packages.getFiles(dependencies)
+        ...packages.getFiles(dependencies)
       ];
     }
   },
   getWixModulesList: () => wixModulesNames,
   eventHandlersService,
   // Methods for Corvid-local (CLI)
-  getWidgetTypeDeclarations: dynamicTypings.widget.getRaw,
-  getPageElementsTypeDeclarations: dynamicTypings.elementsMap.getRaw,
-  getPackageTypeDecelerations: dynamicTypings.packages.getRaw
+  getWidgetTypeDeclarations: widget.getRaw,
+  getPageElementsTypeDeclarations: elementsMap.getRaw,
+  getPackageTypeDecelerations: packages.getRaw
 };

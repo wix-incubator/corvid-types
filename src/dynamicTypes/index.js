@@ -1,5 +1,6 @@
 module.exports = {
   packages: require("./npmDependencies"),
   elementsMap: require("./elementsMap"),
-  widget: require("./widget")
+  widget: require("./widget"),
+  typesLoader: require("./typesLoader")
 };

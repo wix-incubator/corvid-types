@@ -20,7 +20,7 @@ export const getCollectionLibs = async (
   key: LibCollections
 ): Promise<Lib[]> => {
   const fullCorvidTypesModule = await import(
-    /* webpackPrefetch: true */ "../../dist/fullCorvidTypes.json"
+    /* webpackChunkName: "fullCorvidTypesJson" */ "../../dist/fullCorvidTypes.json"
   );
   const fullCorvidTypes: FullCorvidTypes = fullCorvidTypesModule.default;
 
