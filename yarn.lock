@@ -6768,7 +6768,7 @@ webpack-sources@^3.2.2:
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/webpack-sources/-/webpack-sources-3.2.2.tgz#d88e3741833efec57c4c789b6010db9977545260"
   integrity sha1-2I43QYM+/sV8THibYBDbmXdUUmA=
 
-webpack@^5.65.0:
+webpack@~5.65.0:
   version "5.65.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/webpack/-/webpack-5.65.0.tgz#ed2891d9145ba1f0d318e4ea4f89c3fa18e6f9be"
   integrity sha1-7SiR2RRbofDTGOTqT4nD+hjm+b4=

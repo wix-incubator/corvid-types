@@ -1,16 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
 import wixModulesNames from "../dist/wixModules.json";
 import eventHandlersService from "./dynamicTypes/eventHandlersService";
 import { TS_CONFIG_PATHS, BASE_LIBS } from "./constants";
-import { packages, elementsMap, widget, typesLoader } from "./dynamicTypes";
+import {
+  packagesDeclarations,
+  elementsMapDeclarations,
+  widgetDeclarations,
+  typesLoader
+} from "./dynamicTypes";
 
 const { getCollectionLibs, LibCollections } = typesLoader;
 
 export * from "./dynamicTypes/eventHandlersService";
 
-module.exports = {
+export default {
   configPaths: {
     page: `corvid-types/${TS_CONFIG_PATHS.PAGES}`,
     backend: `corvid-types/${TS_CONFIG_PATHS.BACKEND}`,
@@ -37,9 +42,9 @@ module.exports = {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.PAGES)),
-        ...elementsMap.getFiles(elementsMap),
-        ...widget.getFiles(widgets),
-        ...packages.getFiles(dependencies)
+        ...elementsMapDeclarations.getFiles(elementsMap),
+        ...widgetDeclarations.getFiles(widgets),
+        ...packagesDeclarations.getFiles(dependencies)
       ];
     },
     backend: async ({ includeBaseLibs = true, dependencies }: any) => {
@@ -49,7 +54,7 @@ module.exports = {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.BACKEND)),
-        ...packages.getFiles(dependencies)
+        ...packagesDeclarations.getFiles(dependencies)
       ];
     },
     public: async ({ includeBaseLibs = true, dependencies }: any) => {
@@ -62,14 +67,14 @@ module.exports = {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.PUBLIC)),
-        ...packages.getFiles(dependencies)
+        ...packagesDeclarations.getFiles(dependencies)
       ];
     }
   },
   getWixModulesList: () => wixModulesNames,
   eventHandlersService,
   // Methods for Corvid-local (CLI)
-  getWidgetTypeDeclarations: widget.getRaw,
-  getPageElementsTypeDeclarations: elementsMap.getRaw,
-  getPackageTypeDecelerations: packages.getRaw
+  getWidgetTypeDeclarations: widgetDeclarations.getRaw,
+  getPageElementsTypeDeclarations: elementsMapDeclarations.getRaw,
+  getPackageTypeDecelerations: packagesDeclarations.getRaw
 };

@@ -23,8 +23,8 @@
     "node": ">=12.22.0"
   },
   "license": "MIT",
-  "browser": "dist/corvidTypes.esm.js",
-  "main": "dist/corvidTypes.esm.js",
+  "browser": "dist/corvidTypes.js",
+  "main": "dist/corvidTypes.js",
   "files": [
     "src",
     "dist",
@@ -67,7 +67,7 @@
     "ts-loader": "^9.2.6",
     "ts-node": "^9.1.1",
     "typescript": "^4.3.5",
-    "webpack": "^5.65.0",
+    "webpack": "~5.65.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1"
   },

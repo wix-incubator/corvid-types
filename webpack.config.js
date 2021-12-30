@@ -3,8 +3,13 @@ const env = process.env.NODE_ENV || "development";
 module.exports = {
   mode: env === "development" ? "development" : "production",
   entry: "./src/index.ts",
+  experiments: {
+    outputModule: true
+  },
   output: {
-    library: "corvidTypes",
+    library: {
+      type: "module"
+    },
     filename: "corvidTypes.js",
     chunkFilename: "[name].chunk.js"
   },
