@@ -4,12 +4,19 @@ const writeTypingsHelper = require("../utils/writeTypingsHelper");
 const testParser = require("../utils/testParser");
 
 const getDynamicTypings = require("../utils/dynamicTypings");
-const { declarations } = require("../../dist/corvidTypes.umd.js");
+const { declarations } = require("../../dist/corvidTypes.umd.js").default;
+
+console.log(declarations);
 
 const POSITIVE_ROOT_PATH = "test/it/code-samples/positive";
 const positiveRoots = listSubDirectories(POSITIVE_ROOT_PATH);
 
+// global.Promise = jest.requireActual("promise");
 describe("typescript - positive scenarios - configPaths flow", () => {
+  beforeEach(() => {
+    jest.setTimeout(10000);
+  });
+
   it.each(positiveRoots)(
     "should successfully compile %s folder",
     async tsRootPath => {
@@ -38,11 +45,13 @@ describe("typescript - positive scenarios - declarations flow", () => {
         tsRootPath
       );
 
-      const allTypes = declarations[context]({
+      console.log("FETCHING!", context);
+      const allTypes = await declarations[context]({
         elementsMap,
         widgets,
         dependencies
       });
+      console.log("allTypes", allTypes);
 
       const testTmpDirPath = writeTypingsHelper.full(tsRootPath, allTypes);
 

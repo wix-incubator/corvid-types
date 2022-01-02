@@ -19,9 +19,18 @@ type FullCorvidTypes = {
 export const getCollectionLibs = async (
   key: LibCollections
 ): Promise<Lib[]> => {
+  console.log("importing fullCorvidTypes.json");
+  // eslint-disable-next-line
+  debugger;
   const fullCorvidTypesModule = await import(
     /* webpackChunkName: "fullCorvidTypesJson" */ "../../dist/fullCorvidTypes.json"
-  );
+  ).catch(err => {
+    console.log(err);
+  });
+  if (!fullCorvidTypesModule) {
+    return [];
+  }
+  console.log("imported!");
   const fullCorvidTypes: FullCorvidTypes = fullCorvidTypesModule.default;
 
   return fullCorvidTypes.contexts[key]

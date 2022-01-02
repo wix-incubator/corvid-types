@@ -1,17 +1,24 @@
+const path = require("path");
 const env = process.env.NODE_ENV || "development";
+const DIST = path.join(__dirname, "./dist");
 
-module.exports = {
+const baseConfig = libraryTarget => ({
   mode: env === "development" ? "development" : "production",
   entry: "./src/index.ts",
   experiments: {
-    outputModule: true
+    outputModule: libraryTarget === "esm"
   },
   output: {
+    filename: `corvidTypes.${libraryTarget}.js`,
+    chunkFilename: "[name].chunk.js",
+    path: DIST,
+    publicPath: libraryTarget === "umd" ? "/" : "auto",
     library: {
-      type: "module"
-    },
-    filename: "corvidTypes.js",
-    chunkFilename: "[name].chunk.js"
+      type: libraryTarget === "esm" ? "module" : "umd"
+    }
+  },
+  optimization: {
+    chunkIds: "deterministic" // To keep filename consistent between different modes (for example building only)
   },
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]
@@ -35,4 +42,6 @@ module.exports = {
       }
     ]
   }
-};
+});
+
+module.exports = [baseConfig("esm"), baseConfig("umd")];
