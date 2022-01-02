@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "es2020",
     "target": "es2015",
-    "importHelpers": true,
     "allowJs": true,
     "checkJs": false,
     "strict": true,
@@ -14,7 +13,6 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "types": ["node", "typescript", "jest"],
-    "lib": ["es2019", "es2020.promise", "es2020.bigint", "es2020.string"],
     "skipDefaultLibCheck": true,
     "stripInternal": true,
     "strictPropertyInitialization": true,
