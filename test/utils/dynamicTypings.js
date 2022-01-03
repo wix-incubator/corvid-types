@@ -4,7 +4,7 @@ const {
   getWidgetTypeDeclarations,
   getPageElementsTypeDeclarations,
   getPackageTypeDecelerations
-} = require("../../dist/corvidTypes.umd");
+} = require("../../src/index").default;
 
 module.exports = function getDynamicTypings({
   elementsMap,

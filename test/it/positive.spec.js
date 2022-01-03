@@ -4,7 +4,7 @@ const writeTypingsHelper = require("../utils/writeTypingsHelper");
 const testParser = require("../utils/testParser");
 
 const getDynamicTypings = require("../utils/dynamicTypings");
-const { declarations } = require("../../dist/corvidTypes.umd.js");
+const { declarations } = require("../../src/index").default;
 
 const POSITIVE_ROOT_PATH = "test/it/code-samples/positive";
 const positiveRoots = listSubDirectories(POSITIVE_ROOT_PATH);
@@ -38,7 +38,7 @@ describe("typescript - positive scenarios - declarations flow", () => {
         tsRootPath
       );
 
-      const allTypes = declarations[context]({
+      const allTypes = await declarations[context]({
         elementsMap,
         widgets,
         dependencies

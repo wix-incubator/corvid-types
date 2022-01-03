@@ -12,7 +12,7 @@ import dynamicTypings from "./dynamicTypes";
 
 export * from "./dynamicTypes/eventHandlersService";
 
-module.exports = {
+export default {
   configPaths: {
     page: `corvid-types/${TS_CONFIG_PATHS.PAGES}`,
     backend: `corvid-types/${TS_CONFIG_PATHS.BACKEND}`,

@@ -1,4 +1,4 @@
-const corvidTypes = require("../../src");
+const corvidTypes = require("../../src/index").default;
 
 describe("ts config", () => {
   describe("backend path", () => {

@@ -16,13 +16,19 @@ type FullCorvidTypes = {
   libs: Array<Lib>;
 };
 
+const dynamicallyImportFullCorvidTypes = async (): Promise<{
+  default: FullCorvidTypes;
+}> => {
+  return import(
+    /* webpackChunkName: "fullCorvidTypesJSON" */ "../../dist/fullCorvidTypes.json"
+  );
+};
+
 export const getCollectionLibs = async (
   key: LibCollections
 ): Promise<Lib[]> => {
-  const fullCorvidTypesModule = await import(
-    /* webpackPrefetch: true */ "../../dist/fullCorvidTypes.json"
-  );
-  const fullCorvidTypes: FullCorvidTypes = fullCorvidTypesModule.default;
+  const fullCorvidTypesModule = await dynamicallyImportFullCorvidTypes();
+  const fullCorvidTypes = fullCorvidTypesModule.default;
 
   return fullCorvidTypes.contexts[key]
     .map(libPath => {
