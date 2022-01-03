@@ -70,6 +70,9 @@ export default {
   },
   getWixModulesList: () => wixModulesNames,
   eventHandlersService,
+  setTypesCDN: (url: string) => {
+    __webpack_public_path__ = url;
+  },
   // Methods for Corvid-local (CLI)
   getWidgetTypeDeclarations: dynamicTypings.widget.getRaw,
   getPageElementsTypeDeclarations: dynamicTypings.elementsMap.getRaw,

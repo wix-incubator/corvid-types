@@ -22,7 +22,7 @@
     "declarationMap": true,
     "removeComments": false
   },
-  "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],
+  "include": ["./main.d.ts", "./src/**/*", "./scripts/**/*", "./test/**/*"],
   "exclude": [
     "node_modules",
     "dist",
