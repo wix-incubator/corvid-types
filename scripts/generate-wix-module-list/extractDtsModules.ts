@@ -1,8 +1,8 @@
-const tmp = require("tmp");
-const fs = require("fs-extra");
-const _ = require("lodash");
-
-const createTsProgram = require("./createTypescriptProgram");
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import tmp from "tmp";
+import fs from "fs-extra";
+import _ from "lodash";
+import createTsProgram from "../createTypescriptProgram";
 
 tmp.setGracefulCleanup(); // cleans tmp file on process exit
 
@@ -11,7 +11,7 @@ tmp.setGracefulCleanup(); // cleans tmp file on process exit
  * in those dts
  * @param {[string]} dtsPaths - absolute paths
  */
-module.exports = function extractModules(dtsPaths = []) {
+function extractModules(dtsPaths: string[] = []): string[] {
   dtsPaths.forEach(filePath => {
     if (!fs.existsSync(filePath))
       throw new Error(`file ${filePath} does not exist`);
@@ -24,9 +24,9 @@ module.exports = function extractModules(dtsPaths = []) {
   fs.writeFileSync(configFile.fd, JSON.stringify(tsConfig));
   const program = createTsProgram(configFile.name);
 
-  return _.chain(program)
-    .invoke("getSourceFiles")
+  return (_.chain(program).invoke("getSourceFiles") as any)
     .map("ambientModuleNames")
     .flatten()
     .value();
-};
+}
+export default extractModules;
