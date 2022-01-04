@@ -1,7 +1,7 @@
-const tmp = require("tmp");
-const ts = require("typescript");
-const fs = require("fs-extra");
-const _ = require("lodash");
+import tmp from "tmp";
+import ts from "typescript";
+import fs from "fs-extra";
+import _ from "lodash";
 
 tmp.setGracefulCleanup(); // cleans tmp file on process exit
 
@@ -10,23 +10,24 @@ tmp.setGracefulCleanup(); // cleans tmp file on process exit
  * a formalized errors breakdown
  * @param {typescript.Program} program
  */
-function detectErrors(program) {
+const detectErrors = (program: ts.Program): void => {
   const syntaxErrors = program
     .getSyntacticDiagnostics()
     .filter(diagnostic => diagnostic.category === ts.DiagnosticCategory.Error);
+
   if (_.isEmpty(syntaxErrors)) return;
 
   const errors = syntaxErrors.map(
     ({ file, start, messageText, code }) =>
-      `\tAt ${file.path} position ${start} - ${messageText} (code - ${code})`
+      `\tAt ${file.fileName} position ${start} - ${messageText} (code - ${code})`
   );
   throw new Error(
     "Encountered the following error(s) while compiling:\n" +
       _.join(errors, "\n")
   );
-}
+};
 
-const prepareEmptyTypescriptProgram = configPath => {
+const prepareEmptyTypescriptProgram = (configPath: string): string => {
   const tmpDir = tmp.dirSync();
 
   const tmpDirPath = tmpDir.name;
@@ -40,14 +41,17 @@ const prepareEmptyTypescriptProgram = configPath => {
   return tmpConfigPath;
 };
 
-module.exports = function createTsProgram(tsConfigPath) {
+const createTsProgram = (tsConfigPath: string): ts.Program => {
   const host = ts.sys;
   const tmpConfigPath = prepareEmptyTypescriptProgram(tsConfigPath);
+  const onUnRecoverableConfigFileDiagnostic = (diagnostic: ts.Diagnostic) => {
+    console.error(diagnostic);
+  };
   const parsedCmd = ts.getParsedCommandLineOfConfigFile(
     tmpConfigPath,
     undefined,
-    host
-  );
+    { onUnRecoverableConfigFileDiagnostic, ...host }
+  ) as ts.ParsedCommandLine;
 
   const { options, fileNames } = parsedCmd;
 
@@ -61,3 +65,4 @@ module.exports = function createTsProgram(tsConfigPath) {
 
   return program;
 };
+export default createTsProgram;

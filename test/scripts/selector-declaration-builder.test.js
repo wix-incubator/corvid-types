@@ -1,4 +1,5 @@
-const $wDeclarationBuilder = require("../../scripts/selector-declaration-builder");
+const $wDeclarationBuilder = require("../../scripts/generate-typings/selector-declaration-builder")
+  .default;
 
 describe("define $w.d.ts", () => {
   function get$wDts(servicePath) {

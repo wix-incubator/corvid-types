@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 const compiler = require("../utils/compiler");
 const listSubDirectories = require("../utils/listSubDirectories");
 const writeTypingsHelper = require("../utils/writeTypingsHelper");

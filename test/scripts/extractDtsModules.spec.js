@@ -1,5 +1,6 @@
 const path = require("path");
-const extractDtsModules = require("../../scripts/extractDtsModules");
+const extractDtsModules = require("../../scripts/generate-wix-module-list/extractDtsModules")
+  .default;
 
 const fixturesDir = path.join(__dirname, "./fixtures");
 

@@ -1,6 +1,7 @@
 const path = require("path");
 const ts = require("typescript");
-const changeWixAuthElevateFunctionType = require("../../scripts/ast-patches/changeWixAuthElevateFunctionType");
+const changeWixAuthElevateFunctionType = require("../../scripts/ast-patches/changeWixAuthElevateFunctionType")
+  .default;
 
 const fixturesDir = path.join(__dirname, "./fixtures", "wix-auth");
 

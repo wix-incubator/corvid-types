@@ -1,12 +1,14 @@
-const path = require("path");
-const ts = require("typescript");
-const _ = require("lodash");
-const fs = require("fs-extra");
+import path from "path";
+import ts from "typescript";
+import _ from "lodash";
+import fs from "fs-extra";
 
-const astPatches = require("./ast-patches");
+import astPatches from ".";
 const applyAllPatches = _.flow(astPatches);
 
-const transformer = (/*context*/) => sourceAst =>
+const transformer = (/*context*/) => (
+  sourceAst: ts.SourceFile
+): ts.SourceFile =>
   ts.visitNode(sourceAst, mainNode => {
     try {
       return applyAllPatches(mainNode);
@@ -16,9 +18,9 @@ const transformer = (/*context*/) => sourceAst =>
     }
   });
 
-function run(sourceFilePath, outDirFilePath) {
+const run = (sourceFilePath: string, outDirFilePath: string) => {
   const tsProgram = ts.createProgram([sourceFilePath], {});
-  const sourceAst = tsProgram.getSourceFile(sourceFilePath);
+  const sourceAst = tsProgram.getSourceFile(sourceFilePath) as ts.SourceFile;
 
   const transformationResult = ts.transform(sourceAst, [transformer]);
   const newContent = ts
@@ -27,11 +29,11 @@ function run(sourceFilePath, outDirFilePath) {
 
   fs.ensureFileSync(outDirFilePath);
   fs.writeFileSync(outDirFilePath, newContent);
-}
+};
 
 const DECLARATIONS_PATH = path.join(
   __dirname,
-  "../types/common/declaration.d.ts"
+  "../../types/common/declaration.d.ts"
 );
 if (!fs.existsSync(DECLARATIONS_PATH)) {
   throw new Error(`Cannot find the declaration file at [${DECLARATIONS_PATH}]`);

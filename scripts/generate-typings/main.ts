@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-const tmp = require("tmp");
-const fs = require("fs-extra");
-const path = require("path");
-const $wGenerator = require("./selector-declaration-generator");
-const { spawnSync } = require("child_process");
+import tmp from "tmp";
+import fs from "fs-extra";
+import path from "path";
+import $wGenerator from "./selector-declaration-generator";
+import { spawnSync } from "child_process";
 
 const WIX_CODE_DOCS_REMOTE = "https://github.com/wix/wix-code-docs.git";
 const WIX_CODE_DOCS_API_URL = "https://www.wix.com/corvid/reference";
@@ -16,7 +16,7 @@ const TYPES_COMMON_PATH = path.join(DEST_TYPES_PATH, "common");
 const TYPES_PAGES_PATH = path.join(DEST_TYPES_PATH, "pages");
 const DOCS_BRANCH = process.env.DOCS_BRANCH;
 
-const cloneDocsRepo = () => {
+const cloneDocsRepo = (): string => {
   const tmpDir = tmp.dirSync();
   const commandOptions = ["clone", WIX_CODE_DOCS_REMOTE, tmpDir.name];
   if (DOCS_BRANCH) {
@@ -29,7 +29,7 @@ const cloneDocsRepo = () => {
   return tmpDir.name;
 };
 
-async function generateDeclarations() {
+const generateDeclarations = async (): Promise<void> => {
   const localDocsRepoPath = process.env.LOCAL_DOCS_REPO_PATH || cloneDocsRepo();
 
   fs.removeSync(DEST_TYPES_PATH);
@@ -58,6 +58,6 @@ async function generateDeclarations() {
     localDocsRepoPath,
     path.join(TYPES_PAGES_PATH, DECLARATION_FULL_FILE_NAME)
   );
-}
+};
 
 generateDeclarations();
