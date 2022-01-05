@@ -23,8 +23,8 @@
     "node": ">=12.22.0"
   },
   "license": "MIT",
-  "browser": "dist/corvidTypes.js",
-  "main": "dist/corvidTypes.js",
+  "browser": "dist/corvidTypes.esm.js",
+  "main": "dist/corvidTypes.esm.js",
   "files": [
     "src",
     "dist",

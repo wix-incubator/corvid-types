@@ -9,7 +9,7 @@ module.exports = {
     outputModule: true
   },
   output: {
-    filename: `corvidTypes.js`,
+    filename: `corvidTypes.esm.js`,
     chunkFilename: "[name].chunk.js",
     path: DIST,
     library: {
