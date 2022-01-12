@@ -3,14 +3,16 @@
     "env": {
         "commonjs": true,
         "es2020": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2020
+        "ecmaVersion": 2020,
+        "sourceType": "module"
     },
     "rules": {
         "import/no-extraneous-dependencies": "error"
