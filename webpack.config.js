@@ -13,10 +13,10 @@ const baseConfig = libraryTarget => ({
     chunkFilename: `[name].${libraryTarget}.chunk.js`,
     path: DIST,
     library: {
-      ...(libraryTarget === "esm" ? {} : { name: "corvidTypes" }),
-      type: libraryTarget === "esm" ? "module" : "var"
+      type: libraryTarget === "esm" ? "module" : "umd"
     }
   },
+  ...(libraryTarget === "umd" ? { target: "node" } : {}),
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"]
   },
