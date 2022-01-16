@@ -2,37 +2,36 @@ import ts from "typescript";
 import { Writable } from "./utils";
 const WIX_AUTH_NAME = "wix-auth";
 const WIX_AUTH_ELEVATE_METHOD_NAME = "elevate";
-const isWixAuthModule = (statement: ts.Statement) =>
+const isWixAuthModule = (
+  statement: ts.Statement
+): statement is ts.ModuleDeclaration =>
   ts.isModuleDeclaration(statement) && statement.name.text === WIX_AUTH_NAME;
-const isElevateMethod = (statement: ts.Statement) =>
+const isElevateMethod = (
+  statement: ts.Statement
+): statement is Writable<ts.FunctionDeclaration> =>
   ts.isFunctionDeclaration(statement) &&
-  (statement.name as ts.Identifier).escapedText ===
-    WIX_AUTH_ELEVATE_METHOD_NAME;
+  statement.name?.escapedText === WIX_AUTH_ELEVATE_METHOD_NAME;
 
 const changeWixAuthElevateFunctionType = (
   ast: ts.SourceFile
 ): ts.SourceFile => {
-  const wixAuthModule = ast.statements.find(
-    isWixAuthModule
-  ) as ts.ModuleDeclaration;
-
-  if (!wixAuthModule) {
+  const wixAuthModule = ast.statements.find(isWixAuthModule);
+  if (
+    !wixAuthModule ||
+    !wixAuthModule.body ||
+    !ts.isModuleBlock(wixAuthModule.body)
+  )
     return ast;
-  }
 
-  const elevateFunction = (wixAuthModule.body as ts.ModuleBlock).statements.find(
-    isElevateMethod
-  ) as ts.FunctionDeclaration;
+  const elevateFunction = wixAuthModule.body.statements.find(isElevateMethod);
 
-  if (!elevateFunction) {
-    return ast;
-  }
+  if (!elevateFunction) return ast;
 
   (elevateFunction.typeParameters as Partial<
     ts.NodeArray<ts.TypeParameterDeclaration>
   >) = [
     ts.factory.createTypeParameterDeclaration("T extends (...arg: any) => any")
-  ] as ts.TypeParameterDeclaration[];
+  ];
 
   (elevateFunction.parameters as Partial<
     ts.NodeArray<ts.ParameterDeclaration>
@@ -45,9 +44,7 @@ const changeWixAuthElevateFunctionType = (
     )
   ];
 
-  (elevateFunction as Writable<
-    ts.FunctionDeclaration
-  >).type = ts.factory.createTypeReferenceNode(
+  elevateFunction.type = ts.factory.createTypeReferenceNode(
     "(...param: Parameters<T>) => ReturnType<T>"
   );
 

@@ -80,7 +80,8 @@ const getEventHandlersParser = (
     };
   };
 
-  const isMethodEventHandler = (member: ts.MethodSignature): boolean => {
+  const isMethodEventHandler = (member: ts.TypeElement): boolean => {
+    if (!member.name) return false;
     const docTags = typeChecker
       .getSymbolAtLocation(member.name)
       ?.getJsDocTags();
@@ -110,7 +111,7 @@ const getEventHandlersParser = (
   ): EventHandler[] => {
     return interfaceNode.members
       .filter((member): member is ts.MethodSignature =>
-        isMethodEventHandler(member as ts.MethodSignature)
+        isMethodEventHandler(member)
       )
       .map(member => buildEventHandler(rootInterfaceName, member));
   };

@@ -15,7 +15,7 @@ const FULL_CORVID_DECLARATION_PATH = path.join(
 
 const getDeclarationFilesFromTsConfig = (configPath: string): string[] => {
   const program = createTsProgram(configPath);
-
+  if (!program) return [];
   return program
     .getSourceFiles()
     .filter((file: ts.SourceFile) => file.isDeclarationFile)
@@ -25,7 +25,8 @@ const getDeclarationFilesFromTsConfig = (configPath: string): string[] => {
 async function generateFullCorvidDeclarations() {
   const corvidLib: { [contextKey: string]: string[] } = {};
   Object.keys(NO_LIB_TS_CONFIG_PATHS).forEach((context: string) => {
-    const configPath = NO_LIB_TS_CONFIG_PATHS[context] as string;
+    const configPath = NO_LIB_TS_CONFIG_PATHS[context];
+    if (!configPath) return;
     corvidLib[context] = getDeclarationFilesFromTsConfig(
       path.join(projectRoot, configPath)
     );
@@ -37,7 +38,7 @@ async function generateFullCorvidDeclarations() {
         return [...soFar, ...libs];
       }, [])
     )
-  ] as string[];
+  ];
 
   const libs = uniqueLibs.map((libPath: string) => {
     return {

@@ -10,17 +10,27 @@ const CONTAINABLE_MIXIN = "ContainableMixin";
 const CONTAINABLE_MIXIN_PROPERTY_CHILDREN = "children";
 
 const allowAnyPropOnContainerChildren = (ast: ts.SourceFile): ts.SourceFile => {
-  const $w = ast.statements.find(is$wModule) as ts.ModuleDeclaration;
-  const containableMixin = ($w.body as ts.ModuleBlock).statements.find(
-    statement => isMixinInterface(statement, CONTAINABLE_MIXIN)
-  ) as ts.InterfaceDeclaration;
-  const containableMixinChildren = containableMixin.members.find(member =>
-    isInterfaceMixinMember(member, CONTAINABLE_MIXIN_PROPERTY_CHILDREN)
-  ) as Writable<ts.PropertySignature>;
+  const $w = ast.statements.find(is$wModule);
+  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) return ast;
+  const containableMixin = $w.body.statements.find(
+    (statement): statement is ts.InterfaceDeclaration =>
+      isMixinInterface(statement, CONTAINABLE_MIXIN)
+  );
+  if (!containableMixin) return ast;
+  const containableMixinChildren = containableMixin.members.find(
+    (member): member is Writable<ts.PropertySignature> =>
+      isInterfaceMixinMember(member, CONTAINABLE_MIXIN_PROPERTY_CHILDREN)
+  );
+  if (
+    !containableMixinChildren ||
+    !containableMixinChildren.type ||
+    !ts.isArrayTypeNode(containableMixinChildren.type)
+  )
+    return ast;
 
   containableMixinChildren.type = ts.factory.createArrayTypeNode(
     ts.factory.createIntersectionTypeNode([
-      (containableMixinChildren.type as ts.ArrayTypeNode).elementType,
+      containableMixinChildren.type.elementType,
       ts.factory.createTypeReferenceNode("AnyProperties")
     ])
   );
