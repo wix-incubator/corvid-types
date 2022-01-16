@@ -12,7 +12,7 @@ const {
   convertTreeToString
 } = docworksDts.dtsGenerator;
 const { convertOperationToFunction } = docworksDts.docworksToDtsConverters;
-const $W = "$w";
+const $W = Constants.$w_MODULE_NAME;
 const DECLARE_KEYWORD = "declare";
 
 interface Operation {
@@ -48,11 +48,10 @@ const find$wService = (
 };
 
 const getQueryableObjectType = (services: Array<DocworksService>) => {
-  const isQueryableService = (service: DocworksService): boolean =>
-    !!(
-      service.memberOf === $W &&
-      (service as DocworksQueryableService).extra.queryable
-    );
+  const isQueryableService = (
+    service: DocworksService
+  ): service is DocworksQueryableService =>
+    !!(service.memberOf === $W && service.extra?.queryable);
   const queryableServices = services.filter(isQueryableService);
   const properties = queryableServices.map(service =>
     dtsProperty(service.name, `${$W}.${service.name}`)
@@ -63,11 +62,14 @@ const getQueryableObjectType = (services: Array<DocworksService>) => {
 
 const extract$wComments = (
   services: Array<DocworksService>
-): { [globalCommentsPlaceholders: string]: string } => {
-  const $wService = find$wService(services) as DocworksService;
+): { [globalCommentsPlaceholders: string]: string } | undefined => {
+  const $wService = find$wService(services);
+  if (!$wService) throw new Error(`Can't find $w service`);
+
   const $wOperation = $wService.operations.find(
     operation => operation.name === $W
-  ) as Operation;
+  );
+  if (!$wOperation) return undefined;
 
   const [$w$wMembersComment] = $wService.operations
     .filter(o => o.name === $W)
@@ -86,7 +88,9 @@ const extract$wComments = (
 };
 
 const extract$wMembers = (services: Array<DocworksService>): string => {
-  const $wService = find$wService(services) as DocworksService;
+  const $wService = find$wService(services);
+  if (!$wService) throw new Error(`Can't find $w service`);
+
   const $wMembersOperations = $wService.operations
     .filter(o => o.name !== $W)
     .map(operation => {
@@ -104,6 +108,7 @@ const extract$wMembers = (services: Array<DocworksService>): string => {
 
 const declarationBuilder = (services: Array<DocworksService>): string => {
   const $wComments = extract$wComments(services);
+  if (!$wComments) throw new Error(`Can't find $w comments`);
   const $wMembers = extract$wMembers(services);
   const queryableType = getQueryableObjectType(services);
 

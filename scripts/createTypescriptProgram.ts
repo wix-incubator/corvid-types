@@ -41,7 +41,7 @@ const prepareEmptyTypescriptProgram = (configPath: string): string => {
   return tmpConfigPath;
 };
 
-const createTsProgram = (tsConfigPath: string): ts.Program => {
+const createTsProgram = (tsConfigPath: string): ts.Program | undefined => {
   const host = ts.sys;
   const tmpConfigPath = prepareEmptyTypescriptProgram(tsConfigPath);
   const onUnRecoverableConfigFileDiagnostic = (diagnostic: ts.Diagnostic) => {
@@ -51,7 +51,8 @@ const createTsProgram = (tsConfigPath: string): ts.Program => {
     tmpConfigPath,
     undefined,
     { onUnRecoverableConfigFileDiagnostic, ...host }
-  ) as ts.ParsedCommandLine;
+  );
+  if (!parsedCmd) return undefined;
 
   const { options, fileNames } = parsedCmd;
 

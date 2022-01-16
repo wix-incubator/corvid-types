@@ -5,9 +5,7 @@ import extractDtsModules from "./extractDtsModules";
 
 const projectRoot = path.join(__dirname, "../../");
 const MODULE_LIST_FILE_PATH = path.join(projectRoot, "dist", "wixModules.json");
-const TARGET_DTS = [
-  path.join(projectRoot, "types/common/declaration.d.ts") as string
-];
+const TARGET_DTS = [path.join(projectRoot, "types/common/declaration.d.ts")];
 
 function generateModuleList(): void {
   const moduleList = extractDtsModules(TARGET_DTS);

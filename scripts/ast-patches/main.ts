@@ -18,9 +18,10 @@ const transformer = (/*context*/) => (
     }
   });
 
-const run = (sourceFilePath: string, outDirFilePath: string) => {
+const run = (sourceFilePath: string, outDirFilePath: string): void => {
   const tsProgram = ts.createProgram([sourceFilePath], {});
-  const sourceAst = tsProgram.getSourceFile(sourceFilePath) as ts.SourceFile;
+  const sourceAst = tsProgram.getSourceFile(sourceFilePath);
+  if (!sourceAst) return;
 
   const transformationResult = ts.transform(sourceAst, [transformer]);
   const newContent = ts

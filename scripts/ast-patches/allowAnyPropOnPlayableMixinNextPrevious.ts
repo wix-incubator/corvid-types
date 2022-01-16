@@ -4,50 +4,61 @@ import { is$wModule, isInterfaceMixinMember, isMixinInterface } from "./utils";
 const PLAYABLE_MIXIN_NAME = "PlayableMixin";
 const PLAYABLE_MIXIN_NEXT_PROPERTY_NAME = "next";
 const PLAYABLE_MIXIN_PREVIOUS_PROPERTY_NAME = "previous";
-
 const allowAnyPropOnPlayableMixinNextPrevious = (
   ast: ts.SourceFile
 ): ts.SourceFile => {
-  const $w = ast.statements.find(is$wModule) as ts.ModuleDeclaration;
-  const playableMixin = ($w.body as ts.ModuleBlock).statements.find(statement =>
-    isMixinInterface(statement, PLAYABLE_MIXIN_NAME)
-  ) as ts.InterfaceDeclaration;
+  const $w = ast.statements.find(is$wModule);
+  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) return ast;
+
+  const playableMixin = $w.body.statements.find(
+    (statement): statement is ts.InterfaceDeclaration =>
+      isMixinInterface(statement, PLAYABLE_MIXIN_NAME)
+  );
+  if (!playableMixin) return ast;
 
   const playableMixinNext = playableMixin.members.find(
-    (member: ts.TypeElement) =>
+    (member: ts.TypeElement): member is ts.PropertySignature =>
       isInterfaceMixinMember(member, PLAYABLE_MIXIN_NEXT_PROPERTY_NAME)
-  ) as ts.PropertySignature;
-  const [
-    playableMixinNextTypeArgument
-  ] = (playableMixinNext.type as ts.NodeWithTypeArguments)
-    .typeArguments as ts.NodeArray<ts.TypeNode>;
+  );
+
+  if (
+    !playableMixinNext ||
+    !playableMixinNext.type ||
+    !ts.isTypeReferenceNode(playableMixinNext.type) ||
+    !playableMixinNext.type.typeArguments
+  )
+    return ast;
+
   const playableMixinNextNewTypeArguments = [
     ts.factory.createIntersectionTypeNode([
-      playableMixinNextTypeArgument,
+      playableMixinNext.type.typeArguments[0],
       ts.factory.createTypeReferenceNode("AnyProperties")
     ])
-  ] as ts.IntersectionTypeNode[];
-  ((playableMixinNext.type as ts.NodeWithTypeArguments)
-    .typeArguments as Partial<
+  ];
+
+  (playableMixinNext.type.typeArguments as Partial<
     ts.NodeArray<ts.TypeNode>
   >) = playableMixinNextNewTypeArguments;
 
   const playableMixinPrevious = playableMixin.members.find(
-    (member: ts.TypeElement) =>
+    (member: ts.TypeElement): member is ts.PropertySignature =>
       isInterfaceMixinMember(member, PLAYABLE_MIXIN_PREVIOUS_PROPERTY_NAME)
-  ) as ts.PropertySignature;
-  const [
-    playableMixinPreviousTypeArgument
-  ] = (playableMixinPrevious.type as ts.NodeWithTypeArguments)
-    .typeArguments as ts.NodeArray<ts.TypeNode>;
+  );
+  if (
+    !playableMixinPrevious ||
+    !playableMixinPrevious.type ||
+    !ts.isTypeReferenceNode(playableMixinPrevious.type) ||
+    !playableMixinPrevious.type.typeArguments
+  )
+    return ast;
+
   const playableMixinPreviousNewTypeArguments = [
     ts.factory.createIntersectionTypeNode([
-      playableMixinPreviousTypeArgument,
+      playableMixinPrevious.type.typeArguments[0],
       ts.factory.createTypeReferenceNode("AnyProperties")
     ])
-  ] as ts.IntersectionTypeNode[];
-  ((playableMixinPrevious.type as ts.NodeWithTypeArguments)
-    .typeArguments as Partial<
+  ];
+  (playableMixinPrevious.type.typeArguments as Partial<
     ts.NodeArray<ts.TypeNode>
   >) = playableMixinPreviousNewTypeArguments;
 

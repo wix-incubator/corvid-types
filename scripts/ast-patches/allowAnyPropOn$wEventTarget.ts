@@ -7,16 +7,22 @@ import {
 } from "./utils";
 
 const allowAnyPropOn$wEventTarget = (ast: ts.SourceFile): ts.SourceFile => {
-  const $w = ast.statements.find(is$wModule) as ts.ModuleDeclaration;
-  const $wEvent = ($w.body as ts.ModuleBlock).statements.find(statement =>
-    isMixinInterface(statement, "Event")
-  ) as ts.InterfaceDeclaration;
-  const $wEventTarget = $wEvent.members.find(member =>
-    isInterfaceMixinMember(member, "target")
-  ) as Writable<ts.PropertySignature>;
+  const $w = ast.statements.find(is$wModule);
+  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) return ast;
+
+  const $wEvent = $w.body.statements.find(
+    (statement): statement is ts.InterfaceDeclaration =>
+      isMixinInterface(statement, "Event")
+  );
+  if (!$wEvent) return ast;
+
+  const $wEventTarget = $wEvent.members.find((member): member is Writable<
+    ts.PropertySignature
+  > => isInterfaceMixinMember(member, "target"));
+  if (!$wEventTarget || !$wEventTarget.type) return ast;
 
   $wEventTarget.type = ts.factory.createIntersectionTypeNode([
-    $wEventTarget.type as ts.TypeNode,
+    $wEventTarget.type,
     ts.factory.createTypeReferenceNode("AnyProperties")
   ]);
   return ast;
