@@ -3,7 +3,7 @@
 /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
 import wixModulesNames from "../dist/wixModules.json";
 import eventHandlersService from "./dynamicTypes/eventHandlersService";
-import { TS_CONFIG_PATHS, BASE_LIBS } from "./constants";
+import Constants from "./constants";
 import {
   packagesDeclarations,
   elementsMapDeclarations,
@@ -12,7 +12,7 @@ import {
 } from "./dynamicTypes";
 
 const { getCollectionLibs, LibCollections } = typesLoader;
-
+const { TS_CONFIG_PATHS, BASE_LIBS } = Constants;
 export * from "./dynamicTypes/eventHandlersService";
 
 export default {

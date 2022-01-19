@@ -1,8 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import ts from "typescript";
 import tmp from "tmp";
 import fs from "fs-extra";
-import _ from "lodash";
-import createTsProgram from "../createTypescriptProgram";
+import {
+  createTsProgram,
+  getDirectoryFromPath,
+  getPathsCompilerOptions
+} from "../utils";
+
+interface WithAmbientModuleNames extends ts.SourceFile {
+  ambientModuleNames: Array<string>;
+}
+interface WithOptionalAmbientModuleNames extends ts.SourceFile {
+  ambientModuleNames?: Array<string>;
+}
 
 tmp.setGracefulCleanup(); // cleans tmp file on process exit
 
@@ -11,22 +22,39 @@ tmp.setGracefulCleanup(); // cleans tmp file on process exit
  * in those dts
  * @param {[string]} dtsPaths - absolute paths
  */
-function extractModules(dtsPaths: string[] = []): string[] {
+const extractModules = (dtsPaths: string[] = []): string[] => {
+  const configFile = tmp.fileSync();
   dtsPaths.forEach(filePath => {
     if (!fs.existsSync(filePath))
       throw new Error(`file ${filePath} does not exist`);
   });
 
   const tsConfig = {
-    files: dtsPaths
+    files: dtsPaths,
+    compilerOptions: {
+      noLib: true,
+      allowSyntheticDefaultImports: true,
+      paths: getPathsCompilerOptions(
+        getDirectoryFromPath(configFile.name),
+        dtsPaths
+      )
+    }
   };
-  const configFile = tmp.fileSync();
+
   fs.writeFileSync(configFile.fd, JSON.stringify(tsConfig));
   const program = createTsProgram(configFile.name);
+  if (!program) return [];
 
-  return (_.chain(program).invoke("getSourceFiles") as any)
-    .map("ambientModuleNames")
-    .flatten()
-    .value();
-}
+  const modules = program
+    .getSourceFiles()
+    .filter(
+      (
+        source: WithOptionalAmbientModuleNames
+      ): source is WithAmbientModuleNames => !!source.ambientModuleNames
+    )
+    .map(source => source.ambientModuleNames)
+    .flat();
+
+  return modules;
+};
 export default extractModules;

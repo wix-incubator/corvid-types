@@ -9,5 +9,6 @@
   "header1": "$w.Header",
   "footer1": "$w.Footer",
   "wixChat1": "$w.IFrame",
-  "repeater1": "$w.Repeater"
+  "repeater1": "$w.Repeater",
+  "dataset1": "$w.dataset"
 }

@@ -2,9 +2,35 @@ import tmp from "tmp";
 import ts from "typescript";
 import fs from "fs-extra";
 import _ from "lodash";
-
+import path from "path";
+import Constants from "./constants";
 tmp.setGracefulCleanup(); // cleans tmp file on process exit
+const { $W_DECLARATION_FULL_FILENAME } = Constants;
+const getFileNameFromPath = (strPath: any): string => {
+  const parts = strPath.split("/");
+  const fullname = parts[parts.length - 1];
+  const [name] = fullname.split(".");
+  return name;
+};
 
+export const getPathsCompilerOptions = (
+  rootFolder: string,
+  files: string[]
+): ts.MapLike<string[]> => {
+  return files.reduce((targetPaths, file) => {
+    if (file.endsWith($W_DECLARATION_FULL_FILENAME)) return targetPaths;
+    return {
+      ...targetPaths,
+      [getFileNameFromPath(file)]: [path.relative(rootFolder, file)]
+    };
+  }, {});
+};
+
+export const getDirectoryFromPath = (strPath: string) => {
+  const parts = strPath.split("/");
+  parts.pop();
+  return parts.join("/");
+};
 /**
  * Get a typescript compiled program and if has compile time error will throw error with
  * a formalized errors breakdown
@@ -41,7 +67,9 @@ const prepareEmptyTypescriptProgram = (configPath: string): string => {
   return tmpConfigPath;
 };
 
-const createTsProgram = (tsConfigPath: string): ts.Program | undefined => {
+export const createTsProgram = (
+  tsConfigPath: string
+): ts.Program | undefined => {
   const host = ts.sys;
   const tmpConfigPath = prepareEmptyTypescriptProgram(tsConfigPath);
   const onUnRecoverableConfigFileDiagnostic = (diagnostic: ts.Diagnostic) => {
@@ -66,4 +94,8 @@ const createTsProgram = (tsConfigPath: string): ts.Program | undefined => {
 
   return program;
 };
-export default createTsProgram;
+export default {
+  createTsProgram,
+  getDirectoryFromPath,
+  getPathsCompilerOptions
+};

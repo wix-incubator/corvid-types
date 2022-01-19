@@ -4,17 +4,15 @@ import fs from "fs-extra";
 import path from "path";
 import $wGenerator from "./selector-declaration-generator";
 import { spawnSync } from "child_process";
+import Constants from "../constants";
 
 const WIX_CODE_DOCS_REMOTE = "https://github.com/wix/wix-code-docs.git";
 const WIX_CODE_DOCS_API_URL = "https://www.wix.com/corvid/reference";
 const WIX_CODE_DOCS_TEMPLATE = `<%= model.summary %>\n\t[Read more](${WIX_CODE_DOCS_API_URL}/<%= model.service %>.html#<%= model.member %>)<%  if (model.eventType) { %> \n <% print("@eventType " + model.eventType); } %>`;
-const DECLARATION_FILE_NAME = "declaration";
-const DECLARATION_FULL_FILE_NAME = "$w.d.ts";
-const ORIGINAL_TYPES_PATH = "src_types";
-const DEST_TYPES_PATH = "types";
-const TYPES_COMMON_PATH = path.join(DEST_TYPES_PATH, "common");
-const TYPES_PAGES_PATH = path.join(DEST_TYPES_PATH, "pages");
 const DOCS_BRANCH = process.env.DOCS_BRANCH;
+
+const removeDtsExtention = (filename: string): string =>
+  filename.replace(".d.ts", "");
 
 const cloneDocsRepo = (): string => {
   const tmpDir = tmp.dirSync();
@@ -29,34 +27,45 @@ const cloneDocsRepo = (): string => {
   return tmpDir.name;
 };
 
+const runDocworks = (localDocsRepoPath: string, multipleFiles = false) => {
+  const mainDeclarationFile = multipleFiles
+    ? Constants.DECLARATIONS_DTS_FILENAME
+    : Constants.DECLARATIONS_DTS_FILENAME_DEPRECATED;
+  const docworksDtsOptions = [
+    "dts",
+    "--local",
+    localDocsRepoPath,
+    "--out",
+    removeDtsExtention(mainDeclarationFile),
+    "--dir",
+    Constants.TYPES_COMMON_PATH,
+    "--wixselector",
+    "--summaryTemplate",
+    WIX_CODE_DOCS_TEMPLATE
+  ];
+
+  if (multipleFiles) docworksDtsOptions.push("--multipleFiles");
+
+  spawnSync("docworks", docworksDtsOptions, {
+    stdio: "inherit"
+  });
+};
+
 const generateDeclarations = async (): Promise<void> => {
   const localDocsRepoPath = process.env.LOCAL_DOCS_REPO_PATH || cloneDocsRepo();
 
-  fs.removeSync(DEST_TYPES_PATH);
-  fs.copySync(ORIGINAL_TYPES_PATH, DEST_TYPES_PATH);
+  fs.removeSync(Constants.DEST_TYPES_FOLDER);
+  fs.copySync(Constants.SRC_TYPES_FOLDER, Constants.DEST_TYPES_FOLDER);
 
-  spawnSync(
-    "docworks",
-    [
-      "dts",
-      "--local",
-      localDocsRepoPath,
-      "--out",
-      DECLARATION_FILE_NAME,
-      "--dir",
-      TYPES_COMMON_PATH,
-      "--wixselector",
-      "--summaryTemplate",
-      WIX_CODE_DOCS_TEMPLATE
-    ],
-    {
-      stdio: "inherit"
-    }
-  );
+  runDocworks(localDocsRepoPath);
+  runDocworks(localDocsRepoPath, true);
 
   await $wGenerator(
     localDocsRepoPath,
-    path.join(TYPES_PAGES_PATH, DECLARATION_FULL_FILE_NAME)
+    path.join(
+      Constants.TYPES_PAGES_PATH,
+      Constants.$W_DECLARATION_FULL_FILENAME
+    )
   );
 };
 

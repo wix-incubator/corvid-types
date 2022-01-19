@@ -22,5 +22,6 @@ $w.onReady(function() {
   $w("#text1").text = lastClicked
   $w("#text2").text = previousPageURL
   $w('#repeater1').onItemReady(($item) => $item('#button1'))
+  $w("#dataset1").getCurrentItem()
 });
 
