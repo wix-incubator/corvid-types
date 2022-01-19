@@ -1,4 +1,5 @@
 import fs from "fs-extra";
+import path from "path";
 import has_ from "lodash/has";
 import Constants from "../constants";
 // eslint-disable-next-line
@@ -113,7 +114,11 @@ const declarationBuilder = (services: Array<DocworksService>): string => {
   const queryableType = getQueryableObjectType(services);
 
   const page$wTemplate: string = fs.readFileSync(
-    "./src_types/pages/$w.d.ts",
+    path.join(
+      Constants.SRC_TYPES_FOLDER,
+      Constants.DEST_PAGES_FOLDER,
+      Constants.$W_DECLARATION_FULL_FILENAME
+    ),
     "utf-8"
   );
   const page$wWithMembers: string = page$wTemplate.replace(

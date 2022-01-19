@@ -1,5 +1,7 @@
 import ts from "typescript";
 import {
+  fetch$wModuleFromGlobal,
+  isGlobalModule,
   is$wModule,
   isInterfaceMixinMember,
   isMixinInterface,
@@ -7,7 +9,10 @@ import {
 } from "./utils";
 
 const allowAnyPropOn$wEventTarget = (ast: ts.SourceFile): ts.SourceFile => {
-  const $w = ast.statements.find(is$wModule);
+  const globalStatment = ast.statements.find(isGlobalModule);
+  const $w = globalStatment
+    ? fetch$wModuleFromGlobal(globalStatment)
+    : ast.statements.find(is$wModule);
   if (!$w || !$w.body || !ts.isModuleBlock($w.body)) return ast;
 
   const $wEvent = $w.body.statements.find(

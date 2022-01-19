@@ -2,9 +2,10 @@ import path from "path";
 import ts from "typescript";
 import _ from "lodash";
 import fs from "fs-extra";
-
+import Constants from "../constants";
 import astPatches from ".";
 const applyAllPatches = _.flow(astPatches);
+const RELATIVE_PATH_TO_ROOT_FOLDER = "../../";
 
 const transformer = (/*context*/) => (
   sourceAst: ts.SourceFile
@@ -18,26 +19,52 @@ const transformer = (/*context*/) => (
     }
   });
 
-const run = (sourceFilePath: string, outDirFilePath: string): void => {
-  const tsProgram = ts.createProgram([sourceFilePath], {});
-  const sourceAst = tsProgram.getSourceFile(sourceFilePath);
+const run = (sourceFilesPath: string): void => {
+  const sourcefiles = fs
+    .readdirSync(sourceFilesPath)
+    .map(fileName =>
+      path.join(
+        __dirname,
+        RELATIVE_PATH_TO_ROOT_FOLDER,
+        Constants.TYPES_COMMON_PATH,
+        fileName
+      )
+    );
+  const tsProgram = ts.createProgram(sourcefiles, {});
+  const sourceAst = sourcefiles.map(filePath => {
+    return {
+      path: filePath,
+      ast: tsProgram.getSourceFile(filePath)
+    };
+  });
   if (!sourceAst) return;
+  const transformationResult = sourceAst.map((file): {
+    path: string;
+    ast: ts.TransformationResult<ts.SourceFile> | undefined;
+  } => {
+    return {
+      path: file.path,
+      ast: file.ast ? ts.transform(file.ast, [transformer]) : undefined
+    };
+  });
 
-  const transformationResult = ts.transform(sourceAst, [transformer]);
-  const newContent = ts
-    .createPrinter()
-    .printFile(transformationResult.transformed[0]);
-
-  fs.ensureFileSync(outDirFilePath);
-  fs.writeFileSync(outDirFilePath, newContent);
+  transformationResult.forEach(file => {
+    if (!file.ast) return;
+    const newContent = ts.createPrinter().printFile(file.ast.transformed[0]);
+    fs.ensureFileSync(file.path);
+    fs.writeFileSync(file.path, newContent);
+  });
 };
 
 const DECLARATIONS_PATH = path.join(
   __dirname,
-  "../../types/common/declaration.d.ts"
+  RELATIVE_PATH_TO_ROOT_FOLDER,
+  Constants.TYPES_COMMON_PATH
 );
 if (!fs.existsSync(DECLARATIONS_PATH)) {
-  throw new Error(`Cannot find the declaration file at [${DECLARATIONS_PATH}]`);
+  throw new Error(
+    `Cannot find the declaration folder at [${DECLARATIONS_PATH}]`
+  );
 }
 
-run(DECLARATIONS_PATH, DECLARATIONS_PATH);
+run(DECLARATIONS_PATH);

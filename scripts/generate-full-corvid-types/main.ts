@@ -2,15 +2,25 @@
 import ts from "typescript";
 import fs from "fs-extra";
 import path from "path";
-
-import createTsProgram from "../createTypescriptProgram";
-import { NO_LIB_TS_CONFIG_PATHS } from "../../src/constants";
-
+import { createTsProgram } from "../utils";
+import srcConstants from "../../src/constants";
+import Constants from "../constants";
+const {
+  NO_LIB_TS_CONFIG_PATHS,
+  NO_LIB_TS_CONFIG_PATHS_DEPRECATED
+} = srcConstants;
 const projectRoot = path.join(__dirname, "../../");
+
 const FULL_CORVID_DECLARATION_PATH = path.join(
   projectRoot,
-  "dist",
-  "fullCorvidTypes.json"
+  Constants.DIST_BUILD_FOLDER,
+  Constants.FULL_CORVID_DECLARATION_FILENAME
+);
+
+const FULL_CORVID_DECLARATION_PATH_DEPRECATED = path.join(
+  projectRoot,
+  Constants.DIST_BUILD_FOLDER,
+  Constants.FULL_CORVID_DECLARATION_FILENAME_DEPRECATED
 );
 
 const getDeclarationFilesFromTsConfig = (configPath: string): string[] => {
@@ -22,10 +32,13 @@ const getDeclarationFilesFromTsConfig = (configPath: string): string[] => {
     .map((file: ts.SourceFile) => file.fileName);
 };
 
-async function generateFullCorvidDeclarations() {
+async function generateFullCorvidDeclarations(
+  configPaths: { [contextKey: string]: string },
+  jsonPath: string
+) {
   const corvidLib: { [contextKey: string]: string[] } = {};
-  Object.keys(NO_LIB_TS_CONFIG_PATHS).forEach((context: string) => {
-    const configPath = NO_LIB_TS_CONFIG_PATHS[context];
+  Object.keys(configPaths).forEach((context: string) => {
+    const configPath = configPaths[context];
     if (!configPath) return;
     corvidLib[context] = getDeclarationFilesFromTsConfig(
       path.join(projectRoot, configPath)
@@ -47,9 +60,9 @@ async function generateFullCorvidDeclarations() {
     };
   });
 
-  fs.ensureFileSync(FULL_CORVID_DECLARATION_PATH);
+  fs.ensureFileSync(jsonPath);
   fs.writeFileSync(
-    FULL_CORVID_DECLARATION_PATH,
+    jsonPath,
     JSON.stringify(
       {
         libs,
@@ -61,4 +74,11 @@ async function generateFullCorvidDeclarations() {
   );
 }
 
-generateFullCorvidDeclarations();
+generateFullCorvidDeclarations(
+  NO_LIB_TS_CONFIG_PATHS,
+  FULL_CORVID_DECLARATION_PATH
+);
+generateFullCorvidDeclarations(
+  NO_LIB_TS_CONFIG_PATHS_DEPRECATED,
+  FULL_CORVID_DECLARATION_PATH_DEPRECATED
+);
