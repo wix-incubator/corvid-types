@@ -125,8 +125,8 @@ export const getBaseClassesNames = (
       []
     )
     .map(type => type.expression)
-    .filter((expression): expression is ts.PropertyAccessExpression =>
-      ts.isPropertyAccessExpression(expression)
+    .filter((expression): expression is ts.Identifier =>
+      ts.isIdentifier(expression)
     )
-    .map(expression => expression.name.getText());
+    .map(expression => expression.getText());
 };

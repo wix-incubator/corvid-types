@@ -3,7 +3,7 @@
  */
 
  declare namespace $w {
-  interface Element extends $w.Node, $w.ViewportMixin {
+  interface Element extends Node, ViewportMixin {
     readonly rendered: boolean;
 
      /**
@@ -19,7 +19,7 @@
      * 	[Read more](https://www.wix.com/corvid/reference/$w.Element.html#onMouseIn) 
      *  @eventType mouseenter
      */
-     onMouseIn(handler: $w.MouseEventHandler): $w.Element;
+     onMouseIn(handler: MouseEventHandler): Element;
 
       /**
       * Adds an event handler that runs when the mouse pointer is moved
@@ -34,16 +34,16 @@
       * 	[Read more](https://www.wix.com/corvid/reference/$w.Element.html#onMouseOut) 
       *  @eventType mouseleave
       */
-     onMouseOut(handler: $w.MouseEventHandler): $w.Element;
+     onMouseOut(handler: MouseEventHandler): Element;
   };
   
   interface Event {
-      readonly target: $w.Element;
+      readonly target: Element;
       readonly type: string;
   }
 
-  type MouseEventHandler = (event: $w.MouseEvent, $w: $w.$w) => void;
-  type EventHandler = (event: $w.Event) => void;
+  type MouseEventHandler = (event: MouseEvent, $w: $w) => void;
+  type EventHandler = (event: Event) => void;
 
   interface ClickableMixin {
       /**
@@ -51,14 +51,14 @@
        * 	[Read more](https://www.wix.com/corvid/reference/$w.ClickableMixin.html#onClick) 
        *  @eventType click
        */
-      onClick(handler: $w.MouseEventHandler): $w.Element;
+      onClick(handler: MouseEventHandler): Element;
 
       /**
       * Adds an event handler that runs when the element is double-clicked.
       * 	[Read more](https://www.wix.com/corvid/reference/$w.ClickableMixin.html#onDblClick) 
       *  @eventType dblClick
       */
-      onDblClick(handler: $w.MouseEventHandler): $w.Element;
+      onDblClick(handler: MouseEventHandler): Element;
   }
 
   interface ViewportMixin {
@@ -69,25 +69,25 @@
      * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportEnter) 
      *  @eventType viewportEnter
      */
-     onViewportEnter(handler: $w.EventHandler): $w.Element;
+     onViewportEnter(handler: EventHandler): Element;
      /**
      * Adds an event handler that runs when an element is no longer
      *  displayed in the viewable part of the current window.
      * 	[Read more](https://www.wix.com/corvid/reference/$w.ViewportMixin.html#onViewportLeave) 
      *  @eventType viewportLeave
      */
-     onViewportLeave(handler: $w.EventHandler): $w.Element;
+     onViewportLeave(handler: EventHandler): Element;
   }
 
-  interface Chatbox extends $w.Element, $w.HiddenMixin {
+  interface Chatbox extends Element, HiddenMixin {
       readonly global: boolean;
       readonly hidden: boolean;
       readonly isVisible: boolean;
       readonly maximized: boolean;
-      readonly parent: $w.Node;
-      focusChannel(channelInfo: $w.Chatbox.ChannelInfo): Promise<void>;
-      getChannel(channelInfo: $w.Chatbox.ChannelInfo): Promise<$w.Chatbox.Channel>;
-      getChannelList(): Promise<$w.Chatbox.Channel[]>;
+      readonly parent: Node;
+      focusChannel(channelInfo: Chatbox.ChannelInfo): Promise<void>;
+      getChannel(channelInfo: Chatbox.ChannelInfo): Promise<Chatbox.Channel>;
+      getChannelList(): Promise<Chatbox.Channel[]>;
       maximize(): Promise<void>;
       minimize(): Promise<void>;
       onMaximize(): void;
@@ -96,25 +96,25 @@
        * onMessageReceived
        *  @eventType messageReceived
        */
-      onMessageReceived(message: $w.Chatbox.Message): void;
+      onMessageReceived(message: Chatbox.Message): void;
 
       /**
        * onMessageSent
        *  @eventType messageSent
        */
-      onMessageSent(message: $w.Chatbox.Message): void;
+      onMessageSent(message: Chatbox.Message): void;
       onMinimize(): void;
-      onViewportEnter(handler: $w.EventHandler): $w.Element;
-      onViewportLeave(handler: $w.EventHandler): $w.Element;
+      onViewportEnter(handler: EventHandler): Element;
+      onViewportLeave(handler: EventHandler): Element;
       scrollTo(): Promise<void>;
-      sendMessage(messageInfo: $w.Chatbox.MessageInfo): Promise<void>;
+      sendMessage(messageInfo: Chatbox.MessageInfo): Promise<void>;
   }
 
-  interface Anchor extends $w.Node, $w.ViewportMixin {
+  interface Anchor extends Node, ViewportMixin {
     readonly name: string;
   }
 
-  interface Button extends $w.Element, $w.ClickableMixin, $w.StyleMixin, $w.LabelMixin {
+  interface Button extends Element, ClickableMixin, StyleMixin, LabelMixin {
     label: string;
     link: string;
   }
@@ -127,10 +127,10 @@
     updateValidityIndication(): void;
   }
 
-  interface FormElement extends $w.Element, $w.ValidatableMixin {
+  interface FormElement extends Element, ValidatableMixin {
   }
 
-  interface DatePicker extends $w.FormElement, $w.FocusMixin, $w.ClickableMixin {
+  interface DatePicker extends FormElement, FocusMixin, ClickableMixin {
     disabledDates: Date[];
     disabledDaysOfWeek: number[];
     maxDate: Date;

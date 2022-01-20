@@ -11,7 +11,7 @@ import {
   getStatementByInterfaceName,
   isFunctionTypeNodeWithParameters
 } from "./utils";
-
+import { get$wModule } from "../ast-patches/utils";
 const EVENT_TYPE_JS_DOC_TAG_NAME = "eventType";
 
 export type ComponentsEventHandlers = {
@@ -81,7 +81,9 @@ const getEventHandlersParser = (
   };
 
   const isMethodEventHandler = (member: ts.TypeElement): boolean => {
-    if (!member.name) return false;
+    if (!member.name) {
+      return false;
+    }
     const docTags = typeChecker
       .getSymbolAtLocation(member.name)
       ?.getJsDocTags();
@@ -160,19 +162,11 @@ const getEventHandlersParser = (
   const get$wComponentsModuleBody = (
     sourceFile: ts.SourceFile
   ): ts.ModuleBlock => {
-    const $wModuleDeclaration = sourceFile.statements.find(
-      (statement): statement is ts.ModuleDeclaration => {
-        return (
-          ts.isModuleDeclaration(statement) &&
-          statement.name.text === Constants.$w_MODULE_NAME
-        );
-      }
-    );
-
+    const $wModuleDeclaration = get$wModule(sourceFile);
     const $wModuleBody = getModuleDeclarationBody($wModuleDeclaration);
     if (!$wModuleBody) {
       throw new Error(
-        `Failed finding the ${Constants.$w_MODULE_NAME} interface`
+        `Failed finding the ${Constants.$W_MODULE_NAME} interface`
       );
     }
     return $wModuleBody;
@@ -189,7 +183,7 @@ const getEventHandlersParser = (
     return interfaces.reduce((componentsMap, interfaceNode) => {
       const interfaceNodeName = interfaceNode.name.getText();
       return Object.assign(componentsMap, {
-        [`${Constants.$w_MODULE_NAME}.${interfaceNodeName}`]: getEventHandlers(
+        [`${Constants.$W_MODULE_NAME}.${interfaceNodeName}`]: getEventHandlers(
           interfaceNodeName,
           interfaceNode
         )

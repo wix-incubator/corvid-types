@@ -10,9 +10,8 @@ import {
   widgetDeclarations,
   typesLoader
 } from "./dynamicTypes";
-
-const { getCollectionLibs, LibCollections } = typesLoader;
 const { TS_CONFIG_PATHS, BASE_LIBS } = Constants;
+const { getCollectionLibs, LibCollections } = typesLoader;
 export * from "./dynamicTypes/eventHandlersService";
 
 export default {
@@ -29,44 +28,65 @@ export default {
   declarations: {
     page: async ({
       includeBaseLibs = true,
+      multipleFiles = false,
       dependencies,
       elementsMap,
       widgets
     }: any = {}) => {
       const baseLibs = includeBaseLibs
         ? [
-            ...(await getCollectionLibs(LibCollections.TARGET_ES)),
-            ...(await getCollectionLibs(LibCollections.WEB_WORKER))
+            ...(await getCollectionLibs(
+              LibCollections.TARGET_ES,
+              multipleFiles
+            )),
+            ...(await getCollectionLibs(
+              LibCollections.WEB_WORKER,
+              multipleFiles
+            ))
           ]
         : [];
       return [
         ...baseLibs,
-        ...(await getCollectionLibs(LibCollections.PAGES)),
+        ...(await getCollectionLibs(LibCollections.PAGES, multipleFiles)),
         ...elementsMapDeclarations.getFiles(elementsMap),
         ...widgetDeclarations.getFiles(widgets),
         ...packagesDeclarations.getFiles(dependencies)
       ];
     },
-    backend: async ({ includeBaseLibs = true, dependencies }: any) => {
+    backend: async ({
+      includeBaseLibs = true,
+      multipleFiles = false,
+      dependencies
+    }: any) => {
       const baseLibs = includeBaseLibs
-        ? await getCollectionLibs(LibCollections.TARGET_ES)
+        ? await getCollectionLibs(LibCollections.TARGET_ES, multipleFiles)
         : [];
       return [
         ...baseLibs,
-        ...(await getCollectionLibs(LibCollections.BACKEND)),
+        ...(await getCollectionLibs(LibCollections.BACKEND, multipleFiles)),
         ...packagesDeclarations.getFiles(dependencies)
       ];
     },
-    public: async ({ includeBaseLibs = true, dependencies }: any) => {
+    public: async ({
+      includeBaseLibs = true,
+      multipleFiles = false,
+      dependencies
+    }: any) => {
       const baseLibs = includeBaseLibs
         ? [
-            ...(await getCollectionLibs(LibCollections.TARGET_ES)),
-            ...(await getCollectionLibs(LibCollections.WEB_WORKER))
+            ...(await getCollectionLibs(
+              LibCollections.TARGET_ES,
+              multipleFiles
+            )),
+            ...(await getCollectionLibs(
+              LibCollections.WEB_WORKER,
+              multipleFiles
+            ))
           ]
         : [];
       return [
         ...baseLibs,
-        ...(await getCollectionLibs(LibCollections.PUBLIC)),
+        ...(await getCollectionLibs(LibCollections.PUBLIC, multipleFiles)),
         ...packagesDeclarations.getFiles(dependencies)
       ];
     }

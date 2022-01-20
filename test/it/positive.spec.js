@@ -34,7 +34,7 @@ describe("typescript - positive scenarios - configPaths flow", () => {
   );
 });
 
-describe("typescript - positive scenarios - declarations flow", () => {
+describe("DEPRECATED typescript - positive scenarios - declarations flow", () => {
   it.each(positiveRoots)(
     "should successfully compile %s folder",
     async tsRootPath => {
@@ -43,6 +43,30 @@ describe("typescript - positive scenarios - declarations flow", () => {
       );
 
       const allTypes = await declarations[context]({
+        elementsMap,
+        widgets,
+        dependencies
+      });
+
+      const testTmpDirPath = writeTypingsHelper.full(tsRootPath, allTypes);
+
+      expect(() => {
+        compiler(`${testTmpDirPath}/tsconfig.json`);
+      }).not.toThrow();
+    }
+  );
+});
+
+describe("typescript - positive scenarios - declarations flow", () => {
+  it.each(positiveRoots)(
+    "should successfully compile %s folder",
+    async tsRootPath => {
+      const { context, elementsMap, widgets, dependencies } = testParser.read(
+        tsRootPath
+      );
+      const multipleFiles = true;
+      const allTypes = await declarations[context]({
+        multipleFiles,
         elementsMap,
         widgets,
         dependencies
