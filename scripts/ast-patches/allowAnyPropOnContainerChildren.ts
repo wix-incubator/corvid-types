@@ -16,12 +16,16 @@ const allowAnyPropOnContainerChildren = (ast: ts.SourceFile): ts.SourceFile => {
   const $w = globalStatment
     ? fetch$wModuleFromGlobal(globalStatment)
     : ast.statements.find(is$wModule);
-  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) return ast;
+  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) {
+    return ast;
+  }
   const containableMixin = $w.body.statements.find(
     (statement): statement is ts.InterfaceDeclaration =>
       isMixinInterface(statement, CONTAINABLE_MIXIN)
   );
-  if (!containableMixin) return ast;
+  if (!containableMixin) {
+    return ast;
+  }
   const containableMixinChildren = containableMixin.members.find(
     (member): member is Writable<ts.PropertySignature> =>
       isInterfaceMixinMember(member, CONTAINABLE_MIXIN_PROPERTY_CHILDREN)
@@ -30,8 +34,9 @@ const allowAnyPropOnContainerChildren = (ast: ts.SourceFile): ts.SourceFile => {
     !containableMixinChildren ||
     !containableMixinChildren.type ||
     !ts.isArrayTypeNode(containableMixinChildren.type)
-  )
+  ) {
     return ast;
+  }
 
   containableMixinChildren.type = ts.factory.createArrayTypeNode(
     ts.factory.createIntersectionTypeNode([

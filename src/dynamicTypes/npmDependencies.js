@@ -6,7 +6,9 @@ const getPackageRawDeclaration = name =>
 
 function getPackagesTypeDeclarations(dependencies = {}) {
   const dependenciesNames = Object.keys(dependencies);
-  if (!dependenciesNames.length) return [];
+  if (!dependenciesNames.length) {
+    return [];
+  }
 
   return dependenciesNames.map(packageName => ({
     path: `/dependencies/${packageName}.${dependencies[packageName]}.d.ts`,

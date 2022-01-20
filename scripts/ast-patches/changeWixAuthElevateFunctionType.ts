@@ -2,10 +2,12 @@ import ts from "typescript";
 import { Writable } from "./utils";
 const WIX_AUTH_NAME = "wix-auth";
 const WIX_AUTH_ELEVATE_METHOD_NAME = "elevate";
+
 const isWixAuthModule = (
   statement: ts.Statement
 ): statement is ts.ModuleDeclaration =>
   ts.isModuleDeclaration(statement) && statement.name.text === WIX_AUTH_NAME;
+
 const isElevateMethod = (
   statement: ts.Statement
 ): statement is Writable<ts.FunctionDeclaration> =>
@@ -20,12 +22,15 @@ const changeWixAuthElevateFunctionType = (
     !wixAuthModule ||
     !wixAuthModule.body ||
     !ts.isModuleBlock(wixAuthModule.body)
-  )
+  ) {
     return ast;
+  }
 
   const elevateFunction = wixAuthModule.body.statements.find(isElevateMethod);
 
-  if (!elevateFunction) return ast;
+  if (!elevateFunction) {
+    return ast;
+  }
 
   (elevateFunction.typeParameters as Partial<
     ts.NodeArray<ts.TypeParameterDeclaration>

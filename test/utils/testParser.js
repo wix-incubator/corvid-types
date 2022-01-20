@@ -32,9 +32,15 @@ const getTestWidgets = testPath => {
 };
 
 const getTestContext = testPath => {
-  if (testPath.includes("/pages")) return "page";
-  if (testPath.includes("/backend")) return "backend";
-  if (testPath.includes("/public")) return "public";
+  if (testPath.includes("/pages")) {
+    return "page";
+  }
+  if (testPath.includes("/backend")) {
+    return "backend";
+  }
+  if (testPath.includes("/public")) {
+    return "public";
+  }
 };
 
 module.exports = {

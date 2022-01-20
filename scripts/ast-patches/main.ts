@@ -3,7 +3,7 @@ import ts from "typescript";
 import _ from "lodash";
 import fs from "fs-extra";
 import Constants from "../constants";
-import astPatches from ".";
+import astPatches from "./patches";
 const applyAllPatches = _.flow(astPatches);
 const RELATIVE_PATH_TO_ROOT_FOLDER = "../../";
 
@@ -37,7 +37,9 @@ const run = (sourceFilesPath: string): void => {
       ast: tsProgram.getSourceFile(filePath)
     };
   });
-  if (!sourceAst) return;
+  if (!sourceAst) {
+    return;
+  }
   const transformationResult = sourceAst.map((file): {
     path: string;
     ast: ts.TransformationResult<ts.SourceFile> | undefined;
@@ -49,7 +51,9 @@ const run = (sourceFilesPath: string): void => {
   });
 
   transformationResult.forEach(file => {
-    if (!file.ast) return;
+    if (!file.ast) {
+      return;
+    }
     const newContent = ts.createPrinter().printFile(file.ast.transformed[0]);
     fs.ensureFileSync(file.path);
     fs.writeFileSync(file.path, newContent);

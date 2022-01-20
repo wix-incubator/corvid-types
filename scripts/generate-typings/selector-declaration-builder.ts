@@ -65,12 +65,16 @@ const extract$wComments = (
   services: Array<DocworksService>
 ): { [globalCommentsPlaceholders: string]: string } | undefined => {
   const $wService = find$wService(services);
-  if (!$wService) throw new Error(`Can't find $w service`);
+  if (!$wService) {
+    throw new Error(`Can't find $w service`);
+  }
 
   const $wOperation = $wService.operations.find(
     operation => operation.name === $W
   );
-  if (!$wOperation) return undefined;
+  if (!$wOperation) {
+    return undefined;
+  }
 
   const [$w$wMembersComment] = $wService.operations
     .filter(o => o.name === $W)
@@ -90,7 +94,9 @@ const extract$wComments = (
 
 const extract$wMembers = (services: Array<DocworksService>): string => {
   const $wService = find$wService(services);
-  if (!$wService) throw new Error(`Can't find $w service`);
+  if (!$wService) {
+    throw new Error(`Can't find $w service`);
+  }
 
   const $wMembersOperations = $wService.operations
     .filter(o => o.name !== $W)
@@ -109,7 +115,9 @@ const extract$wMembers = (services: Array<DocworksService>): string => {
 
 const declarationBuilder = (services: Array<DocworksService>): string => {
   const $wComments = extract$wComments(services);
-  if (!$wComments) throw new Error(`Can't find $w comments`);
+  if (!$wComments) {
+    throw new Error(`Can't find $w comments`);
+  }
   const $wMembers = extract$wMembers(services);
   const queryableType = getQueryableObjectType(services);
 
