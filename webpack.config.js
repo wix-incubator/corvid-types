@@ -1,5 +1,5 @@
 const path = require("path");
-const env = process.env.NODE_ENV || "development";
+const env = process.env.CI ? "production" : (process.env.NODE_ENV || "development");
 const DIST = path.join(__dirname, "./dist");
 
 const baseConfig = libraryTarget => ({
