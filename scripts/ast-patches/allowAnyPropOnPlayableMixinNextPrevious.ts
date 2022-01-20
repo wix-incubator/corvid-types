@@ -1,11 +1,5 @@
 import ts from "typescript";
-import {
-  isGlobalModule,
-  is$wModule,
-  fetch$wModuleFromGlobal,
-  isInterfaceMixinMember,
-  isMixinInterface
-} from "./utils";
+import { get$wModule, isInterfaceMixinMember, isMixinInterface } from "./utils";
 
 const PLAYABLE_MIXIN_NAME = "PlayableMixin";
 const PLAYABLE_MIXIN_NEXT_PROPERTY_NAME = "next";
@@ -20,11 +14,8 @@ const $wMixinAllowAnyPropTypeArguments = ({
   mixinName: string;
   memberName: string;
 }): void => {
-  const globalStatment = ast.statements.find(isGlobalModule);
-  const $w = globalStatment
-    ? fetch$wModuleFromGlobal(globalStatment)
-    : ast.statements.find(is$wModule);
-  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) {
+  const $w = get$wModule(ast);
+  if (!$w) {
     return;
   }
 

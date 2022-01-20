@@ -1,8 +1,6 @@
 import ts from "typescript";
 import {
-  fetch$wModuleFromGlobal,
-  isGlobalModule,
-  is$wModule,
+  get$wModule,
   isInterfaceMixinMember,
   isMixinInterface,
   Writable
@@ -12,11 +10,8 @@ const CONTAINABLE_MIXIN = "ContainableMixin";
 const CONTAINABLE_MIXIN_PROPERTY_CHILDREN = "children";
 
 const allowAnyPropOnContainerChildren = (ast: ts.SourceFile): ts.SourceFile => {
-  const globalStatment = ast.statements.find(isGlobalModule);
-  const $w = globalStatment
-    ? fetch$wModuleFromGlobal(globalStatment)
-    : ast.statements.find(is$wModule);
-  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) {
+  const $w = get$wModule(ast);
+  if (!$w) {
     return ast;
   }
   const containableMixin = $w.body.statements.find(

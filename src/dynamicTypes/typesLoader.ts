@@ -24,10 +24,21 @@ const dynamicallyImportFullCorvidTypes = async (): Promise<{
   );
 };
 
+const dynamicallyImportFullCorvidTypesDeprecated = async (): Promise<{
+  default: FullCorvidTypes;
+}> => {
+  return import(
+    /* webpackChunkName: "fullCorvidTypesJSON.deprecated" */ "../../dist/fullCorvidTypes.deprecated.json"
+  );
+};
+
 export const getCollectionLibs = async (
-  key: LibCollections
+  key: LibCollections,
+  multipleFiles: boolean
 ): Promise<Lib[]> => {
-  const fullCorvidTypesModule = await dynamicallyImportFullCorvidTypes();
+  const fullCorvidTypesModule = multipleFiles
+    ? await dynamicallyImportFullCorvidTypes()
+    : await dynamicallyImportFullCorvidTypesDeprecated();
   const fullCorvidTypes = fullCorvidTypesModule.default;
 
   return fullCorvidTypes.contexts[key]

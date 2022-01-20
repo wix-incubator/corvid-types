@@ -38,7 +38,7 @@ describe("typescript - negative scenarios - configPaths flow", () => {
   );
 });
 
-describe("typescript - negative scenarios - declarations flow", () => {
+describe("DEPRECATED typescript - negative scenarios - declarations flow", () => {
   it.each(negativeRoots)(
     "should fail compiling %s folder",
     async tsRootPath => {
@@ -47,6 +47,30 @@ describe("typescript - negative scenarios - declarations flow", () => {
       );
 
       const allTypes = await declarations[context]({
+        elementsMap,
+        widgets,
+        dependencies
+      });
+
+      const testTmpDirPath = writeTypingsHelper.full(tsRootPath, allTypes);
+
+      expect(() => {
+        compiler(`${testTmpDirPath}/tsconfig.json`);
+      }).toThrowErrorMatchingSnapshot();
+    }
+  );
+});
+
+describe("typescript - negative scenarios - declarations flow", () => {
+  it.each(negativeRoots)(
+    "should fail compiling %s folder",
+    async tsRootPath => {
+      const { context, elementsMap, widgets, dependencies } = testParser.read(
+        tsRootPath
+      );
+      const multipleFiles = true;
+      const allTypes = await declarations[context]({
+        multipleFiles,
         elementsMap,
         widgets,
         dependencies

@@ -13,7 +13,7 @@ const {
   convertTreeToString
 } = docworksDts.dtsGenerator;
 const { convertOperationToFunction } = docworksDts.docworksToDtsConverters;
-const $W = Constants.$w_MODULE_NAME;
+const $W = Constants.$W_MODULE_NAME;
 const DECLARE_KEYWORD = "declare";
 
 interface Operation {

@@ -52,7 +52,7 @@ describe("generate-events", () => {
       handlerArgs: [
         {
           name: "event",
-          type: "$w.Event"
+          type: "Event"
         }
       ]
     });
@@ -66,7 +66,7 @@ describe("generate-events", () => {
       handlerArgs: [
         {
           name: "event",
-          type: "$w.MouseEvent"
+          type: "MouseEvent"
         }
       ]
     });

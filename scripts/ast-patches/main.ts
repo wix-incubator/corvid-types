@@ -19,7 +19,7 @@ const transformer = (/*context*/) => (
     }
   });
 
-const run = (sourceFilesPath: string): void => {
+const getSourceAst = (sourceFilesPath: string) => {
   const sourcefiles = fs
     .readdirSync(sourceFilesPath)
     .map(fileName =>
@@ -38,8 +38,13 @@ const run = (sourceFilesPath: string): void => {
     };
   });
   if (!sourceAst) {
-    return;
+    throw new Error("source ast not found");
   }
+  return sourceAst;
+};
+
+const run = (sourceFilesPath: string): void => {
+  const sourceAst = getSourceAst(sourceFilesPath);
   const transformationResult = sourceAst.map((file): {
     path: string;
     ast: ts.TransformationResult<ts.SourceFile> | undefined;

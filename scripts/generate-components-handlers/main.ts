@@ -14,7 +14,8 @@ const OUTPUT_PATH = path.join(
 const DECLARATIONS_DTS_PATH = path.join(
   __dirname,
   ROOT_DIR,
-  Constants.DECLARATIONS_DTS_ROOT_PATH
+  Constants.TYPES_COMMON_PATH,
+  Constants.$W_DECLARATION_FULL_FILENAME
 );
 
 const generatedEvents = generateComponentsEventHandlersFromDTS(
