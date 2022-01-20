@@ -6,7 +6,9 @@ const getPageElementsRawDeclarations = elementsMap =>
   "}";
 
 function getPageElementsTypeDeclarations(elementsMap) {
-  if (!elementsMap) return [];
+  if (!elementsMap) {
+    return [];
+  }
   return [
     {
       path: "/elementsMap.d.ts",

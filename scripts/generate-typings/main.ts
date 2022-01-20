@@ -44,7 +44,9 @@ const runDocworks = (localDocsRepoPath: string, multipleFiles = false) => {
     WIX_CODE_DOCS_TEMPLATE
   ];
 
-  if (multipleFiles) docworksDtsOptions.push("--multipleFiles");
+  if (multipleFiles) {
+    docworksDtsOptions.push("--multipleFiles");
+  }
 
   spawnSync("docworks", docworksDtsOptions, {
     stdio: "inherit"

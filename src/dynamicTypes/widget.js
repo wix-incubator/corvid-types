@@ -24,7 +24,9 @@ const getWidgetRawDeclaration = ({ name, members = {}, events = {} }) => {
 };
 
 function getWidgetsTypeDeclarations(widgets) {
-  if (!widgets) return [];
+  if (!widgets) {
+    return [];
+  }
 
   return widgets.map(({ name, events, members }) => ({
     path: `/widgets/${name}.d.ts`,

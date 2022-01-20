@@ -15,7 +15,8 @@
         "sourceType": "module"
     },
     "rules": {
-        "import/no-extraneous-dependencies": "error"
+        "import/no-extraneous-dependencies": "error",
+        "curly": "error"
     },
     "plugins": ["jest"],
     "extends": [
@@ -40,7 +41,8 @@
             "import/named": 0,
             "import/namespace": 0,
             "import/default": 0,
-            "import/no-named-as-default-member": 0
+            "import/no-named-as-default-member": 0,
+            "curly": "error"
           },
           "plugins": ["jest", "@typescript-eslint"],
           "extends": [

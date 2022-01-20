@@ -25,7 +25,9 @@ const FULL_CORVID_DECLARATION_PATH_DEPRECATED = path.join(
 
 const getDeclarationFilesFromTsConfig = (configPath: string): string[] => {
   const program = createTsProgram(configPath);
-  if (!program) return [];
+  if (!program) {
+    return [];
+  }
   return program
     .getSourceFiles()
     .filter((file: ts.SourceFile) => file.isDeclarationFile)
@@ -39,7 +41,9 @@ async function generateFullCorvidDeclarations(
   const corvidLib: { [contextKey: string]: string[] } = {};
   Object.keys(configPaths).forEach((context: string) => {
     const configPath = configPaths[context];
-    if (!configPath) return;
+    if (!configPath) {
+      return;
+    }
     corvidLib[context] = getDeclarationFilesFromTsConfig(
       path.join(projectRoot, configPath)
     );

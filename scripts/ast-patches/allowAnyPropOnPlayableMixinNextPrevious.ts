@@ -24,13 +24,17 @@ const $wMixinAllowAnyPropTypeArguments = ({
   const $w = globalStatment
     ? fetch$wModuleFromGlobal(globalStatment)
     : ast.statements.find(is$wModule);
-  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) return;
+  if (!$w || !$w.body || !ts.isModuleBlock($w.body)) {
+    return;
+  }
 
   const mixin = $w.body.statements.find(
     (statement): statement is ts.InterfaceDeclaration =>
       isMixinInterface(statement, mixinName)
   );
-  if (!mixin) return;
+  if (!mixin) {
+    return;
+  }
 
   const mixinMember = mixin.members.find(
     (member: ts.TypeElement): member is ts.PropertySignature =>
@@ -42,8 +46,9 @@ const $wMixinAllowAnyPropTypeArguments = ({
     !mixinMember.type ||
     !ts.isTypeReferenceNode(mixinMember.type) ||
     !mixinMember.type.typeArguments
-  )
+  ) {
     return;
+  }
 
   const newTypeArguments = [
     ts.factory.createIntersectionTypeNode([

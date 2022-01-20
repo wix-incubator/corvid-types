@@ -6,7 +6,7 @@ import path from "path";
 import Constants from "./constants";
 tmp.setGracefulCleanup(); // cleans tmp file on process exit
 const { $W_DECLARATION_FULL_FILENAME } = Constants;
-const getFileNameFromPath = (strPath: any): string => {
+const getFileNameFromPath = (strPath: string): string => {
   const parts = strPath.split("/");
   const fullname = parts[parts.length - 1];
   const [name] = fullname.split(".");
@@ -18,7 +18,9 @@ export const getPathsCompilerOptions = (
   files: string[]
 ): ts.MapLike<string[]> => {
   return files.reduce((targetPaths, file) => {
-    if (file.endsWith($W_DECLARATION_FULL_FILENAME)) return targetPaths;
+    if (file.endsWith($W_DECLARATION_FULL_FILENAME)) {
+      return targetPaths;
+    }
     return {
       ...targetPaths,
       [getFileNameFromPath(file)]: [path.relative(rootFolder, file)]
@@ -41,7 +43,9 @@ const detectErrors = (program: ts.Program): void => {
     .getSyntacticDiagnostics()
     .filter(diagnostic => diagnostic.category === ts.DiagnosticCategory.Error);
 
-  if (_.isEmpty(syntaxErrors)) return;
+  if (_.isEmpty(syntaxErrors)) {
+    return;
+  }
 
   const errors = syntaxErrors.map(
     ({ file, start, messageText, code }) =>
@@ -80,7 +84,9 @@ export const createTsProgram = (
     undefined,
     { onUnRecoverableConfigFileDiagnostic, ...host }
   );
-  if (!parsedCmd) return undefined;
+  if (!parsedCmd) {
+    return undefined;
+  }
 
   const { options, fileNames } = parsedCmd;
 

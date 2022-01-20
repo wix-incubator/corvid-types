@@ -25,8 +25,9 @@ tmp.setGracefulCleanup(); // cleans tmp file on process exit
 const extractModules = (dtsPaths: string[] = []): string[] => {
   const configFile = tmp.fileSync();
   dtsPaths.forEach(filePath => {
-    if (!fs.existsSync(filePath))
+    if (!fs.existsSync(filePath)) {
       throw new Error(`file ${filePath} does not exist`);
+    }
   });
 
   const tsConfig = {
@@ -43,7 +44,9 @@ const extractModules = (dtsPaths: string[] = []): string[] => {
 
   fs.writeFileSync(configFile.fd, JSON.stringify(tsConfig));
   const program = createTsProgram(configFile.name);
-  if (!program) return [];
+  if (!program) {
+    return [];
+  }
 
   const modules = program
     .getSourceFiles()

@@ -18,7 +18,9 @@ module.exports = function compiler(configFilePath) {
     options
   });
   const jsFiles = fileNames.filter(filterJSFiles);
-  if (jsFiles.length === 0) throw new Error("No JS files to compile");
+  if (jsFiles.length === 0) {
+    throw new Error("No JS files to compile");
+  }
 
   const emitResult = program.emit(undefined, undefined, undefined, undefined, {
     before: [],
@@ -40,5 +42,7 @@ module.exports = function compiler(configFilePath) {
       compilerErrors.push(msg);
     });
 
-  if (compilerErrors.length > 0) throw new Error(compilerErrors.toString());
+  if (compilerErrors.length > 0) {
+    throw new Error(compilerErrors.toString());
+  }
 };
