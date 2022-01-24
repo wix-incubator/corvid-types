@@ -6,6 +6,7 @@ import $wGenerator from "./selector-declaration-generator";
 import { spawnSync } from "child_process";
 import Constants from "../constants";
 
+const MODULES_TO_IGNORE = ["site-monitoring"];
 const WIX_CODE_DOCS_REMOTE = "https://github.com/wix/wix-code-docs.git";
 const WIX_CODE_DOCS_API_URL = "https://www.wix.com/corvid/reference";
 const WIX_CODE_DOCS_TEMPLATE = `<%= model.summary %>\n\t[Read more](${WIX_CODE_DOCS_API_URL}/<%= model.service %>.html#<%= model.member %>)<%  if (model.eventType) { %> \n <% print("@eventType " + model.eventType); } %>`;
@@ -41,7 +42,11 @@ const runDocworks = (localDocsRepoPath: string, multipleFiles = false) => {
     Constants.TYPES_COMMON_PATH,
     "--wixselector",
     "--summaryTemplate",
-    WIX_CODE_DOCS_TEMPLATE
+    WIX_CODE_DOCS_TEMPLATE,
+    ...MODULES_TO_IGNORE.map((m2i: string): string[] => [
+      "--ignoreModule",
+      m2i
+    ]).flat()
   ];
 
   if (multipleFiles) {
