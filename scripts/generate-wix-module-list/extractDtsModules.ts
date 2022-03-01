@@ -48,6 +48,7 @@ const extractModules = (dtsPaths: string[] = []): string[] => {
     return [];
   }
 
+  const skippedModules = new Set(["@wix/react-velo"]);
   const modules = program
     .getSourceFiles()
     .filter(
@@ -56,7 +57,8 @@ const extractModules = (dtsPaths: string[] = []): string[] => {
       ): source is WithAmbientModuleNames => !!source.ambientModuleNames
     )
     .map(source => source.ambientModuleNames)
-    .flat();
+    .flat()
+    .filter(m => !skippedModules.has(m));
 
   return modules;
 };
