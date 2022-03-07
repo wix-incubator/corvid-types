@@ -51,7 +51,9 @@ const getEventHandlersParser = (
     return [
       {
         name: eventHandlerParameter.name.getText(),
-        type: eventHandlerParameter.type?.getText()
+        type: `${
+          Constants.$W_MODULE_NAME
+        }.${eventHandlerParameter.type?.getText()}`
       }
     ];
   };
