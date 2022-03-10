@@ -50,7 +50,7 @@ export default {
         ...(await getCollectionLibs(LibCollections.PAGES, multipleFiles)),
         ...elementsMapDeclarations.getFiles(elementsMap),
         ...widgetDeclarations.getFiles(widgets),
-        ...packagesDeclarations.getFiles(dependencies)
+        ...(await packagesDeclarations.getFiles(dependencies))
       ];
     },
     backend: async ({
@@ -64,7 +64,7 @@ export default {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.BACKEND, multipleFiles)),
-        ...packagesDeclarations.getFiles(dependencies)
+        ...(await packagesDeclarations.getFiles(dependencies))
       ];
     },
     public: async ({
@@ -87,7 +87,7 @@ export default {
       return [
         ...baseLibs,
         ...(await getCollectionLibs(LibCollections.PUBLIC, multipleFiles)),
-        ...packagesDeclarations.getFiles(dependencies)
+        ...(await packagesDeclarations.getFiles(dependencies))
       ];
     }
   },
