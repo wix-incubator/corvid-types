@@ -7,16 +7,20 @@ const getDefaultPackageRawDeclaration = name =>
 const BASE_PACKAGE_TYPES_URL = `https://unpkg.com`;
 
 async function getRemoteTypeDeclaration(packageName) {
-  // eslint-disable-next-line no-undef
-  const typeDeclarationResponse = await fetch(
-    `${BASE_PACKAGE_TYPES_URL}/${packageName}/velo-types/index.d.ts`
-  );
+  try {
+    // eslint-disable-next-line no-undef
+    const typeDeclarationResponse = await fetch(
+      `${BASE_PACKAGE_TYPES_URL}/${packageName}/velo-types/index.d.ts`
+    );
 
-  if (!typeDeclarationResponse.ok) {
+    if (!typeDeclarationResponse.ok) {
+      return getDefaultPackageRawDeclaration(packageName);
+    }
+
+    return typeDeclarationResponse.text();
+  } catch (ex) {
     return getDefaultPackageRawDeclaration(packageName);
   }
-
-  return typeDeclarationResponse.text();
 }
 
 async function getPackageRawDeclaration(packageName) {
