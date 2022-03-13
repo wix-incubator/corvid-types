@@ -24,9 +24,11 @@ const getBackendTsConfig = (testPath: string): string => `{
   "extends": "${path.relative(testPath, TS_CONFIG_PATHS.BACKEND)}",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": ${Object.assign(
-      { "backend/*": ["./*"] },
-      getPathsCompilerOptions(testPath, getWixModulesPaths())
+    "paths": ${JSON.stringify(
+      Object.assign(
+        { "backend/*": ["./*"] },
+        getPathsCompilerOptions(testPath, getWixModulesPaths())
+      )
     )}
   }
 }`;
@@ -35,9 +37,11 @@ const getPagesTsConfig = (testPath: string): string => `{
   "extends": "${path.relative(testPath, TS_CONFIG_PATHS.PAGES)}",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": ${Object.assign(
-      { "public/*": ["./public/*"] },
-      getPathsCompilerOptions(testPath, getWixModulesPaths())
+    "paths": ${JSON.stringify(
+      Object.assign(
+        { "public/*": ["./public/*"] },
+        getPathsCompilerOptions(testPath, getWixModulesPaths())
+      )
     )}
   }
 }`;
@@ -46,9 +50,11 @@ const getPublicTsConfig = (testPath: string): string => `{
   "extends": "${path.relative(testPath, TS_CONFIG_PATHS.PUBLIC)}",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": ${Object.assign(
-      { "public/*": ["./*"] },
-      getPathsCompilerOptions(testPath, getWixModulesPaths())
+    "paths": ${JSON.stringify(
+      Object.assign(
+        { "public/*": ["./*"] },
+        getPathsCompilerOptions(testPath, getWixModulesPaths())
+      )
     )}
   }
 }`;
