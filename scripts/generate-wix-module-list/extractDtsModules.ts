@@ -38,8 +38,7 @@ const extractModules = (dtsPaths: string[] = []): string[] => {
       paths: getPathsCompilerOptions(
         getDirectoryFromPath(configFile.name),
         dtsPaths
-      ),
-      jsx: "react"
+      )
     }
   };
 
