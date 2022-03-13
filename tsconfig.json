@@ -20,11 +20,13 @@
     "declaration": true,
     "outDir": "dist/types",
     "declarationMap": true,
-    "removeComments": false
+    "removeComments": false,
+    "jsx": "react"
   },
   "ts-node": {
     "compilerOptions": {
-      "module": "commonjs"
+      "module": "commonjs",
+      "jsx": "react"
     }
   },
   "include": ["./src/**/*", "./scripts/**/*", "./test/**/*"],

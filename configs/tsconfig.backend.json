@@ -2,6 +2,7 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "typeRoots": ["../"],
-    "types": ["types/backend", "node_modules/@types/node"]
+    "types": ["types/backend", "node_modules/@types/node"],
+    "jsx": "react"
   }
 }

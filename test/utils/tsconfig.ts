@@ -29,7 +29,8 @@ const getBackendTsConfig = (testPath: string): string => `{
         { "backend/*": ["./*"] },
         getPathsCompilerOptions(testPath, getWixModulesPaths())
       )
-    )}
+    )},
+    "jsx": "react"
   }
 }`;
 
@@ -42,7 +43,8 @@ const getPagesTsConfig = (testPath: string): string => `{
         { "public/*": ["./public/*"] },
         getPathsCompilerOptions(testPath, getWixModulesPaths())
       )
-    )}
+    )},
+    "jsx": "react"
   }
 }`;
 
@@ -55,7 +57,8 @@ const getPublicTsConfig = (testPath: string): string => `{
         { "public/*": ["./*"] },
         getPathsCompilerOptions(testPath, getWixModulesPaths())
       )
-    )}
+    )},
+    "jsx": "react"
   }
 }`;
 
@@ -71,7 +74,8 @@ const getEmptyTsConfig = () => `{
     "allowJs": true,
     "noEmit": true,
     "checkJs": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react"
   }
 }`;
 
