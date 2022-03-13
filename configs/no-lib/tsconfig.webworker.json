@@ -2,7 +2,6 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "noLib": false,
-    "lib": ["WebWorker"],
-    "jsx": "react"
+    "lib": ["WebWorker"]
   }
 }

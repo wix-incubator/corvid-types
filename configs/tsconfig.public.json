@@ -3,7 +3,6 @@
   "compilerOptions": {
     "typeRoots": ["../"],
     "types": ["types/public"],
-    "lib": ["ES2020", "WebWorker"],
-    "jsx": "react"
+    "lib": ["ES2020", "WebWorker"]
   }
 }

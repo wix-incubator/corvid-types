@@ -2,7 +2,6 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "typeRoots": ["../../../"],
-    "types": ["types/deprecated/public"],
-    "jsx": "react"
+    "types": ["types/deprecated/public"]
   }
 }
