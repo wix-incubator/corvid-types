@@ -39,7 +39,7 @@ const extractModules = (dtsPaths: string[] = []): string[] => {
         getDirectoryFromPath(configFile.name),
         dtsPaths
       ),
-      jsx: 'react'
+      jsx: "react"
     }
   };
 
