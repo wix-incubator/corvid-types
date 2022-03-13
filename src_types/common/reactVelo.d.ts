@@ -48,7 +48,7 @@ type ReactVeloOutputElementsMap = {
 type VeloTypeNames = Extract<keyof TypeNameToSdkType, string>;
 
 type ReactVeloOutputTypesMap = {
-    [key in VeloTypeNames as Uncapitalize<key>]: TypeNameToSdkType[key] extends $w.Repeater ? ReactVeloRepeaterType : ReactifiedVeloType<TypeNameToSdkType[key]>
+    [key in VeloTypeNames as Uncapitalize<key>]: TypeNameToSdkType[key] extends $w.Repeater ? (prop: ReactVeloRepeaterType) => JSX.Element : (prop: ReactifiedVeloType<TypeNameToSdkType[key]>) => JSX.Element
 }
 
 declare module '@wix/react-velo' {
