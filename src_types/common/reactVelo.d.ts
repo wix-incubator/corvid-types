@@ -56,3 +56,8 @@ declare module '@wix/react-velo' {
     export const W: ReactVeloOutputElementsMap;
     export const V: ReactVeloOutputTypesMap;
 }
+
+
+declare namespace JSX {
+    interface Element {}
+}
