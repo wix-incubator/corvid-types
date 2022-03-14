@@ -4,7 +4,7 @@ const getDefaultPackageRawDeclaration = name =>
     declare module '${name}/*';
   `;
 
-const BASE_PACKAGE_TYPES_URL = `https://bo.wix.com/_serverless/package-types-resolver`;
+const BASE_PACKAGE_TYPES_URL = `https://manage.wix.com/_serverless/package-types-resolver`;
 const SERVER_TIMEOUT_MS = 5 * 1000;
 
 async function getRemoteTypeDeclarationFromServer(packageName, packageVersion) {
