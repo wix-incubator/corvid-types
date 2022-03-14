@@ -14,7 +14,9 @@ async function getRemoteTypeDeclarationFromServer(packageName, packageVersion) {
   );
 
   if (!typeDeclarationResponse.ok) {
-    return getDefaultPackageRawDeclaration(packageName);
+    throw new Error(
+      `Unable to fetch ${packageName}@${packageVersion} type declaration`
+    );
   }
 
   return typeDeclarationResponse.text();
