@@ -6,6 +6,7 @@ const getDefaultPackageRawDeclaration = name =>
 
 const BASE_PACKAGE_TYPES_URL = `https://manage.wix.com/_serverless/package-types-resolver`;
 const SERVER_TIMEOUT_MS = 5 * 1000;
+const WIX_NPM_SCOPE = "@wix";
 
 async function getRemoteTypeDeclarationFromServer(packageName, packageVersion) {
   // eslint-disable-next-line no-undef
@@ -36,7 +37,7 @@ async function getRemoteTypeDeclaration(packageName, packageVersion) {
 }
 
 async function getPackageRawDeclaration(packageName, packageVersion) {
-  if (packageName.startsWith("@wix/")) {
+  if (packageName.startsWith(WIX_NPM_SCOPE)) {
     return getRemoteTypeDeclaration(packageName, packageVersion);
   }
 
