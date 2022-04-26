@@ -4,7 +4,7 @@ const getDefaultPackageRawDeclaration = name =>
     declare module '${name}/*';
   `;
 
-const BASE_PACKAGE_TYPES_URL = `https://editor.wix.com/_serverless/wix-code-types-bundler-service`;
+const BASE_PACKAGE_TYPES_URL = `https://editor.wix.com/_serverless/wix-code-types-bundler-service/npm-package-types`;
 const SERVER_TIMEOUT_MS = 5 * 1000;
 const WIX_NPM_SCOPE = "@wix";
 
