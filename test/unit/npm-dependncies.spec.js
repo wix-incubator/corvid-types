@@ -4,7 +4,7 @@ const givenPackage = async (pacakgeDefinitions, assertionCallback) => {
   const originalFetch = global.fetch;
 
   global.fetch = jest.fn(url => {
-    const typeResolverBaseURLSuffix = "package-types-resolver/";
+    const typeResolverBaseURLSuffix = "npm-package-types/";
     const packageName = url.split(typeResolverBaseURLSuffix)[1];
 
     if (typeof pacakgeDefinitions[packageName] === "function") {
