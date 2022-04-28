@@ -27,11 +27,6 @@ const givenPackage = async (pacakgeDefinitions, assertionCallback) => {
 
 describe("npm dependencies", () => {
   describe("should load types for npm modules", () => {
-    it("get default type when request raw", () => {
-      const rawNpmType = npmDependencies.getRaw("react");
-      expect(rawNpmType).toMatchSnapshot();
-    });
-
     it("get default type when files requested and the namespaces is not @wix", async () => {
       const npmDtsFiles = await npmDependencies.getFiles({
         react: "16.8.6",
