@@ -83,7 +83,7 @@ describe("npm dependencies", () => {
       );
     });
 
-    it("should handle request properly evne if it hangs", async () => {
+    it("should handle request properly even if it hangs", async () => {
       await givenPackage(
         {
           "@wix/react-velo@1.0.0": () =>
