@@ -22,7 +22,8 @@ const onlyUnique = (
 const filesToFilter = [
   Constants.$W_DECLARATION_FULL_FILENAME,
   Constants.DECLARATIONS_DTS_FILENAME,
-  Constants.DECLARATIONS_DTS_FILENAME_DEPRECATED
+  Constants.DECLARATIONS_DTS_FILENAME_DEPRECATED,
+  Constants.REACT_VELO_FULL_FILENAME
 ];
 function generateModuleList(): void {
   const sourcefiles = fs
